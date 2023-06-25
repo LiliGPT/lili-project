@@ -1,9 +1,8 @@
 "use client";
 
 import React from 'react';
-import { BasePage, PageTitle, SharedUi, SideProjects } from '@lili-project/shared-ui';
+import { BasePage, PageTitle, SharedUi, SideProjects, store, useAppDispatch } from '@lili-project/shared-ui';
 import { Provider, useDispatch, useSelector } from 'react-redux';
-import { store, useAppDispatch } from '../store';
 import { fetchProject, selectAllProject } from '@lili-project/lili-store';
 
 export default async function Index() {

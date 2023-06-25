@@ -1,3 +1,4 @@
+export * from './store/index';
 export * from './lib/shared-ui';
 export * from './components/Button';
 export * from './components/icons/BookIcon';
