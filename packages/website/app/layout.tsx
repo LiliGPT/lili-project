@@ -1,3 +1,4 @@
+import { Provider } from 'react-redux';
 import './global.css';
 
 export const metadata = {
@@ -10,6 +11,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+
   return (
     <html lang="en">
       <head></head>
