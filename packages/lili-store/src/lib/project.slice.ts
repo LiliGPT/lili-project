@@ -16,8 +16,10 @@ export interface ProjectEntity {
   id: number;
 }
 
+export type ReduxLoadingStatus = 'not loaded' | 'loading' | 'loaded' | 'error';
+
 export interface ProjectState extends EntityState<ProjectEntity> {
-  loadingStatus: 'not loaded' | 'loading' | 'loaded' | 'error';
+  loadingStatus: ReduxLoadingStatus,
   error?: string | null;
 }
 
@@ -71,7 +73,12 @@ export const projectSlice = createSlice({
   reducers: {
     add: projectAdapter.addOne,
     remove: projectAdapter.removeOne,
-    // ...
+    setLoadingStatus(state, action: PayloadAction<ReduxLoadingStatus>) {
+      return {
+        ...state,
+        loadingStatus: action.payload,
+      };
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -137,9 +144,19 @@ export const getProjectState = (rootState: {
   [PROJECT_FEATURE_KEY]: ProjectState;
 }): ProjectState => rootState[PROJECT_FEATURE_KEY];
 
-export const selectAllProject = createSelector(getProjectState, selectAll);
+export const selectAllProject = () => createSelector(getProjectState, selectAll);
 
-export const selectProjectEntities = createSelector(
+export const selectProjectEntities = () => createSelector(
   getProjectState,
   selectEntities
+);
+
+export const selectProjectLoadingStatus = () => createSelector(
+  getProjectState,
+  (state) => state.loadingStatus
+);
+
+export const selectProjectError = () => createSelector(
+  getProjectState,
+  (state) => state.error
 );
