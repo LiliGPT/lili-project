@@ -1,0 +1,93 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .BasePage {
+    @apply pl-96 w-full overflow-x-hidden overflow-y-visible bg-slate-800 flex flex-row;
+  }
+
+  .AppSidebar {
+    @apply fixed top-0 left-0 bottom-0; 
+  }
+  .AppSideContent {
+    @apply fixed top-0 left-24 bottom-0 w-72;
+  }
+  .AppMainContainer {
+    @apply p-4;
+  }
+
+  .AppSidebar {
+    @apply flex flex-col items-center justify-start h-full w-24 bg-slate-800;
+    .AppLogo {
+      @apply flex items-center justify-center h-16 w-full;
+    }
+    > .AppMenu {
+      @apply relative w-[74px] pl-2 py-2 rounded-tl-3xl rounded-bl-3xl self-end bg-primary flex flex-col items-end;
+
+      &:before {
+        @apply w-5 h-5 content-[''] absolute -top-5 right-0 bg-primary;
+      }
+
+      &:after {
+        @apply w-5 h-5 content-[''] absolute -top-5 right-0 rounded-br-3xl bg-slate-800;
+      }
+      
+      .AppMenuItem {
+        @apply z-20 my-1 w-16 py-4 block rounded-[50%] bg-slate-800 text-center relative cursor-pointer transition-all duration-300 ease-linear;
+
+        &.active {
+          @apply bg-secondary rounded-2xl;
+
+          .SvgIcon {
+            @apply fill-slate-200;
+          }
+        }
+
+        &:hover {
+          @apply bg-secondary rounded-2xl;
+
+          .SvgIcon {
+            @apply fill-slate-200;
+          }
+
+          .AppMenuTooltip {
+            @apply visible opacity-100;
+          }
+        }
+
+        &:not(.active) {
+          @apply opacity-50;
+
+          .SvgIcon {
+            @apply fill-secondary;
+          }
+        }
+
+        &:not(.active):hover {
+          @apply fill-secondary opacity-100;
+          
+          .SvgIcon {
+            @apply fill-slate-200;
+          }
+        }
+
+        .SvgIcon {
+          @apply w-7 h-7 transition-colors duration-300 ease-out;
+        }
+  
+        .AppMenuTooltip {
+          @apply ml-1 invisible opacity-0 absolute top-1/2 left-full w-32 h-7 -translate-y-1/2 bg-[#111111] border border-slate-500 drop-shadow-lg rounded-full text-blue-200 text-center text-xs leading-6 transition-all duration-500 ease-in font-semibold tracking-widest;
+        }
+      }
+    }
+  }
+
+  .AppSideContent {
+    @apply bg-primary h-screen px-4 py-4;
+  }
+
+  .AppMainContainer {
+    @apply w-full max-w-xl;
+  }
+}

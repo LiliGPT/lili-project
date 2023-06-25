@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .CustomButton {
+    @apply text-white font-bold py-2 px-4 duration-500;
+
+    &.primary {
+      @apply bg-blue-500 hover:bg-blue-700;
+    }
+
+    &.secondary {
+      @apply bg-green-500 hover:bg-green-700;
+    }
+
+    &.tertiary {
+      @apply bg-red-500 hover:bg-red-700;
+    }
+
+    &.accent {
+      @apply bg-accent hover:bg-accent-hover text-black;
+    }
+
+    &.disabled {
+      @apply bg-gray-500 cursor-not-allowed;
+    }
+
+    &.small {
+      @apply text-sm py-2 px-4 rounded;
+    }
+
+    &.medium {
+      @apply text-lg py-2 px-4 rounded-md;
+    }
+
+    &.large {
+      @apply text-lg py-2 px-4 rounded-xl;
+    }
+
+    &.fullWidth {
+      @apply w-full;
+    }
+  }
+}
