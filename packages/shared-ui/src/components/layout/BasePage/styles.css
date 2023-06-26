@@ -8,10 +8,10 @@
   }
 
   .AppSidebar {
-    @apply fixed top-0 left-0 bottom-0; 
+    @apply fixed top-0 left-0 bottom-0 z-10; 
   }
   .AppSideContent {
-    @apply fixed top-0 left-24 bottom-0 w-72;
+    @apply fixed top-0 left-24 bottom-0 w-72 z-0;
   }
   .AppMainContainer {
     @apply p-4;
