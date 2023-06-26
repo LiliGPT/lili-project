@@ -1,5 +1,3 @@
-import Image from 'next/image';
-import Link from 'next/link';
 import { SideNav } from './SideNav';
 import { Spacer } from '../Spacer';
 import { SideNavItem } from './SideNavItem';
@@ -20,7 +18,7 @@ export function BasePage(props: Props) {
     <div className="BasePage">
       <div className="AppSidebar">
         <div className="AppLogo">
-          <Image src="/favicon.ico" alt="Logo" width={32} height={32} />
+          <div className="SmallTextLogo">Lili</div>
         </div>
 
         <SideNav>
