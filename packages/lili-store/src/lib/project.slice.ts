@@ -6,24 +6,25 @@ import {
   EntityState,
   PayloadAction,
 } from '@reduxjs/toolkit';
+import { CodeProjectEntity } from '../types/code-projects.types';
 
 export const PROJECT_FEATURE_KEY = 'project';
 
 /*
  * Update these interfaces according to your requirements.
  */
-export interface ProjectEntity {
-  id: number;
-}
+// export interface CodeProjectEntity {
+//   id: number;
+// }
 
 export type ReduxLoadingStatus = 'not loaded' | 'loading' | 'loaded' | 'error';
 
-export interface ProjectState extends EntityState<ProjectEntity> {
+export interface ProjectState extends EntityState<CodeProjectEntity> {
   loadingStatus: ReduxLoadingStatus,
   error?: string | null;
 }
 
-export const projectAdapter = createEntityAdapter<ProjectEntity>();
+export const projectAdapter = createEntityAdapter<CodeProjectEntity>();
 
 /**
  * Export an effect using createAsyncThunk from
@@ -42,7 +43,7 @@ export const projectAdapter = createEntityAdapter<ProjectEntity>();
  * }, [dispatch]);
  * ```
  */
-export const fetchProject = createAsyncThunk<ProjectEntity[]>(
+export const fetchProject = createAsyncThunk<CodeProjectEntity[]>(
   'project/fetchStatus',
   async (_, thunkAPI) => {
     /**
@@ -53,8 +54,7 @@ export const fetchProject = createAsyncThunk<ProjectEntity[]>(
     // return Promise.resolve([]);
     return new Promise((resolve, reject) => {
       setTimeout(() => resolve([
-        { id: 1 },
-        { id: 2 },
+
       ]), 2000);
     });
   }
@@ -87,7 +87,7 @@ export const projectSlice = createSlice({
       })
       .addCase(
         fetchProject.fulfilled,
-        (state: ProjectState, action: PayloadAction<ProjectEntity[]>) => {
+        (state: ProjectState, action: PayloadAction<CodeProjectEntity[]>) => {
           projectAdapter.setAll(state, action.payload);
           state.loadingStatus = 'loaded';
         }

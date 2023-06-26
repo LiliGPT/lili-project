@@ -1,7 +1,7 @@
 import React from 'react';
-import { BasePage, PageTitle, SharedUi, SideProjects, store, useAppDispatch } from '@lili-project/shared-ui';
+import { BasePage, PageTitle, SharedUi, SideProjects } from '@lili-project/shared-ui';
 import { Provider, useDispatch, useSelector } from 'react-redux';
-import { fetchProject, selectAllProject, selectProjectLoadingStatus } from '@lili-project/lili-store';
+import { store, useAppDispatch, fetchProject, selectAllProject, selectProjectLoadingStatus } from '@lili-project/lili-store';
 
 export default function App() {
   return (
