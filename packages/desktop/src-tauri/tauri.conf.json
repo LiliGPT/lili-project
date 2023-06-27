@@ -13,15 +13,41 @@
   "tauri": {
     "allowlist": {
       "all": false,
+      "process": {
+        "all": true,
+        "exit": true,
+        "relaunch": true,
+        "relaunchDangerousAllowSymlinkMacos": true
+      },
       "shell": {
-        "all": false,
-        "open": true
+        "all": true,
+        "execute": true,
+        "scope": [
+          {
+            "name": "bash",
+            "cmd": "/usr/bin/bash",
+            "args": true
+          },
+          {
+            "name": "sh",
+            "cmd": "/bin/sh",
+            "args": true
+          }
+        ]
+      },
+      "dialog": {
+        "all": true,
+        "ask": false,
+        "confirm": false,
+        "message": false,
+        "open": false,
+        "save": false
       }
     },
     "bundle": {
       "active": true,
       "targets": "all",
-      "identifier": "com.tauri.dev",
+      "identifier": "com.gui.dev",
       "icon": [
         "icons/32x32.png",
         "icons/128x128.png",
@@ -35,13 +61,17 @@
     },
     "windows": [
       {
+        "fullscreen": false,
         "maximizable": true,
         "maximized": true,
-        "fullscreen": false,
         "resizable": true,
-        "title": "Lili",
-        "width": 800,
-        "height": 600
+        "decorations": true,
+        "transparent": false,
+        "x": 10,
+        "y": 10,
+        "title": "Lili Dev",
+        "width": 1100,
+        "height": 750
       }
     ]
   }

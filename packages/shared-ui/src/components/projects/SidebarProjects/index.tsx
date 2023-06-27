@@ -1,5 +1,6 @@
 "use client";
 
+import { pickProjectThunk, selectAllProject, selectCurrentProjectUid, useAppDispatch, useAppSelector } from '@lili-project/lili-store';
 import { CustomButton } from '../../Button';
 import { Spacer } from '../../layout/Spacer';
 import { SideProjectItem } from './SideProjectItem';
@@ -9,18 +10,29 @@ import './styles.css';
 interface Props { }
 
 export function SideProjects(props: Props) {
-  const onClickAddProject = () => {
-    //
+  const dispatch = useAppDispatch();
+  const projects = useAppSelector(selectAllProject());
+  const currentProjectUid = useAppSelector(selectCurrentProjectUid());
+
+  const onClickOpenProject = () => {
+    dispatch(pickProjectThunk());
   };
 
   return (
     <div className="SideProjects">
-      <SideProjectItem name="Project 1" project_dir="~/projects/project1" />
-      <SideProjectItem name="Project 2" project_dir="~/projects/project2" />
+      {projects.map((project) => (
+        <SideProjectItem
+          key={project.project_uid}
+          project_uid={project.project_uid}
+          active={project.project_uid === currentProjectUid}
+          name={project.display_name}
+          project_dir={project.data.project_dir.replace(/\/home\/\w+\//, '~/')}
+        />
+      ))}
       <Spacer />
       <CustomButton
-        label="Add Project"
-        onClick={onClickAddProject}
+        label="Open Project"
+        onClick={onClickOpenProject}
         size="large"
         variant="accent"
         disabled={false}

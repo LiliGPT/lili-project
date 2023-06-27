@@ -7,18 +7,34 @@
     @apply flex flex-col h-full;
   }
 
-  .SideProjectItem, .SideProjectItem_CloseIcon {
+  .SideProjectItem,
+  .SideProjectItem_CloseIcon {
     @apply duration-500 ease-out;
   }
 
-  .SideProjectItem {
-    @apply relative mb-2 pt-4 pb-5 px-4 border border-slate-800 bg-slate-800 hover:bg-secondary rounded-xl cursor-pointer text-gray-500 hover:text-black font-bold;
+  .SideProjectItem.inactive {
+    @apply relative mb-2 pt-4 pb-5 px-4 border border-slate-800 bg-slate-800 rounded-xl cursor-pointer text-gray-500;
   }
 
+  .SideProjectItem.active {
+    @apply relative mb-2 pt-4 pb-5 px-4 border border-slate-800 bg-secondary rounded-xl cursor-pointer text-black;
+  }
+
+  /*
+  .SideProjectItem.active {
+    @apply: bg-secondary text-black;
+  }
   .SideProjectItem:hover {
-    .SideProjectItem_CloseIcon {
-      @apply bg-secondary hover:bg-tertiary;
-    }
+    @apply: bg-secondary text-black;
+  }
+  .inactive {
+    @apply: bg-slate-800;
+  }
+  */
+
+  .SideProjectItem.active .SideProjectItem_CloseIcon,
+  .SideProjectItem:hover .SideProjectItem_CloseIcon {
+    @apply bg-secondary hover:bg-tertiary;
   }
 
   .SideProjectItem_CloseIcon {

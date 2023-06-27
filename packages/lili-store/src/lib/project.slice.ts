@@ -3,28 +3,28 @@ import {
   createEntityAdapter,
   createSelector,
   createSlice,
-  EntityState,
   PayloadAction,
 } from '@reduxjs/toolkit';
-import { CodeProjectEntity } from '../types/code-projects.types';
+import { ReduxCodeProject, ReduxProjectState } from './project.types';
+import { ReduxLoadingStatus } from './redux.types';
+import { PlatformClient } from '../services/platform/platform.client';
+import { PlatformError } from '../services/platform/platform.error';
+import { CodeProject } from '../services/platform/platform.types';
 
 export const PROJECT_FEATURE_KEY = 'project';
 
-/*
- * Update these interfaces according to your requirements.
- */
-// export interface CodeProjectEntity {
-//   id: number;
-// }
+export const projectAdapter = createEntityAdapter<ReduxCodeProject>({
+  selectId: (project) => project.project_uid,
+});
 
-export type ReduxLoadingStatus = 'not loaded' | 'loading' | 'loaded' | 'error';
-
-export interface ProjectState extends EntityState<CodeProjectEntity> {
-  loadingStatus: ReduxLoadingStatus,
-  error?: string | null;
-}
-
-export const projectAdapter = createEntityAdapter<CodeProjectEntity>();
+const makeErrorValue = (error: unknown) => {
+  console.log(error, typeof error);
+  // return new PlatformError('lili-store.project-slice', String(error));
+  if (error instanceof PlatformError) {
+    return String(error.error_description);
+  }
+  return String(error);
+};
 
 /**
  * Export an effect using createAsyncThunk from
@@ -43,26 +43,47 @@ export const projectAdapter = createEntityAdapter<CodeProjectEntity>();
  * }, [dispatch]);
  * ```
  */
-export const fetchProject = createAsyncThunk<CodeProjectEntity[]>(
-  'project/fetchStatus',
-  async (_, thunkAPI) => {
-    /**
-     * Replace this with your custom fetch call.
-     * For example, `return myApi.getProjects()`;
-     * Right now we just return an empty array.
-     */
-    // return Promise.resolve([]);
-    return new Promise((resolve, reject) => {
-      setTimeout(() => resolve([
+// --- example ---
+type PickProjectThunkArgs = undefined;
 
-      ]), 2000);
-    });
+export const pickProjectThunk = createAsyncThunk<
+  ReduxCodeProject,
+  PickProjectThunkArgs,
+  {
+    rejectValue: string;
+  }
+>('project/pickProjectThunk',
+  async (args, { rejectWithValue }) => {
+    let project: CodeProject | undefined;
+    if (!PlatformClient.client) {
+      return rejectWithValue(makeErrorValue('Platform client not set.'));
+    }
+    try {
+      project = await PlatformClient.client?.pickProject();
+    } catch (error) {
+      return rejectWithValue(makeErrorValue(error));
+    }
+    if (!project) {
+      return rejectWithValue(makeErrorValue('Project not found.'));
+    }
+    const redux_project: ReduxCodeProject = {
+      parent_project_uid: undefined,
+      data: project,
+      dependencies: {
+        is_loading: false,
+        error_message: '',
+      },
+      display_name: project.project_dir.split('/').pop() ?? project.project_dir,
+      project_uid: project.project_dir,
+    };
+    return redux_project;
   }
 );
 
-export const initialProjectState: ProjectState = projectAdapter.getInitialState(
+export const initialProjectState: ReduxProjectState = projectAdapter.getInitialState(
   {
-    loadingStatus: 'not loaded',
+    opened_project_uid: '',
+    loading_status: ReduxLoadingStatus.Idle,
     error: null,
   }
 );
@@ -71,30 +92,35 @@ export const projectSlice = createSlice({
   name: PROJECT_FEATURE_KEY,
   initialState: initialProjectState,
   reducers: {
-    add: projectAdapter.addOne,
-    remove: projectAdapter.removeOne,
+    // upsertOne: projectAdapter.upsertOne,
+    // remove: projectAdapter.removeOne,
     setLoadingStatus(state, action: PayloadAction<ReduxLoadingStatus>) {
       return {
         ...state,
         loadingStatus: action.payload,
       };
     },
+    setOpenedProjectUid(state, action: PayloadAction<string>) {
+      return {
+        ...state,
+        opened_project_uid: action.payload,
+      };
+    },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchProject.pending, (state: ProjectState) => {
-        state.loadingStatus = 'loading';
+      .addCase(pickProjectThunk.pending, (state: ReduxProjectState) => {
+        state.loading_status = ReduxLoadingStatus.Loading;
       })
       .addCase(
-        fetchProject.fulfilled,
-        (state: ProjectState, action: PayloadAction<CodeProjectEntity[]>) => {
-          projectAdapter.setAll(state, action.payload);
-          state.loadingStatus = 'loaded';
-        }
-      )
-      .addCase(fetchProject.rejected, (state: ProjectState, action) => {
-        state.loadingStatus = 'error';
-        state.error = action.error.message;
+        pickProjectThunk.fulfilled,
+        (state: ReduxProjectState, action: PayloadAction<ReduxCodeProject>) => {
+          projectAdapter.upsertOne(state, action.payload);
+          state.loading_status = ReduxLoadingStatus.Success;
+        })
+      .addCase(pickProjectThunk.rejected, (state: ReduxProjectState, action) => {
+        state.loading_status = ReduxLoadingStatus.Error;
+        state.error = String(action.payload);
       });
   },
 });
@@ -141,10 +167,15 @@ export const projectActions = projectSlice.actions;
 const { selectAll, selectEntities } = projectAdapter.getSelectors();
 
 export const getProjectState = (rootState: {
-  [PROJECT_FEATURE_KEY]: ProjectState;
-}): ProjectState => rootState[PROJECT_FEATURE_KEY];
+  [PROJECT_FEATURE_KEY]: ReduxProjectState;
+}): ReduxProjectState => rootState[PROJECT_FEATURE_KEY];
 
 export const selectAllProject = () => createSelector(getProjectState, selectAll);
+
+export const selectCurrentProjectUid = () => createSelector(
+  getProjectState,
+  (state) => state.opened_project_uid
+);
 
 export const selectProjectEntities = () => createSelector(
   getProjectState,
@@ -153,7 +184,7 @@ export const selectProjectEntities = () => createSelector(
 
 export const selectProjectLoadingStatus = () => createSelector(
   getProjectState,
-  (state) => state.loadingStatus
+  (state) => state.loading_status
 );
 
 export const selectProjectError = () => createSelector(

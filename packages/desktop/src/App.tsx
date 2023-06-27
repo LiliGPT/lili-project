@@ -1,7 +1,7 @@
 import React from 'react';
 import { BasePage, PageTitle, SharedUi, SideProjects } from '@lili-project/shared-ui';
 import { Provider, useDispatch, useSelector } from 'react-redux';
-import { store, useAppDispatch, fetchProject, selectAllProject, selectProjectLoadingStatus } from '@lili-project/lili-store';
+import { ReduxLoadingStatus, pickProjectThunk, selectAllProject, selectProjectError, selectProjectLoadingStatus, store, useAppDispatch } from '@lili-project/lili-store';
 
 export default function App() {
   return (
@@ -17,17 +17,26 @@ export default function App() {
 }
 
 function Testme() {
-  const projects = useSelector(selectAllProject());
   const dispatch = useAppDispatch();
-  const loading = useSelector(selectProjectLoadingStatus());
+  const projects = useSelector(selectAllProject());
+  const status = useSelector(selectProjectLoadingStatus());
+  const error = useSelector(selectProjectError());
 
-  const onClick = () => {
-    dispatch(fetchProject());
+  const onClick = async () => {
+    dispatch(pickProjectThunk()).unwrap().then((result) => {
+      console.log('result', result);
+    }).catch((error) => {
+      console.log('error', error);
+    });
   };
 
-  return <>
-    {loading === 'loaded' && <pre>{JSON.stringify(projects, null, 4)}</pre>}
+  return <div className="text-white">
+    {status === ReduxLoadingStatus.Success && <pre>{JSON.stringify(projects, null, 4)}</pre>}
+
+    {status === ReduxLoadingStatus.Error && <pre>error: {String(error)}</pre>}
+
+    {status === ReduxLoadingStatus.Loading && <pre>loading...</pre>}
 
     <button onClick={onClick}>fetch</button>
-  </>;
+  </div>;
 }
