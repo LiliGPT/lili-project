@@ -1,3 +1,5 @@
+export * from './lib/core.slice';
+export * from './lib/core.types';
 export * from './lib/mission.slice';
 export * from './lib/mission.types';
 export * from './lib/project.slice';

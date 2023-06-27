@@ -10,3 +10,6 @@ export * from './components/layout/BasePage';
 export * from './components/layout/PageTitle';
 export * from './components/projects/SidebarProjects';
 export * from './components/projects/ProjectCard';
+export * from './pages/ProjectsPage';
+export * from './pages/SignInPage';
+export * from './pages/AppContent';

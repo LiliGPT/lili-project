@@ -6,8 +6,20 @@
   .TextInput {
     @apply relative w-full flex flex-row;
   }
-  .TextInput .InputTag.Text.MultiLine {
+  .TextInput.MultiLine .InputTag {
     @apply flex-grow bg-transparent appearance-none max-h-32 min-h-fit text-slate-300
       outline-none border border-transparent focus:border-tertiary py-1 px-2 bg-boldy;
+  }
+
+  .TextInput.SingleLine {
+    @apply mt-2 mb-4;
+  }
+  .TextInput.SingleLine .InputTag {
+    @apply flex-grow bg-boldy appearance-none text-slate-300
+      outline-none border border-transparent focus:border-tertiary py-3 px-2 font-normal text-sm;
+  }
+
+  .InputLabel {
+    @apply absolute top-0 left-2 h-fit text-xs -translate-y-1/2 leading-3 text-secondary bg-boldy;
   }
 }

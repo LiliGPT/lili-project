@@ -5,30 +5,51 @@ interface Props {
   label: string;
   value: string;
   onChange?: (value: string) => void;
-  action: {
+  action?: {
     label: string;
     onClick: () => void;
   };
   multiline?: boolean;
+  password?: boolean;
 }
 
 export function TextInput(props: Props) {
-  const { label, value, onChange, action, multiline } = props;
+  const { label, value, onChange, action, multiline, password } = props;
+  const multilineClass = multiline ? 'MultiLine' : 'SingleLine';
+  let tagComponent: JSX.Element;
+  if (multiline) {
+    tagComponent = <textarea
+      className="InputTag"
+      onChange={(e) => onChange && onChange(e.target.value)}
+    >{value}</textarea>;
+  } else {
+    tagComponent = <input
+      className="InputTag"
+      type={password ? 'password' : 'text'}
+      value={value}
+      onChange={(e) => onChange && onChange(e.target.value)}
+    />;
+  }
+
+  let labelComponent: JSX.Element = <></>;
+  if (label) {
+    labelComponent = <span className="InputLabel">{label}</span>;
+  }
 
   return (
-    <div className="TextInput">
-      <textarea
-        className="InputTag Text MultiLine"
-        // onChange={(e) => onChange && onChange(e.target.value)}
-      ></textarea>
-      <CustomButton
-        label={action.label}
-        size="flex"
-        variant="secondary"
-        disabled={false}
-        onClick={action.onClick}
-        rounded={false}
-      />
+    <div className={`TextInput ${multilineClass}`}>
+      {labelComponent}
+      {tagComponent}
+      {!!action && (
+        <CustomButton
+          label={action.label}
+          size="flex"
+          variant="secondary"
+          disabled={false}
+          onClick={action.onClick}
+          rounded={false}
+        />
+      )}
     </div>
   );
 }
