@@ -55,11 +55,11 @@ export const pickProjectThunk = createAsyncThunk<
 >('project/pickProjectThunk',
   async (args, { rejectWithValue }) => {
     let project: CodeProject | undefined;
-    if (!PlatformClient.client) {
-      return rejectWithValue(makeErrorValue('Platform client not set.'));
-    }
+    // if (!PlatformClient.client()) {
+    //   return rejectWithValue(makeErrorValue('Platform client not set.'));
+    // }
     try {
-      project = await PlatformClient.client?.pickProject();
+      project = await PlatformClient.client().pickProject();
     } catch (error) {
       return rejectWithValue(makeErrorValue(error));
     }

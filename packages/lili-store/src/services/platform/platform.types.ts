@@ -1,3 +1,5 @@
+import { TauriInvokeFn } from './rust-platform.types';
+
 export interface CodeProject {
   project_dir: string;
   code_language: string;
@@ -23,6 +25,12 @@ export enum PlatformPossibleClients {
 }
 
 export abstract class SpecificPlatformClient {
+  invokeFn: TauriInvokeFn;
+
+  constructor(invokeFn: TauriInvokeFn) {
+    this.invokeFn = invokeFn;
+  }
+
   /**
    * pickProject public function
    */

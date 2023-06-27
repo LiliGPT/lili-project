@@ -1,3 +1,5 @@
+export * from './lib/mission.slice';
+export * from './lib/mission.types';
 export * from './lib/project.slice';
 export * from './lib/project.types';
 export * from './lib/redux.types';
@@ -5,6 +7,7 @@ export * from './services/platform/platform.client';
 export * from './services/platform/platform.error';
 export * from './services/platform/platform.types';
 export * from './services/platform/rust-platform.client';
+export * from './services/platform/rust-platform.types';
 export * from './services/prompter/prompter.types';
 export * from './services/prompter/prompter.client';
 export * from './store';

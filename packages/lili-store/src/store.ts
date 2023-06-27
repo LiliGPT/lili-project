@@ -3,10 +3,12 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { projectSlice } from './lib/project.slice';
+import { missionSlice } from './lib/mission.slice';
 
 export const store = configureStore({
   reducer: {
     project: projectSlice.reducer,
+    mission: missionSlice.reducer,
   },
 });
 

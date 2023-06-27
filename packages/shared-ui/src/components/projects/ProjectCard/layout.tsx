@@ -1,6 +1,6 @@
 "use client";
 
-import { ReduxCodeProject } from "@lili-project/lili-store";
+import { ReduxCodeProject, selectMissionExecution, useAppSelector } from "@lili-project/lili-store";
 import './styles.css';
 import { RunnableCommand, RunnableCommandStatus } from "../RunnableCommand";
 import { CustomButton } from "../../Button";
@@ -16,6 +16,7 @@ interface Props {
 
 export function ProjectCardLayout(props: Props) {
   const { project, missionOpened, onClickOpenMission, onClickCloseMission } = props;
+  const execution = useAppSelector(selectMissionExecution(`new-${project.data.project_dir}`));
 
   return (
     <div className="ProjectCard">
@@ -57,7 +58,7 @@ export function ProjectCardLayout(props: Props) {
       )}
 
       {missionOpened && (
-        <MissionDetails />
+        <MissionDetails project={project} execution={execution} />
       )}
     </div>
   );
