@@ -33,7 +33,7 @@ export function ProjectCardLayout(props: Props) {
             <CustomButton
               label="New Mission"
               size="small"
-              variant="primary"
+              variant="accent"
               disabled={false}
               onClick={onClickOpenMission}
             />

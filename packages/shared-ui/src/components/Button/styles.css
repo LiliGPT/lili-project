@@ -19,7 +19,7 @@
     }
 
     &.accent {
-      @apply bg-accent hover:bg-accent-hover text-black;
+      @apply bg-accent hover:bg-accent-hover text-gray-300;
     }
 
     &.disabled {

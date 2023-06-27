@@ -13,11 +13,11 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        boldy: '#101215',
+        boldy: '#1a1c20',
         primary: '#202225',
         secondary: '#5865F2',
         tertiary: '#2A3849',
-        accent: '#E09F1F',
+        accent: '#8A4300',
         'accent-hover': '#b06F00',
       }
     },

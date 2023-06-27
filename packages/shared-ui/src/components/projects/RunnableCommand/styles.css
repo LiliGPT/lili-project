@@ -4,17 +4,17 @@
 
 @layer components {
   .RunnableCommand {
-    @apply flex flex-row items-center;
+    @apply flex flex-row items-center border-b border-b-primary bg-boldy mb-0 py-1 px-2;
   }
 
   .RunnableCommand.Idle {
   }
 
   .RunnableCommand_icon {
-    @apply fill-gray-600 mr-2;
+    @apply fill-gray-600 mr-2 -mt-2;
   }
 
   .RunnableCommand_label {
-    @apply text-gray-600 mr-2;
+    @apply text-gray-600 mr-2 w-36 overflow-ellipsis overflow-hidden text-xs whitespace-nowrap;
   }
 }

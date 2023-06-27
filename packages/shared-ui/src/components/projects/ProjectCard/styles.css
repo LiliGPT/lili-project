@@ -4,7 +4,7 @@
 
 @layer components {
   .ProjectCard {
-    @apply flex flex-col bg-primary rounded-lg shadow-lg overflow-hidden min-h-[250px];
+    @apply flex flex-col bg-primary rounded-lg shadow-lg min-h-[250px];
   }
 
   .ProjectCard_header {
