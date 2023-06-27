@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .ProjectCard {
+    @apply bg-primary p-2 pb-4 rounded-lg shadow-lg overflow-hidden min-h-[250px];
+  }
+
+  .ProjectCard_title {
+    @apply mb-2 text-white text-base font-bold;
+  }
+
+  .ProjectCard_subtitle {
+    @apply inline-block ml-4 text-gray-400 text-xs;
+  }
+
+  .ProjectCard_data {
+    @apply mb-4;
+  }
+
+  .ProjectCard_data_item {
+    @apply text-gray-400 text-sm;
+  }
+
+  .ProjectCard_data_item_label {
+    @apply w-36 inline-block mr-2;
+  }
+
+  .ProjectCard_data_item_value {
+    @apply inline-block;
+  }
+}

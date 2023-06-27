@@ -9,3 +9,4 @@ export * from './components/layout/Spacer';
 export * from './components/layout/BasePage';
 export * from './components/layout/PageTitle';
 export * from './components/projects/SidebarProjects';
+export * from './components/projects/ProjectCard';

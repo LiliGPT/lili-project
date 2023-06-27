@@ -1,0 +1,64 @@
+"use client";
+
+import { ReduxCodeProject } from "@lili-project/lili-store";
+import './styles.css';
+import { RunnableCommand, RunnableCommandStatus } from "../RunnableCommand";
+import { CustomButton } from "../../Button";
+import { ProjectDetails } from "./ProjectDetails";
+import { MissionDetails } from "./MissionDetails";
+
+interface Props {
+  missionOpened: boolean;
+  onClickOpenMission: () => void;
+  onClickCloseMission: () => void;
+  project: ReduxCodeProject;
+}
+
+export function ProjectCardLayout(props: Props) {
+  const { project, missionOpened, onClickOpenMission, onClickCloseMission } = props;
+
+  return (
+    <div className="ProjectCard">
+      <div className="flex flex-row justify-between">
+        <div className="ProjectCard_title">
+          {project.display_name}
+          {missionOpened && (
+            <div className="ProjectCard_subtitle">
+              New mission
+            </div>
+          )}
+        </div>
+        {!missionOpened && (
+          <div className="">
+            <CustomButton
+              label="New Mission"
+              size="small"
+              variant="primary"
+              disabled={false}
+              onClick={onClickOpenMission}
+            />
+          </div>
+        )}
+        {missionOpened && (
+          <div className="">
+            <CustomButton
+              label="Cancel"
+              size="small"
+              variant="danger"
+              disabled={false}
+              onClick={onClickCloseMission}
+            />
+          </div>
+        )}
+      </div>
+
+      {!missionOpened && (
+        <ProjectDetails project={project} />
+      )}
+
+      {missionOpened && (
+        <MissionDetails />
+      )}
+    </div>
+  );
+}

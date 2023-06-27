@@ -1,5 +1,5 @@
 import React from 'react';
-import { BasePage, PageTitle, SharedUi, SideProjects } from '@lili-project/shared-ui';
+import { BasePage, PageTitle, ProjectCard, SharedUi, SideProjects } from '@lili-project/shared-ui';
 import { Provider, useDispatch, useSelector } from 'react-redux';
 import { ReduxLoadingStatus, pickProjectThunk, selectAllProject, selectProjectError, selectProjectLoadingStatus, store, useAppDispatch } from '@lili-project/lili-store';
 
@@ -31,7 +31,21 @@ function Testme() {
   };
 
   return <div className="text-white">
-    {status === ReduxLoadingStatus.Success && <pre>{JSON.stringify(projects, null, 4)}</pre>}
+    {status === ReduxLoadingStatus.Success && (
+      <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4">
+          {projects.map((project) => (
+            <ProjectCard
+              key={project.project_uid}
+              project={project}
+            />
+          ))}
+        </div>
+        <div className="bg-primary text-white p-4 rounded-xl">
+            right content
+        </div>
+      </div>
+    )}
 
     {status === ReduxLoadingStatus.Error && <pre>error: {String(error)}</pre>}
 

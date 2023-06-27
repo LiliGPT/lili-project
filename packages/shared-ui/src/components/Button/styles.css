@@ -4,18 +4,18 @@
 
 @layer components {
   .CustomButton {
-    @apply text-white font-bold py-2 px-4 appearance-none outline-none border-none transition-colors duration-500 ease-in-out;
+    @apply text-white py-2 px-4 appearance-none outline-none border-none transition-colors duration-500 ease-in-out;
 
     &.primary {
-      @apply bg-blue-500 hover:bg-blue-700;
+      @apply hover:bg-blue-500 bg-blue-700;
     }
 
     &.secondary {
-      @apply bg-green-500 hover:bg-green-700;
+      @apply bg-slate-800 hover:bg-slate-700;
     }
 
-    &.tertiary {
-      @apply bg-red-500 hover:bg-red-700;
+    &.danger {
+      @apply bg-red-900 hover:bg-red-800;
     }
 
     &.accent {
@@ -27,7 +27,7 @@
     }
 
     &.small {
-      @apply text-sm py-2 px-4 rounded;
+      @apply text-xs mx-1 py-0 px-2 leading-5 rounded;
     }
 
     &.medium {
