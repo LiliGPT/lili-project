@@ -33,4 +33,5 @@ pub struct PathInfo {
     pub dependencies_installed: bool,
     pub local_server_commands: Vec<String>,
     pub subprojects: Vec<SubprojectDescriptor>,
+    pub test_scripts: serde_json::Map<String, serde_json::Value>,
 }

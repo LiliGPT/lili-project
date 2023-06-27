@@ -4,7 +4,7 @@
 
 @layer components {
   .CustomButton {
-    @apply text-white py-2 px-4 appearance-none outline-none border-none transition-colors duration-500 ease-in-out;
+    @apply text-white py-2 px-4 appearance-none outline-none border-none transition-colors duration-500 ease-in-out items-center;
 
     &.primary {
       @apply hover:bg-blue-500 bg-blue-700;
@@ -26,16 +26,33 @@
       @apply bg-gray-500 cursor-not-allowed;
     }
 
+    &.small.is-rounded {
+      @apply rounded;
+    }
+    &.medium.is-rounded {
+      @apply rounded-md;
+    }
+    &.large.is-rounded {
+      @apply rounded-lg;
+    }
+    &.is-sharp {
+      @apply rounded-none;
+    }
+
     &.small {
-      @apply text-xs mx-1 py-0 px-2 leading-5 rounded;
+      @apply text-xs mx-1 py-0 px-2 leading-5;
+    }
+
+    &.flex {
+      @apply text-[11px];
     }
 
     &.medium {
-      @apply text-lg py-2 px-4 rounded-md;
+      @apply text-sm py-2 px-4;
     }
 
     &.large {
-      @apply text-sm py-2 px-4 rounded-xl;
+      @apply text-sm py-2 px-4;
     }
 
     &.fullWidth {

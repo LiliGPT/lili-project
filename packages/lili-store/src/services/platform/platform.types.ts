@@ -5,6 +5,9 @@ export interface CodeProject {
   dependencies_installed: boolean | null;
   local_server_commands: string[];
   subprojects: CodeSubproject[];
+  test_scripts: {
+    [key: string]: string,
+  };
 }
 
 export interface CodeSubproject {

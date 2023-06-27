@@ -19,6 +19,7 @@ pub fn get_path_info(path: &str) -> Result<types::PathInfo, String> {
     let local_server_commands =
         frameworks::get_local_server_commands(path, &code_language, &framework).unwrap_or(vec![]);
     let subprojects = subprojects::get_subprojects(path, &code_language, &framework);
+    let test_scripts = tests::get_test_scripts(path.to_string()).unwrap_or(serde_json::Map::new());
     Ok(types::PathInfo {
         project_dir: path.to_string(),
         code_language,
@@ -26,6 +27,7 @@ pub fn get_path_info(path: &str) -> Result<types::PathInfo, String> {
         dependencies_installed,
         local_server_commands,
         subprojects,
+        test_scripts,
     })
 }
 

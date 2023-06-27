@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .TextInput {
+    @apply relative w-full flex flex-row;
+  }
+  .TextInput .InputTag.Text.MultiLine {
+    @apply flex-grow bg-transparent appearance-none max-h-32 min-h-fit text-slate-300
+      outline-none border border-transparent focus:border-tertiary py-1 px-2 bg-boldy;
+  }
+}

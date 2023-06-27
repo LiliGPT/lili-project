@@ -65,6 +65,23 @@ export function ProjectDetails(props: Props) {
           ))}
         </div>
       </div>
+
+      <div className="ProjectCard_actions">
+        <h3 className="ProjectCard_actions_title">
+          Test scripts
+        </h3>
+        <div className="ProjectCard_actions_list">
+          {Object.entries(project.data.test_scripts).map(([commandKey, commandValue], index) => (
+            <RunnableCommand
+              key={`${index}-${commandKey}`}
+              label={commandKey}
+              status={RunnableCommandStatus.Idle}
+              onPlay={() => { }}
+              onStop={() => { }}
+            />
+          ))}
+        </div>
+      </div>
     </>
   );
 }

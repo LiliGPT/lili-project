@@ -3,10 +3,11 @@ import './styles.css';
 interface Props {
   label: string;
   onClick: () => void;
-  size: 'small' | 'medium' | 'large';
+  size: 'small' | 'medium' | 'large' | 'flex';
   variant: 'primary' | 'secondary' | 'accent' | 'danger';
-  disabled: boolean;
+  disabled?: boolean;
   fullWidth?: boolean;
+  rounded?: boolean;
 }
 
 export function CustomButton(props: Props) {
@@ -17,11 +18,16 @@ export function CustomButton(props: Props) {
     variant,
     disabled,
     fullWidth = false,
+    rounded,
   } = props;
+
+  const fullWidthClass = fullWidth ? 'fullWidth' : '';
+  const roundedClass = rounded || rounded === undefined ? 'is-rounded' : 'is-sharp';
+  const disabledClass = disabled ? 'is-disabled' : 'is-enabled';
 
   return (
     <button
-      className={`CustomButton ${size} ${variant} ${fullWidth ? 'fullWidth' : ''}`}
+      className={`CustomButton ${size} ${variant} ${fullWidthClass} ${roundedClass} ${disabledClass}`}
       onClick={onClick}
       disabled={disabled}
     >

@@ -22,14 +22,6 @@ function Testme() {
   const status = useSelector(selectProjectLoadingStatus());
   const error = useSelector(selectProjectError());
 
-  const onClick = async () => {
-    dispatch(pickProjectThunk()).unwrap().then((result) => {
-      console.log('result', result);
-    }).catch((error) => {
-      console.log('error', error);
-    });
-  };
-
   return <div className="text-white">
     {status === ReduxLoadingStatus.Success && (
       <div className="grid grid-cols-2 gap-4">
@@ -50,7 +42,5 @@ function Testme() {
     {status === ReduxLoadingStatus.Error && <pre>error: {String(error)}</pre>}
 
     {status === ReduxLoadingStatus.Loading && <pre>loading...</pre>}
-
-    <button onClick={onClick}>fetch</button>
   </div>;
 }

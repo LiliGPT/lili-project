@@ -19,7 +19,7 @@ export function ProjectCardLayout(props: Props) {
 
   return (
     <div className="ProjectCard">
-      <div className="flex flex-row justify-between">
+      <div className="ProjectCard_header">
         <div className="ProjectCard_title">
           {project.display_name}
           {missionOpened && (

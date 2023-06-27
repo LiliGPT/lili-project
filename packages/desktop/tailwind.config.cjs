@@ -13,6 +13,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        boldy: '#101215',
         primary: '#202225',
         secondary: '#5865F2',
         tertiary: '#2A3849',

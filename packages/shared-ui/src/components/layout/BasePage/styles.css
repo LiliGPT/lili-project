@@ -85,7 +85,7 @@
   }
 
   .AppMainContainer {
-    @apply w-full;
+    @apply w-full h-screen overflow-y-auto;
   }
 
   .AppLogo {

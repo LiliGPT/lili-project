@@ -59,12 +59,6 @@ export function BasePage(props: Props) {
       </div>
       <div className="AppMainContainer">
         {children}
-        <div className="h-96 bg-red-800"></div>
-        <div className="h-96 bg-blue-800"></div>
-        <div className="h-96 bg-green-800"></div>
-        <div className="h-96 bg-red-800"></div>
-        <div className="h-96 bg-blue-800"></div>
-        <div className="h-96 bg-green-800"></div>
       </div>
     </div>
   );

@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .MissionDetails {
+    @apply flex flex-col flex-grow;
+  }
+
+  .MissionDetails_InputWrapper {
+    @apply border-t border-tertiary;
+  }
+}

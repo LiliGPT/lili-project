@@ -9,15 +9,27 @@
 
   .SideProjectItem,
   .SideProjectItem_CloseIcon {
-    @apply duration-500 ease-out;
+    @apply duration-500 ease-out transition-all;
+  }
+
+  .SideProjectItem {
+    @apply relative mb-2 pt-4 pb-5 px-4 text-left border;
   }
 
   .SideProjectItem.inactive {
-    @apply relative mb-2 pt-4 pb-5 px-4 border border-slate-800 bg-slate-800 rounded-xl cursor-pointer text-gray-500;
+    @apply border-slate-800 bg-boldy opacity-25 rounded-xl cursor-pointer text-gray-500;
   }
 
   .SideProjectItem.active {
-    @apply relative mb-2 pt-4 pb-5 px-4 border border-slate-800 bg-secondary rounded-xl cursor-pointer text-black;
+    @apply bg-slate-800 rounded-xl cursor-pointer text-gray-500;
+  }
+
+  .SideProjectItem.active:hover {
+    @apply border-tertiary;
+  }
+
+  .SideProjectItem.inactive:hover {
+    @apply opacity-100;
   }
 
   /*
@@ -34,7 +46,7 @@
 
   .SideProjectItem.active .SideProjectItem_CloseIcon,
   .SideProjectItem:hover .SideProjectItem_CloseIcon {
-    @apply bg-secondary hover:bg-tertiary;
+    @apply bg-primary hover:bg-tertiary;
   }
 
   .SideProjectItem_CloseIcon {
