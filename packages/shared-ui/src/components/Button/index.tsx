@@ -4,7 +4,7 @@ interface Props {
   label: string;
   onClick: () => void;
   size: 'small' | 'medium' | 'large' | 'flex';
-  variant: 'primary' | 'secondary' | 'accent' | 'danger';
+  variant: 'primary' | 'secondary' | 'accent' | 'danger' | 'boldy';
   disabled?: boolean;
   fullWidth?: boolean;
   rounded?: boolean;

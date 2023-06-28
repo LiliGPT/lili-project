@@ -1,9 +1,9 @@
 "use client";
 
-import { CodeMission, ReduxCodeProject, createMissionThunk, selectMissionExecution, useAppDispatch, useAppSelector } from "@lili-project/lili-store";
+import { CodeMission, ReduxCodeProject, ReduxMissionExecution, createMissionThunk, selectMissionExecution, useAppDispatch, useAppSelector } from "@lili-project/lili-store";
 import { ProjectCardLayout } from "./layout";
 import { useState } from "react";
-import { MissionDetails_OnClickGenerate } from "./MissionDetails";
+import { MissionDetails_OnClickGenerate, MissionDetails_OnClickRetry } from "./MissionDetails";
 
 interface Props {
   project: ReduxCodeProject;
@@ -16,7 +16,7 @@ export function ProjectCard(props: Props) {
   const [executionId, setExecutionId] = useState(`new-${project.data.project_dir}`);
   const execution = useAppSelector(selectMissionExecution(executionId));
 
-  const onClickGenerate: MissionDetails_OnClickGenerate = (project: ReduxCodeProject, message: string) => {
+  const onClickGenerateExecution: MissionDetails_OnClickGenerate = (project: ReduxCodeProject, message: string) => {
     dispatch(createMissionThunk({
       message,
       project_dir: props.project.data.project_dir,
@@ -34,6 +34,18 @@ export function ProjectCard(props: Props) {
     });
   };
 
+  const onClickRetryExecution: MissionDetails_OnClickRetry = (
+    project: ReduxCodeProject,
+    message: string,
+    execution: ReduxMissionExecution,
+  ) => {
+    //
+  };
+
+  const onClickCloseMission = async () => {
+    // 
+  };
+
   return (
     <ProjectCardLayout
       missionOpened={missionOpened}
@@ -42,7 +54,8 @@ export function ProjectCard(props: Props) {
       project={project}
       executionId={executionId}
       execution={execution}
-      onClickGenerateExecution={onClickGenerate}
+      onClickGenerateExecution={onClickGenerateExecution}
+      onClickRetryExecution={onClickRetryExecution}
     />
   );
 }

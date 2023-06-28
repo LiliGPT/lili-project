@@ -8,6 +8,6 @@
   }
 
   .MissionDetails_InputWrapper {
-    @apply border-t border-tertiary;
+    @apply border-t border-tertiary -mb-3;
   }
 }

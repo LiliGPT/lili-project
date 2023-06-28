@@ -141,6 +141,7 @@ export const selectMissionExecution = (entity_id: string) => createSelector(
 
 // --- Thunks
 // /home/l/rust/experiments/gui/src/redux/slices/missionsSlice.ts
+// todo next: set fail thunk and retry mission thunk
 
 type CreateMissionThunkArgs = {
   project_dir: string;
@@ -154,7 +155,7 @@ export const createMissionThunk = createAsyncThunk<
     rejectValue: string;
   }
 >('mission/createMissionThunk',
-  async (args, { rejectWithValue, getState, dispatch }) => {
+  async (args, { dispatch }) => {
     const entity_id = `new-${args.project_dir}`;
     let execution: MissionExecution | undefined;
     // if (!PlatformClient.client()) {
@@ -166,8 +167,6 @@ export const createMissionThunk = createAsyncThunk<
       loading_status: ReduxLoadingStatus.Loading,
       error: null,
     };
-    const getCurrentState = () => (getState() as RootState)[MISSION_FEATURE_KEY];
-    // executionAdapter.addOne(getCurrentState(), new_execution);
     dispatch(missionSlice.actions.upsertOne(new_execution));
     try {
       await dispatch(missionSlice.actions.setLoadingStatus({

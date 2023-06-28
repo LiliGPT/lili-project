@@ -4,15 +4,15 @@
 
 @layer components {
   .ProjectCard {
-    @apply flex flex-col bg-primary rounded-lg shadow-lg min-h-[250px];
+    @apply flex flex-col bg-primary rounded-lg shadow-lg min-h-[250px] pb-4;
   }
 
   .ProjectCard_header {
-    @apply flex flex-row justify-between py-2 px-3;
+    @apply flex flex-row justify-between pt-2 pl-3 pr-2 pb-3;
   }
 
   .ProjectCard_title {
-    @apply mb-2 text-white text-base font-bold;
+    @apply text-white text-base font-bold;
   }
 
   .ProjectCard_subtitle {
@@ -20,7 +20,7 @@
   }
 
   .ProjectCard_data {
-    @apply mb-4 px-3;
+    @apply px-3;
   }
 
   .ProjectCard_data_item {

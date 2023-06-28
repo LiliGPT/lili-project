@@ -1,24 +1,25 @@
 "use client";
 
-import { ReduxCodeProject, ReduxMissionExecution, selectMissionExecution, useAppSelector } from "@lili-project/lili-store";
+import { MissionExecutionStatus, ReduxCodeProject, ReduxMissionExecution, selectMissionExecution, useAppSelector } from "@lili-project/lili-store";
 import './styles.css';
 import { RunnableCommand, RunnableCommandStatus } from "../RunnableCommand";
 import { CustomButton } from "../../Button";
 import { ProjectDetails } from "./ProjectDetails";
-import { MissionDetails, MissionDetails_OnClickGenerate } from "./MissionDetails";
+import { MissionDetails, MissionDetails_OnClickGenerate, MissionDetails_OnClickRetry } from "./MissionDetails";
 
 interface Props {
   missionOpened: boolean;
   onClickOpenMission: () => void;
   onClickCloseMission: () => void;
   onClickGenerateExecution: MissionDetails_OnClickGenerate;
+  onClickRetryExecution: MissionDetails_OnClickRetry;
   project: ReduxCodeProject;
   executionId: string;
-  execution: ReduxMissionExecution;
+  execution?: ReduxMissionExecution;
 }
 
 export function ProjectCardLayout(props: Props) {
-  const { project, missionOpened, onClickOpenMission, onClickCloseMission, onClickGenerateExecution, executionId, execution } = props;
+  const { project, missionOpened, onClickOpenMission, onClickCloseMission, onClickGenerateExecution, onClickRetryExecution, executionId, execution } = props;
   
   return (
     <div className="ProjectCard">
@@ -48,7 +49,7 @@ export function ProjectCardLayout(props: Props) {
               label="Cancel"
               size="small"
               variant="danger"
-              disabled={false}
+              disabled={execution?.data?.execution_status === MissionExecutionStatus.Created}
               onClick={onClickCloseMission}
             />
           </div>
@@ -64,6 +65,7 @@ export function ProjectCardLayout(props: Props) {
           project={project}
           execution={execution}
           onClickGenerate={onClickGenerateExecution}
+          onClickRetry={onClickRetryExecution}
         />
       )}
     </div>

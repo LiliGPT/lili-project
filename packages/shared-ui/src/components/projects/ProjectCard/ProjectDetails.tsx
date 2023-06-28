@@ -42,7 +42,7 @@ export function ProjectDetails(props: Props) {
                 size="small"
                 variant="secondary"
                 disabled={false}
-                onClick={() => {}}
+                onClick={() => { /** */ }}
               />
             )}
           </div>
@@ -59,8 +59,8 @@ export function ProjectDetails(props: Props) {
               key={command}
               label={command}
               status={RunnableCommandStatus.Idle}
-              onPlay={() => { }}
-              onStop={() => { }}
+              onPlay={() => { /** */ }}
+              onStop={() => { /** */ }}
             />
           ))}
         </div>
@@ -76,8 +76,8 @@ export function ProjectDetails(props: Props) {
               key={`${index}-${commandKey}`}
               label={commandKey}
               status={RunnableCommandStatus.Idle}
-              onPlay={() => { }}
-              onStop={() => { }}
+              onPlay={() => { /** */ }}
+              onStop={() => { /** */ }}
             />
           ))}
         </div>
