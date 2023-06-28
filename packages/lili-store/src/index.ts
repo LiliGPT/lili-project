@@ -1,3 +1,5 @@
+export * from './lib/auth.slice';
+export * from './lib/auth.types';
 export * from './lib/core.slice';
 export * from './lib/core.types';
 export * from './lib/mission.slice';

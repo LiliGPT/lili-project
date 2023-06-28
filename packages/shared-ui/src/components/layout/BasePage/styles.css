@@ -41,6 +41,17 @@
           }
         }
 
+        &.variant-normal {
+        }
+
+        &.variant-highlighted {
+          @apply bg-secondary opacity-100 !important;
+
+          .SvgIcon {
+            @apply fill-slate-200 !important;
+          }
+        }
+
         &:hover {
           @apply bg-secondary rounded-2xl;
 

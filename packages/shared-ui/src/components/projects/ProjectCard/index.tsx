@@ -1,8 +1,9 @@
 "use client";
 
-import { CodeMission, ReduxCodeProject } from "@lili-project/lili-store";
+import { CodeMission, ReduxCodeProject, createMissionThunk, selectMissionExecution, useAppDispatch, useAppSelector } from "@lili-project/lili-store";
 import { ProjectCardLayout } from "./layout";
 import { useState } from "react";
+import { MissionDetails_OnClickGenerate } from "./MissionDetails";
 
 interface Props {
   project: ReduxCodeProject;
@@ -10,7 +11,28 @@ interface Props {
 
 export function ProjectCard(props: Props) {
   const { project } = props;
+  const dispatch = useAppDispatch();
   const [missionOpened, setMissionOpened] = useState(true);
+  const [executionId, setExecutionId] = useState(`new-${project.data.project_dir}`);
+  const execution = useAppSelector(selectMissionExecution(executionId));
+
+  const onClickGenerate: MissionDetails_OnClickGenerate = (project: ReduxCodeProject, message: string) => {
+    dispatch(createMissionThunk({
+      message,
+      project_dir: props.project.data.project_dir,
+    })).unwrap().then((execution) => {
+      if (!execution.data) {
+        console.error(
+          '[ProjectCard/index.tsx @ onClickGenerate] no execution data.',
+          'This should never happen since this execution was just created.',
+          { execution }
+        );
+        // todo: show error
+        return;
+      }
+      setExecutionId(execution.data?.execution_id);
+    });
+  };
 
   return (
     <ProjectCardLayout
@@ -18,6 +40,9 @@ export function ProjectCard(props: Props) {
       onClickOpenMission = {() => setMissionOpened(true)}
       onClickCloseMission = {() => setMissionOpened(false)}
       project={project}
+      executionId={executionId}
+      execution={execution}
+      onClickGenerateExecution={onClickGenerate}
     />
   );
 }

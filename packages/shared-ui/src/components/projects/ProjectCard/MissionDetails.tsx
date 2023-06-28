@@ -4,25 +4,25 @@ import { Spacer } from "../../layout/Spacer";
 import './MissionDetails.styles.css';
 import { useState } from 'react';
 
+export type MissionDetails_OnClickGenerate = (project: ReduxCodeProject, message: string, execution?: ReduxMissionExecution) => void;
+
 interface Props {
   project: ReduxCodeProject;
   execution?: ReduxMissionExecution;
+  onClickGenerate: MissionDetails_OnClickGenerate;
 }
 
 export function MissionDetails(props: Props) {
-  const dispatch = useAppDispatch();
-  const { project, execution } = props;
+  const { project, execution, onClickGenerate } = props;
+  
   const [message, setMessage] = useState('');
   const status = execution?.loading_status;
   const error = execution?.error;
-  
-  const onGenerateMission = () => {
-    dispatch(createMissionThunk({
-      message,
-      project_dir: props.project.data.project_dir,
-    }));
-  };
 
+  const onClickGenerateWrapper = () => {
+    onClickGenerate(project, message);
+  };
+  
   return (
     <div className="MissionDetails">
       <Spacer />
@@ -32,6 +32,9 @@ export function MissionDetails(props: Props) {
       {status === ReduxLoadingStatus.Error && !!error && (
         <div className="p-2 text-sm text-red-500">{error.error_description}</div>
       )}
+      {status === ReduxLoadingStatus.Success && !!execution && (
+        <pre className="text-white text-xs">{JSON.stringify(execution, null, 2)}</pre>
+      )}
       <div className="MissionDetails_InputWrapper">
         <TextInput
           label="Mission description"
@@ -39,7 +42,8 @@ export function MissionDetails(props: Props) {
           onChange={(v) => setMessage(v)}
           action={{
             label: 'Generate',
-            onClick: onGenerateMission,
+            onClick: onClickGenerateWrapper,
+            loading: status === ReduxLoadingStatus.Loading,
           }}
           multiline
         />

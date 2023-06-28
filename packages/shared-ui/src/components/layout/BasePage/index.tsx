@@ -6,7 +6,7 @@ import { HomeIcon } from '../../icons/HomeIcon';
 import { ProjectsIcon } from '../../icons/ProjectsIcon';
 import { BookIcon } from '../../icons/BookIcon';
 import { ProfileIcon } from '../../icons/ProfileIcon';
-import { ReduxCoreView, selectCoreView, setCoreView, useAppDispatch, useAppSelector } from '@lili-project/lili-store';
+import { ReduxCoreView, selectCoreView, selectCurrentUser, setCoreView, useAppDispatch, useAppSelector } from '@lili-project/lili-store';
 
 interface Props {
   side: React.ReactNode;
@@ -16,6 +16,7 @@ interface Props {
 export function BasePage(props: Props) {
   const dispatch = useAppDispatch();
   const view = useAppSelector(selectCoreView());
+  const user = useAppSelector(selectCurrentUser());
 
   const { side, children } = props;
 
@@ -64,6 +65,7 @@ export function BasePage(props: Props) {
             icon={ProfileIcon}
             onClick={onClickSignIn}
             active={view === ReduxCoreView.SignIn}
+            variant={user ? `highlighted` : 'normal'}
           />
         </SideNav>
       </div>

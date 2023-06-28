@@ -31,8 +31,12 @@ export abstract class SpecificPlatformClient {
     this.invokeFn = invokeFn;
   }
 
-  /**
-   * pickProject public function
-   */
   abstract pickProject(): Promise<CodeProject>;
+  abstract signInPassword(username: string, password: string): Promise<PlatformSignInResponse>;
+  abstract refreshToken(refresh_token: string): Promise<PlatformSignInResponse>;
+}
+
+export interface PlatformSignInResponse {
+  access_token: string;
+  refresh_token: string;
 }

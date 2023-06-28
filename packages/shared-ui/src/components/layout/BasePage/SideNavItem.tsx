@@ -4,6 +4,7 @@ interface Props {
   onClick: () => void;
   className?: string;
   active: boolean;
+  variant?: 'normal' | 'highlighted';
 }
 
 export function SideNavItem(props: Props) {
@@ -12,11 +13,11 @@ export function SideNavItem(props: Props) {
     icon: Icon,
     onClick,
     active,
-    className = '',
+    variant = 'normal',
   } = props;
 
   return (
-    <button className={`AppMenuItem ${active ? 'active' : ''}`} onClick={onClick}>
+    <button className={`AppMenuItem ${active ? 'active' : ''} variant-${variant}`} onClick={onClick}>
       <Icon width={32} height={32} />
       <span className="AppMenuTooltip">{label}</span>
     </button>

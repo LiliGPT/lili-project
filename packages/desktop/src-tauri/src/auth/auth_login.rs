@@ -20,7 +20,7 @@ pub async fn auth_login(request: AuthLoginRequest) -> Result<AuthLoginResponse, 
         Ok(response) => response,
         Err(error) => return Err(format!("Failed to send request to auth server: {}", error)),
     };
-    println!("Response: {:?}", &response);
+    println!("text response: {:?}", &response);
     // let response = match response.json::<AuthLoginResponse>().await {
     //     Ok(response) => response,
     //     Err(error) => {
@@ -39,6 +39,7 @@ pub async fn auth_login(request: AuthLoginRequest) -> Result<AuthLoginResponse, 
             ))
         }
     };
+    println!("Response: {:?}", &response);
     let final_response = match serde_json::from_str::<AuthLoginResponse>(&response) {
         Ok(response) => response,
         Err(error) => {

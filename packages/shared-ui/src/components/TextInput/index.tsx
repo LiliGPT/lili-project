@@ -8,6 +8,7 @@ interface Props {
   action?: {
     label: string;
     onClick: () => void;
+    loading?: boolean;
   };
   multiline?: boolean;
   password?: boolean;
@@ -21,7 +22,8 @@ export function TextInput(props: Props) {
     tagComponent = <textarea
       className="InputTag"
       onChange={(e) => onChange && onChange(e.target.value)}
-    >{value}</textarea>;
+      value={value}
+    ></textarea>;
   } else {
     tagComponent = <input
       className="InputTag"
@@ -42,10 +44,10 @@ export function TextInput(props: Props) {
       {tagComponent}
       {!!action && (
         <CustomButton
-          label={action.label}
+          label={action.loading ? 'loading...' : action.label}
           size="flex"
           variant="secondary"
-          disabled={false}
+          disabled={action.loading}
           onClick={action.onClick}
           rounded={false}
         />

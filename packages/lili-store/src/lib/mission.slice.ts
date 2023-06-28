@@ -11,6 +11,7 @@ import { PrompterClient } from '../services/prompter/prompter.client';
 import { PlatformError } from '../services/platform/platform.error';
 import { MissionExecution } from '../services/prompter/prompter.types';
 import { RootState } from '../store';
+import { refreshTokenThunk } from './auth.slice';
 
 export const MISSION_FEATURE_KEY = 'mission';
 
@@ -77,6 +78,7 @@ export const missionSlice = createSlice({
       loading_status: ReduxLoadingStatus;
     }>) {
       return _patchEntity(state, action.payload.execution_id, {
+        ...initialMissionState,
         loading_status: action.payload.loading_status,
       });
     },
@@ -85,6 +87,8 @@ export const missionSlice = createSlice({
       error: ReduxError;
     }>) {
       return _patchEntity(state, action.payload.execution_id, {
+        ...initialMissionState,
+        loading_status: ReduxLoadingStatus.Error,
         error: action.payload.error,
       });
     }
@@ -166,6 +170,11 @@ export const createMissionThunk = createAsyncThunk<
     // executionAdapter.addOne(getCurrentState(), new_execution);
     dispatch(missionSlice.actions.upsertOne(new_execution));
     try {
+      await dispatch(missionSlice.actions.setLoadingStatus({
+        execution_id: entity_id,
+        loading_status: ReduxLoadingStatus.Loading,
+      }));
+      await dispatch(refreshTokenThunk());
       execution = await PrompterClient.createMission(args.project_dir, args.message);
     } catch (error) {
       new_execution = {
