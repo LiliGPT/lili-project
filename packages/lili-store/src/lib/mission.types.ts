@@ -9,4 +9,7 @@ export interface ReduxMissionExecution {
   error: ReduxError | null;
 }
 
-export type ReduxMissionState = EntityState<ReduxMissionExecution>;
+export interface ReduxMissionState extends EntityState<ReduxMissionExecution> {
+  loading_status: ReduxLoadingStatus;
+  error: ReduxError | null;
+}

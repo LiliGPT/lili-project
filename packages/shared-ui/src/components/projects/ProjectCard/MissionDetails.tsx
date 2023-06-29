@@ -17,20 +17,23 @@ interface Props {
 }
 
 export function MissionDetails(props: Props) {
-  const { project, execution, onClickGenerate } = props;
+  const { project, execution, onClickGenerate, onClickRetry } = props;
   
   const [message, setMessage] = useState('');
   const status = execution?.loading_status;
   const error = execution?.error;
 
   const isNewlyCreated = execution?.data?.execution_status === MissionExecutionStatus.Created;
-
+  const isFailed = execution?.data?.execution_status === MissionExecutionStatus.Fail;
+  
   const onClickGenerateWrapper = () => {
     onClickGenerate(project, message);
   };
 
   const onClickRetryWrapper = () => {
-    // 
+    if (execution) {
+      onClickRetry(project, message, execution);
+    }
   }
   
   return (
@@ -47,7 +50,7 @@ export function MissionDetails(props: Props) {
           <div className="p-2 text-sm text-red-500">{error.error_description}</div>
         </>
       )}
-      {status === ReduxLoadingStatus.Success && !!execution && (
+      {!!(execution && !isFailed) && (
         <div className="py-2 px-3">
           <ExecutionItem
             defaultEditMode={true}
@@ -61,7 +64,7 @@ export function MissionDetails(props: Props) {
       )}
       {(
         status !== ReduxLoadingStatus.Success
-        || isNewlyCreated
+        || isNewlyCreated || isFailed
       ) && (
         <>
           <Spacer />

@@ -20,7 +20,6 @@ interface Props {
 
 export function ProjectCardLayout(props: Props) {
   const { project, missionOpened, onClickOpenMission, onClickCloseMission, onClickGenerateExecution, onClickRetryExecution, executionId, execution } = props;
-  
   return (
     <div className="ProjectCard">
       <div className="ProjectCard_header">

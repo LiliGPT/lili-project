@@ -3,6 +3,7 @@ import { CustomButton } from "../../Button";
 import { BookIcon } from "../../icons/BookIcon";
 import { SettingsDropdownButton } from "../../SettingsDropdownMenu";
 import { MissionContextFiles } from "../MissionContextFiles";
+import { ExecutionActions } from "../ExecutionActions";
 
 interface Props {
   execution: ReduxMissionExecution;
@@ -15,13 +16,14 @@ interface Props {
   canSetPerfect: boolean;
   onClickFail: () => void;
   onClickSetPerfect: () => void;
+  onClickApproveAndRun: () => void;
   canToggleEditMode?: boolean;
   hideProjectName?: boolean;
   hideMessage?: boolean;
 }
 
 export function ExecutionItemLayout(props: Props) {
-  const { execution, loading, editionMode, setEditionMode, canOpenSettings, settingsActions, canSetFail, canSetPerfect, onClickFail, onClickSetPerfect, hideProjectName, hideMessage, } = props;
+  const { execution, loading, editionMode, setEditionMode, canOpenSettings, settingsActions, canSetFail, canSetPerfect, onClickFail, onClickSetPerfect, onClickApproveAndRun, hideProjectName, hideMessage, } = props;
   const canToggleEditMode = props.canToggleEditMode ?? true;
   const executionData = execution.data;
   // --- settings dropdown
@@ -69,7 +71,7 @@ export function ExecutionItemLayout(props: Props) {
   const approveAndRunButton = !loading && editionMode && executionData?.execution_status === MissionExecutionStatus.Created && (
     <CustomButton
       label="approve and run"
-      onClick={() => { /** */ }}
+      onClick={onClickApproveAndRun}
       size="small"
       variant='boldy'
     />
@@ -99,11 +101,10 @@ export function ExecutionItemLayout(props: Props) {
           {settingsDropdownMenu}
         </div>
       </div>
-      {/* <MissionActions
+      <ExecutionActions
         execution={execution}
         canDelete={!loading && editionMode}
       />
-      */}
       <MissionContextFiles
         execution={execution}
         editMode={editionMode}

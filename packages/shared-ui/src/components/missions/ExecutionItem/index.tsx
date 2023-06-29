@@ -1,4 +1,4 @@
-import { MissionExecutionStatus, ReduxMissionExecution, useAppDispatch } from '@lili-project/lili-store';
+import { MissionExecutionStatus, ReduxMissionExecution, approveAndRunExecutionThunk, setExecutionFailThunk, useAppDispatch } from '@lili-project/lili-store';
 import './ExecutionItem.styles.css';
 import { useState } from 'react';
 import { BookIcon } from '../../icons/BookIcon';
@@ -39,7 +39,9 @@ export function ExecutionItem(props: Props) {
 
   const onClickFail = async () => {
     setLoading(true);
-    // await dispatch(deleteExecutionThunk(execution.execution_id));
+    if (executionData) {
+      await dispatch(setExecutionFailThunk(executionData.execution_id));
+    }
     setLoading(false);
     if (canToggleEditMode) {
       setEditionMode(false);
@@ -68,7 +70,13 @@ export function ExecutionItem(props: Props) {
 
   const onClickApproveAndRun = async () => {
     setLoading(true);
-    // await dispatch(approveAndRunExecutionThunk(execution.mission_data.project_dir, execution.execution_id));
+    console.log('onClickApproveAndRun ', executionData);
+    if (executionData) {
+      await dispatch(approveAndRunExecutionThunk({
+        execution_id: executionData.execution_id,
+        project_dir: executionData.mission_data.project_dir,
+      }));
+    }
     setLoading(false);
     if (canToggleEditMode) {
       setEditionMode(false);
@@ -116,5 +124,6 @@ export function ExecutionItem(props: Props) {
     canSetPerfect={canSetPerfect}
     onClickFail={onClickFail}
     onClickSetPerfect={onClickSetPerfect}
+    onClickApproveAndRun={onClickApproveAndRun}
   />
 }

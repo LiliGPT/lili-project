@@ -9,9 +9,9 @@ export class RustPlatformClient implements SpecificPlatformClient {
     this.invokeFn = invokeFn;
   }
 
-  async pickProject(): Promise<CodeProject> {
+  async pickProject(path?: string): Promise<CodeProject> {
     // throw new PlatformError('not_implemented', 'Rust platform not implemented.');
-    const project = await this.invokeFn<CodeProject>('open_project', { path: '' });
+    const project = await this.invokeFn<CodeProject>('open_project', { path: path ?? '' });
     return project;
   }
 
@@ -27,5 +27,15 @@ export class RustPlatformClient implements SpecificPlatformClient {
     const result = await this.invokeFn<PlatformSignInResponse>('auth_refresh_token_command', { request });
     console.log('refreshToken result: ', result);
     return result;
+  }
+
+  async runShellCommand(cwd: string, command: string): Promise<string> {
+    const request = { cwd, command };
+    return await this.invokeFn<string>('run_shell_command', request);
+  }
+
+  async installProjectDependencies(cwd: string): Promise<void> {
+    const request = { cwd };
+    await this.invokeFn<void>('install_dependencies', request);
   }
 }

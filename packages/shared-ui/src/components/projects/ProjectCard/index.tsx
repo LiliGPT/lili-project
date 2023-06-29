@@ -1,6 +1,6 @@
 "use client";
 
-import { CodeMission, ReduxCodeProject, ReduxMissionExecution, createMissionThunk, selectMissionExecution, useAppDispatch, useAppSelector } from "@lili-project/lili-store";
+import { CodeMission, ReduxCodeProject, ReduxMissionExecution, createMissionThunk, retryExecutionThunk, selectMissionExecution, useAppDispatch, useAppSelector } from "@lili-project/lili-store";
 import { ProjectCardLayout } from "./layout";
 import { useState } from "react";
 import { MissionDetails_OnClickGenerate, MissionDetails_OnClickRetry } from "./MissionDetails";
@@ -34,12 +34,15 @@ export function ProjectCard(props: Props) {
     });
   };
 
-  const onClickRetryExecution: MissionDetails_OnClickRetry = (
+  const onClickRetryExecution: MissionDetails_OnClickRetry = async (
     project: ReduxCodeProject,
     message: string,
     execution: ReduxMissionExecution,
   ) => {
-    //
+    await dispatch(retryExecutionThunk({
+      message,
+      execution_id: executionId,
+    }));
   };
 
   const onClickCloseMission = async () => {
