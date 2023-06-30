@@ -59,6 +59,7 @@ export function MissionDetails(props: Props) {
             canRetry={false}
             hideProjectName
             hideMessage
+            messageForRetry={message}
           />
         </div>
       )}

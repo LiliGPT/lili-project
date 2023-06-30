@@ -1,4 +1,4 @@
-import { MissionExecutionStatus, ReduxMissionExecution, approveAndRunExecutionThunk, setExecutionFailThunk, useAppDispatch } from '@lili-project/lili-store';
+import { MissionExecutionStatus, ReduxMissionExecution, approveAndRunExecutionThunk, commitExecutionLocalChangesThunk, retryExecutionThunk, setExecutionFailThunk, useAppDispatch } from '@lili-project/lili-store';
 import './ExecutionItem.styles.css';
 import { useState } from 'react';
 import { BookIcon } from '../../icons/BookIcon';
@@ -13,6 +13,7 @@ interface Props {
   canRetry?: boolean;
   hideProjectName?: boolean;
   hideMessage?: boolean;
+  messageForRetry?: string;
 }
 
 export function ExecutionItem(props: Props) {
@@ -25,6 +26,7 @@ export function ExecutionItem(props: Props) {
     canRetry,
     hideProjectName,
     hideMessage,
+    messageForRetry,
   } = props;
   const dispatch = useAppDispatch();
   const [editionMode, setEditionMode] = useState<boolean>(defaultEditMode || false);
@@ -60,7 +62,13 @@ export function ExecutionItem(props: Props) {
 
   const onClickRetryMission = async () => {
     setLoading(true);
-    // await dispatch(retryExecutionThunk(execution.execution_id, execution.mission_data.message));
+    if (executionData) {
+      const message = messageForRetry ?? executionData.mission_data.message;
+      await dispatch(retryExecutionThunk({
+        message: messageForRetry,
+        execution_id: executionData.execution_id,
+      }));
+    }
     // TODO: should we run the new actions locally?
     setLoading(false);
     if (canToggleEditMode) {
@@ -86,6 +94,12 @@ export function ExecutionItem(props: Props) {
   const onClickCommitLocalFiles = async () => {
     setLoading(true);
     // await dispatch(commitExecutionLocalChangesThunk(execution.mission_data.project_dir, execution.execution_id));
+    if (executionData) {
+      await dispatch(commitExecutionLocalChangesThunk({
+        project_dir: executionData.mission_data.project_dir,
+        execution_id: executionData.execution_id,
+      }));
+    }
     setLoading(false);
     if (canToggleEditMode) {
       setEditionMode(false);
