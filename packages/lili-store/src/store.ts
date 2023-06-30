@@ -1,11 +1,11 @@
 // redux store
-// Path: packages/website/store/index.ts
 import { configureStore } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { projectSlice } from './lib/project.slice';
 import { missionSlice } from './lib/mission.slice';
 import { coreSlice } from './lib/core.slice';
 import { authSlice } from './lib/auth.slice';
+import { shellTaskSlice } from './lib/shell-task.slice';
 
 export const store = configureStore({
   reducer: {
@@ -13,6 +13,7 @@ export const store = configureStore({
     project: projectSlice.reducer,
     mission: missionSlice.reducer,
     core: coreSlice.reducer,
+    shelltask: shellTaskSlice.reducer,
   },
 });
 

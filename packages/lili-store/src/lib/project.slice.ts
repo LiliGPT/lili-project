@@ -26,60 +26,6 @@ const makeErrorValue = (error: unknown) => {
   return String(error);
 };
 
-/**
- * Export an effect using createAsyncThunk from
- * the Redux Toolkit: https://redux-toolkit.js.org/api/createAsyncThunk
- *
- * e.g.
- * ```
- * import React, { useEffect } from 'react';
- * import { useDispatch } from 'react-redux';
- *
- * // ...
- *
- * const dispatch = useDispatch();
- * useEffect(() => {
- *   dispatch(fetchProject())
- * }, [dispatch]);
- * ```
- */
-// --- example ---
-type PickProjectThunkArgs = undefined;
-
-export const pickProjectThunk = createAsyncThunk<
-  ReduxCodeProject,
-  PickProjectThunkArgs,
-  {
-    rejectValue: string;
-  }
->('project/pickProjectThunk',
-  async (args, { rejectWithValue }) => {
-    let project: CodeProject | undefined;
-    // if (!PlatformClient.client()) {
-    //   return rejectWithValue(makeErrorValue('Platform client not set.'));
-    // }
-    try {
-      project = await PlatformClient.client().pickProject();
-    } catch (error) {
-      return rejectWithValue(makeErrorValue(error));
-    }
-    if (!project) {
-      return rejectWithValue(makeErrorValue('Project not found.'));
-    }
-    const redux_project: ReduxCodeProject = {
-      parent_project_uid: undefined,
-      data: project,
-      dependencies: {
-        is_loading: false,
-        error_message: '',
-      },
-      display_name: project.project_dir.split('/').pop() ?? project.project_dir,
-      project_uid: project.project_dir,
-    };
-    return redux_project;
-  }
-);
-
 export const initialProjectState: ReduxProjectState = projectAdapter.getInitialState(
   {
     opened_project_uid: '',
@@ -130,40 +76,8 @@ export const projectSlice = createSlice({
  */
 export const projectReducer = projectSlice.reducer;
 
-/*
- * Export action creators to be dispatched. For use with the `useDispatch` hook.
- *
- * e.g.
- * ```
- * import React, { useEffect } from 'react';
- * import { useDispatch } from 'react-redux';
- *
- * // ...
- *
- * const dispatch = useDispatch();
- * useEffect(() => {
- *   dispatch(projectActions.add({ id: 1 }))
- * }, [dispatch]);
- * ```
- *
- * See: https://react-redux.js.org/next/api/hooks#usedispatch
- */
 export const projectActions = projectSlice.actions;
 
-/*
- * Export selectors to query state. For use with the `useSelector` hook.
- *
- * e.g.
- * ```
- * import { useSelector } from 'react-redux';
- *
- * // ...
- *
- * const entities = useSelector(selectAllProject);
- * ```
- *
- * See: https://react-redux.js.org/next/api/hooks#useselector
- */
 const { selectAll, selectEntities } = projectAdapter.getSelectors();
 
 export const getProjectState = (rootState: {
@@ -182,6 +96,13 @@ export const selectProjectEntities = () => createSelector(
   selectEntities
 );
 
+export const selectProject =
+  (project_id: string) => 
+    createSelector(
+      getProjectState,
+      (state) => selectEntities(state)[project_id] as ReduxCodeProject | undefined,
+    );
+
 export const selectProjectLoadingStatus = () => createSelector(
   getProjectState,
   (state) => state.loading_status
@@ -191,3 +112,42 @@ export const selectProjectError = () => createSelector(
   getProjectState,
   (state) => state.error
 );
+
+// --- Thunks
+
+type PickProjectThunkArgs = undefined;
+
+export const pickProjectThunk = createAsyncThunk<
+  ReduxCodeProject,
+  PickProjectThunkArgs,
+  {
+    rejectValue: string;
+  }
+>('project/pickProjectThunk',
+  async (args, { rejectWithValue }) => {
+    let project: CodeProject | undefined;
+    // if (!PlatformClient.client()) {
+    //   return rejectWithValue(makeErrorValue('Platform client not set.'));
+    // }
+    try {
+      project = await PlatformClient.client().pickProject();
+    } catch (error) {
+      return rejectWithValue(makeErrorValue(error));
+    }
+    if (!project) {
+      return rejectWithValue(makeErrorValue('Project not found.'));
+    }
+    const redux_project: ReduxCodeProject = {
+      parent_project_uid: undefined,
+      data: project,
+      dependencies: {
+        is_loading: false,
+        error_message: '',
+      },
+      display_name: project.project_dir.split('/').pop() ?? project.project_dir,
+      project_uid: project.project_dir,
+    };
+    return redux_project;
+  }
+);
+

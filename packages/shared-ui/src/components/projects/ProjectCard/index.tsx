@@ -12,7 +12,7 @@ interface Props {
 export function ProjectCard(props: Props) {
   const { project } = props;
   const dispatch = useAppDispatch();
-  const [missionOpened, setMissionOpened] = useState(true);
+  const [missionOpened, setMissionOpened] = useState(false);
   const [executionId, setExecutionId] = useState(`new-${project.data.project_dir}`);
   const execution = useAppSelector(selectMissionExecution(executionId));
 

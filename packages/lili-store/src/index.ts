@@ -7,6 +7,8 @@ export * from './lib/mission.types';
 export * from './lib/project.slice';
 export * from './lib/project.types';
 export * from './lib/redux.types';
+export * from './lib/shell-task.slice';
+export * from './lib/shell-task.types';
 export * from './services/platform/platform.client';
 export * from './services/platform/platform.error';
 export * from './services/platform/platform.types';

@@ -1,5 +1,5 @@
-import { ReduxCodeProject } from "@lili-project/lili-store";
-import { RunnableCommand, RunnableCommandStatus } from "../RunnableCommand";
+import { ReduxCodeProject, useAppDispatch, addShellTaskThunk, removeShellTaskThunk, stopShellTaskThunk } from "@lili-project/lili-store";
+import { RunnableCommand } from "../RunnableCommand";
 import { CustomButton } from "../../Button";
 
 interface Props {
@@ -8,6 +8,23 @@ interface Props {
 
 export function ProjectDetails(props: Props) {
   const { project } = props;
+  const dispatch = useAppDispatch();
+  const project_id = project.project_uid;
+
+  const onPlayCommand = (command: string) => async () => {
+    await dispatch(addShellTaskThunk({
+      command,
+      project_id,
+    }));
+  };
+
+  const onStopCommand = (command: string) => async () => {
+    await dispatch(stopShellTaskThunk({
+      command,
+      project_id,
+    }));
+  };
+
   return (
     <>
       <div className="ProjectCard_data">
@@ -58,9 +75,10 @@ export function ProjectDetails(props: Props) {
             <RunnableCommand
               key={command}
               label={command}
-              status={RunnableCommandStatus.Idle}
-              onPlay={() => { /** */ }}
-              onStop={() => { /** */ }}
+              project_id={project_id}
+              command={command}
+              onPlay={onPlayCommand(command)}
+              onStop={onStopCommand(command)}
             />
           ))}
         </div>
@@ -75,7 +93,8 @@ export function ProjectDetails(props: Props) {
             <RunnableCommand
               key={`${index}-${commandKey}`}
               label={commandKey}
-              status={RunnableCommandStatus.Idle}
+              project_id={project_id}
+              command={commandValue}
               onPlay={() => { /** */ }}
               onStop={() => { /** */ }}
             />

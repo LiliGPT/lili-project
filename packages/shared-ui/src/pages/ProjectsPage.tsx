@@ -1,6 +1,7 @@
 import { ReduxLoadingStatus, selectAllProject, selectProjectError, selectProjectLoadingStatus, useAppDispatch } from '@lili-project/lili-store';
 import { BasePage, PageTitle, ProjectCard, SideProjects } from '@lili-project/shared-ui';
 import { useSelector } from 'react-redux';
+import { SidePanel } from '../components/SidePanel/SidePanel';
 
 export function ProjectsPage() {
   return (
@@ -30,9 +31,7 @@ function PageContent() {
             />
           ))}
         </div>
-        <div className="bg-primary text-white p-4 rounded-xl">
-            right content
-        </div>
+        <SidePanel />
       </div>
     )}
 
