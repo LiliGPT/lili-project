@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import { ExecutionActionItem } from "./ExecutionActionItem";
-import { MissionAction, ReduxMissionExecution, removeExecutionActionThunk, useAppDispatch } from "@lili-project/lili-store";
+import { MissionAction, ReduxMissionExecution, removeExecutionActionThunk, toggleSelectedExecutionAction, useAppDispatch } from "@lili-project/lili-store";
 
 interface Props {
   execution: ReduxMissionExecution;
@@ -10,7 +10,7 @@ interface Props {
 
 export function ExecutionActions(props: Props) {
   const { execution, canDelete } = props;
-  const [action, setAction] = useState<MissionAction | null>(null);
+  // const [action, setAction] = useState<MissionAction | null>(null);
   const dispatch = useAppDispatch();
   const executionData = execution.data;
 
@@ -19,6 +19,17 @@ export function ExecutionActions(props: Props) {
       action_path,
       execution_id: execution.entity_id,
     }));
+  };
+
+  const onClickActionItem = (action: MissionAction) => () => {
+    dispatch(toggleSelectedExecutionAction({
+      execution_id: execution.entity_id,
+      action_path: action.path,
+    }));
+  };
+
+  const isSelectedAction = (action: MissionAction) => {
+    return false;
   };
 
   if (!executionData) {
@@ -36,7 +47,8 @@ export function ExecutionActions(props: Props) {
       {actions.map((action, index) => <ExecutionActionItem
         key={`${executionData.execution_id}-act-${index}`}
         execution_id={executionData.execution_id}
-        onClick={() => setAction(action)}
+        is_selected={isSelectedAction(action)}
+        onClick={onClickActionItem(action)}
         onClickDelete={onClickDelete(action.path)}
         {...action}
       />)}

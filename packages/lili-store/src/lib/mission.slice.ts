@@ -9,7 +9,7 @@ import { ReduxError, ReduxLoadingStatus } from './redux.types';
 import { ReduxMissionExecution, ReduxMissionState } from './mission.types';
 import { PrompterClient } from '../services/prompter/prompter.client';
 import { PlatformError } from '../services/platform/platform.error';
-import { MissionExecution, MissionExecutionStatus } from '../services/prompter/prompter.types';
+import { MissionAction, MissionExecution, MissionExecutionContextFile, MissionExecutionStatus } from '../services/prompter/prompter.types';
 import { RootState } from '../store';
 import { refreshTokenThunk } from './auth.slice';
 
@@ -108,7 +108,25 @@ export const missionSlice = createSlice({
         loading_status: ReduxLoadingStatus.Error,
         error: action.payload.error,
       });
-    }
+    },
+    toggleSelectedExecutionAction(state, action: PayloadAction<{
+      execution_id: string;
+      action_path: string;
+    }>) {
+      const { execution_id, action_path } = action.payload;
+      let selected_actions_paths: string[] = JSON.parse(JSON.stringify(
+        state.entities[execution_id]?.selected_actions_paths
+      ));
+      if (!selected_actions_paths) return;
+      if (selected_actions_paths.indexOf(action_path) === -1) {
+        selected_actions_paths.push(action_path);
+      } else {
+        selected_actions_paths = selected_actions_paths.filter(a => a !== action_path);
+      }
+      return _patchEntity(state, action.payload.execution_id, {
+        selected_actions_paths,
+      });
+    },
   },
   extraReducers: (builder) => {
     // builder.addCase(createMissionThunk.pending, (state): ReduxMissionState => {
@@ -130,6 +148,8 @@ export const missionSlice = createSlice({
     // });
   },
 });
+
+export const { toggleSelectedExecutionAction } = missionSlice.actions;
 
 // --- Selectors
 
@@ -156,6 +176,50 @@ export const selectMissionExecution = (entity_id: string) => createSelector(
   (state) => state.entities[entity_id],
 );
 
+export interface SelectedMissionActions {
+  rows: {
+    actions: MissionAction[];
+    context_files: MissionExecutionContextFile[];
+  }[];
+}
+
+export const selectSelectedMissionActions = () => createSelector(
+  getMissionState,
+  (state: ReduxMissionState): SelectedMissionActions => {
+    const entities = state.ids.map((id) => state.entities[id] as ReduxMissionExecution);
+    const result: SelectedMissionActions = {
+      rows: entities.map((execution) => {
+        const actions = execution.data?.reviewed_actions ?? execution.data?.original_actions ?? [];
+        const context_files = execution.data?.context_files ?? [];
+        const selected_actions_paths = execution.selected_actions_paths ?? [];
+        const selected_actions = actions.filter(action => {
+          return selected_actions_paths.indexOf(action.path) !== -1;
+        });
+        return {
+          actions: selected_actions,
+          context_files,
+        };
+      }),
+    };
+    return result;
+
+    /* const all_actions: MissionAction[][] = entities.map(execution => {
+      return execution?.data?.reviewed_actions ?? execution?.data?.original_actions ?? [];
+    });
+    const selected_actions: MissionAction[][] = entities.map((execution, index) => {
+      const selecteds = execution?.selected_actions_paths ?? [];
+      const exe_selecteds_actions: MissionAction[] = all_actions[index]?.filter(action => {
+        return selecteds.indexOf(action.path) !== -1;
+      });
+      return exe_selecteds_actions;
+    });
+    return selected_actions.reduce((prev, action_list) => {
+      const curr = action_list.filter(a => !!a);
+      return [...prev, ...curr];
+    }, []) as MissionAction[]; */
+  }
+);
+
 // --- Thunks
 
 // fetchMissionExecutionsThunk
@@ -179,6 +243,7 @@ export const fetchMissionExecutionsThunk = createAsyncThunk<
           data: exec,
           loading_status: ReduxLoadingStatus.Idle,
           error: null,
+          selected_actions_paths: [],
         }));
       }
       dispatch(missionSlice.actions.setSliceLoadingStatus(ReduxLoadingStatus.Success));
@@ -214,6 +279,7 @@ export const createMissionThunk = createAsyncThunk<
       data: null,
       loading_status: ReduxLoadingStatus.Loading,
       error: null,
+      selected_actions_paths: [],
     };
     dispatch(missionSlice.actions.upsertOne(new_execution));
     dispatch(missionSlice.actions.setExecutionLoadingStatus({
@@ -253,6 +319,7 @@ export const createMissionThunk = createAsyncThunk<
       data: execution,
       loading_status: ReduxLoadingStatus.Success,
       error: null,
+      selected_actions_paths: [],
     };
     dispatch(missionSlice.actions.upsertOne(result));
     return result;
@@ -482,3 +549,4 @@ export const commitExecutionLocalChangesThunk = createAsyncThunk<
     }
   }
 );
+
