@@ -40,7 +40,7 @@ export function PreviewFile(props: Props) {
   return (
     <div className="py-2">
       {buttons}
-      <div className="text-xs h-60 p-2 bg-tertiary overflow-y-auto rounded-lg">
+      <div className="text-xs h-60 p-2 bg-tertiary overflow-y-auto rounded-lg text-slate-300">
         <pre>{
           showOriginal ?
             props.original_content :

@@ -63,6 +63,7 @@ export const projectSlice = createSlice({
         (state: ReduxProjectState, action: PayloadAction<ReduxCodeProject>) => {
           projectAdapter.upsertOne(state, action.payload);
           state.loading_status = ReduxLoadingStatus.Success;
+          state.opened_project_uid = action.payload.project_uid;
         })
       .addCase(pickProjectThunk.rejected, (state: ReduxProjectState, action) => {
         state.loading_status = ReduxLoadingStatus.Error;
@@ -97,7 +98,7 @@ export const selectProjectEntities = () => createSelector(
 );
 
 export const selectProject =
-  (project_id: string) => 
+  (project_id: string) =>
     createSelector(
       getProjectState,
       (state) => selectEntities(state)[project_id] as ReduxCodeProject | undefined,
