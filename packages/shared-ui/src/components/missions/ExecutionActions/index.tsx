@@ -29,7 +29,7 @@ export function ExecutionActions(props: Props) {
   };
 
   const isSelectedAction = (action: MissionAction) => {
-    return false;
+    return execution.selected_actions_paths.includes(action.path);
   };
 
   if (!executionData) {

@@ -15,7 +15,10 @@ export function ExecutionActionItem(props: Props) {
 
   return (
     <div className="my-1 w-full flex flex-row items-center">
-      <div onClick={props.onClick} className={`rounded flex-grow py-1 px-2 text-xs cursor-pointer ${labelClassName}`}>
+      <div
+        onClick={props.onClick}
+        className={`rounded flex-grow py-1 px-2 text-xs cursor-pointer ${labelClassName}`}
+      >
         {props.action_type} - {props.path}
       </div>
       {!!onClickDelete && (
