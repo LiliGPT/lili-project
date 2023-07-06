@@ -6,6 +6,11 @@ interface Props {
 
 export function ShellTasksSidePanel(props: Props) {
   const shellTasks = useAppSelector(selectShellTasks());
+
+  if (!shellTasks.length) {
+    return null;
+  }
+
   return <ShellTasksSidePanelLayout
     shellTasks={shellTasks}
   />

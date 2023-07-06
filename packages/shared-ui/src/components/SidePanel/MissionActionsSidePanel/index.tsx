@@ -4,6 +4,11 @@ import { MissionActionsSidePanelLayout } from "./MissionActionsSidePanel.layout"
 export function MissionActionsSidePanel() {
   const dispatch = useAppDispatch();
   const actions = useAppSelector(selectSelectedMissionActions());
+
+  if (!actions.rows.length) {
+    return null;
+  }
+
   return <MissionActionsSidePanelLayout
     actions={actions}
   />
