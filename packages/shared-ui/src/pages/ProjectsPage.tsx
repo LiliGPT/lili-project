@@ -1,4 +1,4 @@
-import { ReduxLoadingStatus, selectAllProject, selectProjectError, selectProjectLoadingStatus, useAppDispatch } from '@lili-project/lili-store';
+import { ReduxLoadingStatus, selectAllProject, selectOpenedProjects, selectProjectError, selectProjectLoadingStatus, useAppDispatch } from '@lili-project/lili-store';
 import { BasePage, PageTitle, ProjectCard, SideProjects } from '@lili-project/shared-ui';
 import { useSelector } from 'react-redux';
 import { SidePanel } from '../components/SidePanel/SidePanel';
@@ -16,7 +16,7 @@ export function ProjectsPage() {
 
 function PageContent() {
   const dispatch = useAppDispatch();
-  const projects = useSelector(selectAllProject());
+  const projects = useSelector(selectOpenedProjects());
   const status = useSelector(selectProjectLoadingStatus());
   const error = useSelector(selectProjectError());
 

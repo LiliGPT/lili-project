@@ -87,6 +87,15 @@ export const getProjectState = (rootState: {
 
 export const selectAllProject = () => createSelector(getProjectState, selectAll);
 
+export const selectOpenedProjects = () => createSelector(
+  getProjectState,
+  (state) => selectAll(state).filter((project) => {
+    const is_project_uid = project.project_uid === state.opened_project_uid;
+    const is_parent_project_uid = project.parent_project_uid === state.opened_project_uid;
+    return is_project_uid || is_parent_project_uid;
+  }),
+);
+
 export const selectCurrentProjectUid = () => createSelector(
   getProjectState,
   (state) => state.opened_project_uid
