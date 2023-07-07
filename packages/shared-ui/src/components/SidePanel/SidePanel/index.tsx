@@ -6,8 +6,8 @@ import { ProjectSidePanel } from "../ProjectSidePanel";
 export function SidePanel() {
   return (
     <div className="grid grid-cols-1">
-      <ShellTasksSidePanel />
       <MissionActionsSidePanel />
+      <ShellTasksSidePanel />
       <ProjectSidePanel />
     </div>
   );

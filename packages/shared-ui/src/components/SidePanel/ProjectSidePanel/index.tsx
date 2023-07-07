@@ -1,16 +1,9 @@
-import { MissionExecution, PrompterClient, ReduxLoadingStatus, ReduxMissionExecution, refreshTokenThunk, selectOpenedProjects, selectOpenedRootProject, useAppDispatch, useAppSelector } from "@lili-project/lili-store";
+import { MissionExecution, PrompterClient, ReduxLoadingStatus, ReduxMissionExecution, fetchMissionExecutionsThunk, refreshTokenThunk, selectMissionError, selectMissionExecutions, selectMissionLoading, selectMissionSliceError, selectMissionSliceLoadingStatus, selectOpenedProjects, selectOpenedRootProject, useAppDispatch, useAppSelector } from "@lili-project/lili-store";
 import { useEffect, useState } from "react";
 import { ExecutionItem } from "../../missions/ExecutionItem";
+import { CustomButton } from "../../Button";
 
-interface Props {
-
-}
-
-interface State {
-  executions: ReduxMissionExecution[];
-  loadingStatus: ReduxLoadingStatus;
-  error?: string;
-}
+interface Props { }
 
 export function ProjectSidePanel(props: Props) {
   // const {  } = props;
@@ -18,80 +11,59 @@ export function ProjectSidePanel(props: Props) {
   const project = useAppSelector(selectOpenedRootProject());
   const project_dir = project?.data?.project_dir;
   const contentComponents: JSX.Element[] = [];
+  const executions = useAppSelector(selectMissionExecutions());
+  const error = useAppSelector(selectMissionSliceError());
+  const loadingStatus = useAppSelector(selectMissionSliceLoadingStatus());
 
-  const [state, setState] = useState<State>({
-    executions: [],
-    loadingStatus: ReduxLoadingStatus.Idle,
-    error: undefined,
-  });
+  // get current filters
+  const getFilters = () => {
+    const filters = {
+      "mission_data.project_dir": project_dir,
+    };
+    return { filters };
+  };
 
+  // refresh executions on project change
   useEffect(() => {
-    async function searchExecutions(project_dir?: string) {
-      if (!project_dir || state.loadingStatus !== ReduxLoadingStatus.Idle) {
-        return;
-      }
+    dispatch(fetchMissionExecutionsThunk(getFilters()));
+  }, [project_dir]);
 
-      setState(currentState => ({
-        ...currentState,
-        loadingStatus: ReduxLoadingStatus.Loading,
-        error: undefined,
-      }));
-
-      await dispatch(refreshTokenThunk());
-      PrompterClient.searchExecutions({
-        "mission_data.project_dir": project_dir,
-      }).then((rawExecutions) => {
-        const executions: ReduxMissionExecution[] = rawExecutions.map((rawExecution) => {
-          return {
-            data: rawExecution,
-            entity_id: rawExecution.execution_id,
-            error: null,
-            loading_status: ReduxLoadingStatus.Success,
-            selected_actions_paths: [],
-          };
-        });
-        setState(currentState => ({
-          ...currentState,
-          loadingStatus: ReduxLoadingStatus.Success,
-          executions,
-          error: undefined,
-        }));
-      }).catch((error) => {
-        setState(currentState => ({
-          ...currentState,
-          loadingStatus: ReduxLoadingStatus.Error,
-          executions: [],
-          error: String(error),
-        }));
-      });
-    }
-    searchExecutions(project_dir);
-  }, [project_dir, dispatch, state.loadingStatus]);
+  const onClickRefreshLastExecutions = () => {
+    dispatch(fetchMissionExecutionsThunk(getFilters()));
+  };
 
   if (!project_dir) {
     return null;
   }
 
-  if (state.loadingStatus === ReduxLoadingStatus.Error) {
+  if (loadingStatus === ReduxLoadingStatus.Error) {
     contentComponents.push(
       <div className="bg-red-500 text-white rounded-xl py-2 px-3" key="error">
         <h1>Error</h1>
-        <p>{state.error}</p>
+        <p>{JSON.stringify(error, null, 2)}</p>
       </div>
     );
   }
 
-  if (state.loadingStatus === ReduxLoadingStatus.Loading) {
+  if (loadingStatus === ReduxLoadingStatus.Loading) {
     contentComponents.push(
       <div className="rounded-full h-16 w-16 border-2 border-t-2 border-accent animate-spin" key="loading" />
     );
   }
 
-  if (state.loadingStatus === ReduxLoadingStatus.Success) {
+  if (loadingStatus === ReduxLoadingStatus.Success) {
     contentComponents.push(
       <div className="bg-primary py-2 px-3 rounded-xl text-left flex flex-col gap-2" key="success">
-        <h2 className="text-left">Last Executions</h2>
-        {state.executions.map((execution) => {
+        <h2 className="text-left">
+          Last Executions
+          <CustomButton
+            label="Refresh"
+            onClick={onClickRefreshLastExecutions}
+            size="small"
+            variant="boldy"
+          />
+        </h2>
+        {executions.map((execution) => {
           return (
             <ExecutionItem
               key={execution.entity_id}

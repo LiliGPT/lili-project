@@ -46,7 +46,11 @@ export function ProjectCard(props: Props) {
   };
 
   const onClickCloseMission = async () => {
-    // 
+    //
+  };
+
+  const onClickOpenTerminal = async () => {
+    // todo: open windows terminal
   };
 
   return (
@@ -59,6 +63,7 @@ export function ProjectCard(props: Props) {
       execution={execution}
       onClickGenerateExecution={onClickGenerateExecution}
       onClickRetryExecution={onClickRetryExecution}
+      onClickOpenTerminal={onClickOpenTerminal}
     />
   );
 }

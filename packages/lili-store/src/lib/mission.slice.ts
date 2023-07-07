@@ -159,6 +159,16 @@ export const getMissionState = (rootState: {
   [MISSION_FEATURE_KEY]: ReduxMissionState;
 }): ReduxMissionState => rootState[MISSION_FEATURE_KEY];
 
+export const selectMissionSliceLoadingStatus = () => createSelector(
+  getMissionState,
+  (state) => state.loading_status,
+);
+
+export const selectMissionSliceError = () => createSelector(
+  getMissionState,
+  (state) => state.error,
+);
+
 export const selectMissionExecutions = () => createSelector(getMissionState, selectAll);
 
 export const selectMissionLoading = (entity_id: string) => createSelector(
@@ -224,19 +234,27 @@ export const selectSelectedMissionActions = () => createSelector(
 
 // fetchMissionExecutionsThunk
 
+interface FetchMissionExecutionsThunkArgs {
+  filters?: object;
+}
+
+let _lastFetchMissionExecutionsArgs: FetchMissionExecutionsThunkArgs | null = null;
+
 export const fetchMissionExecutionsThunk = createAsyncThunk<
   MissionExecution[],
-  void
+  FetchMissionExecutionsThunkArgs | undefined
 >(`${MISSION_FEATURE_KEY}/fetchMissionExecutionsThunk`,
-  async (_, { dispatch }) => {
+  async (args, { dispatch }) => {
+    const _argsFilters: FetchMissionExecutionsThunkArgs = args ?? _lastFetchMissionExecutionsArgs ?? {filters:{}};
     dispatch(missionSlice.actions.setSliceLoadingStatus(ReduxLoadingStatus.Loading));
     await dispatch(refreshTokenThunk());
-    const filter = {
+    const filters = {
+      ...(_argsFilters.filters ?? {}),
       'execution_status': { '$ne': 'fail' }
     };
     let executions: MissionExecution[] = [];
     try {
-      executions = await PrompterClient.searchExecutions(filter);
+      executions = await PrompterClient.searchExecutions(filters);
       for (const exec of executions) {
         dispatch(missionSlice.actions.upsertOne({
           entity_id: exec.execution_id,
@@ -247,7 +265,10 @@ export const fetchMissionExecutionsThunk = createAsyncThunk<
         }));
       }
       dispatch(missionSlice.actions.setSliceLoadingStatus(ReduxLoadingStatus.Success));
-    } catch(e) {
+      if (_argsFilters.filters) {
+        _lastFetchMissionExecutionsArgs = _argsFilters;
+      }
+    } catch (e) {
       dispatch(missionSlice.actions.setSliceError({
         error_code: 'lili-store.mission-slice',
         error_description: makeErrorValue(e),
@@ -345,15 +366,16 @@ export const setExecutionFailThunk = createAsyncThunk<
         console.log('[setExecutionFailThunk] invalid execution ', execution_id, execution);
         return;
       }
-      dispatch(missionSlice.actions.upsertOne({
-        ...execution,
-        loading_status: ReduxLoadingStatus.Success,
-        error: null,
-        data: {
-            ...execution.data,
-            execution_status: MissionExecutionStatus.Fail,
-        },
-      }));
+      await dispatch(fetchMissionExecutionsThunk());
+      // dispatch(missionSlice.actions.upsertOne({
+      //   ...execution,
+      //   loading_status: ReduxLoadingStatus.Success,
+      //   error: null,
+      //   data: {
+      //       ...execution.data,
+      //       execution_status: MissionExecutionStatus.Fail,
+      //   },
+      // }));
     } catch (error) {
       dispatch(missionSlice.actions.setExecutionError({
         execution_id,
@@ -365,6 +387,55 @@ export const setExecutionFailThunk = createAsyncThunk<
     }
   }
 );
+
+// setExecutionPerfectThunk
+
+export const setExecutionPerfectThunk = createAsyncThunk<
+  void,
+  string
+>(`${MISSION_FEATURE_KEY}/setExecutionPerfectThunk`,
+  async (execution_id: string, { dispatch, getState }) => {
+    dispatch(missionSlice.actions.setExecutionLoadingStatus({
+      execution_id,
+      loading_status: ReduxLoadingStatus.Loading,
+    }));
+    await dispatch(refreshTokenThunk());
+    try {
+      await PrompterClient.setExecutionPerfect(execution_id);
+      await dispatch(fetchMissionExecutionsThunk());
+      const execution = selectMissionExecution(execution_id)((getState() as RootState));
+      if (!execution?.data) {
+        console.log('[setExecutionPerfectThunk] invalid execution ', execution_id, execution);
+        return;
+      }
+      await dispatch(fetchMissionExecutionsThunk());
+      // dispatch(missionSlice.actions.upsertOne({
+      //   ...execution,
+      //   loading_status: ReduxLoadingStatus.Success,
+      //   error: null,
+      //   data: {
+      //       ...execution.data,
+      //       execution_status: MissionExecutionStatus.Perfect,
+      //   },
+      // }));
+    } catch (error) {
+      console.log(
+        '[setExecutionPerfectThunk] error',
+        execution_id,
+        error,
+      );
+      dispatch(missionSlice.actions.setExecutionError({
+        execution_id,
+        error: {
+          error_code: '--todo--',
+          error_description: makeErrorValue(error),
+        },
+      }));
+    }
+  }
+);
+
+
 
 // removeExecutionActionThunk
 

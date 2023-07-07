@@ -11,6 +11,7 @@ interface Props {
   missionOpened: boolean;
   onClickOpenMission: () => void;
   onClickCloseMission: () => void;
+  onClickOpenTerminal: () => void;
   onClickGenerateExecution: MissionDetails_OnClickGenerate;
   onClickRetryExecution: MissionDetails_OnClickRetry;
   project: ReduxCodeProject;
@@ -19,7 +20,7 @@ interface Props {
 }
 
 export function ProjectCardLayout(props: Props) {
-  const { project, missionOpened, onClickOpenMission, onClickCloseMission, onClickGenerateExecution, onClickRetryExecution, executionId, execution } = props;
+  const { project, missionOpened, onClickOpenMission, onClickCloseMission, onClickGenerateExecution, onClickRetryExecution, onClickOpenTerminal, executionId, execution } = props;
   return (
     <div className="ProjectCard">
       <div className="ProjectCard_header">
@@ -33,6 +34,13 @@ export function ProjectCardLayout(props: Props) {
         </div>
         {!missionOpened && (
           <div className="">
+            <CustomButton
+              label="Terminal"
+              size="small"
+              variant="boldy"
+              disabled={false}
+              onClick={onClickOpenTerminal}
+            />
             <CustomButton
               label="New Mission"
               size="small"

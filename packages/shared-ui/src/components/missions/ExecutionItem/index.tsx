@@ -1,4 +1,4 @@
-import { MissionExecutionStatus, ReduxMissionExecution, approveAndRunExecutionThunk, commitExecutionLocalChangesThunk, retryExecutionThunk, setExecutionFailThunk, useAppDispatch } from '@lili-project/lili-store';
+import { MissionExecutionStatus, ReduxMissionExecution, approveAndRunExecutionThunk, commitExecutionLocalChangesThunk, retryExecutionThunk, setExecutionFailThunk, setExecutionPerfectThunk, useAppDispatch } from '@lili-project/lili-store';
 import './ExecutionItem.styles.css';
 import { useState } from 'react';
 import { BookIcon } from '../../icons/BookIcon';
@@ -54,6 +54,9 @@ export function ExecutionItem(props: Props) {
     setLoading(true);
     // await rustExecutionSetPerfect(execution.execution_id);
     // await dispatch(fetchExecutionsThunk());
+    if (executionData) {
+      await dispatch(setExecutionPerfectThunk(executionData.execution_id));
+    }
     setLoading(false);
     if (canToggleEditMode) {
       setEditionMode(false);
