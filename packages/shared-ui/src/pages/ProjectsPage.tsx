@@ -6,11 +6,11 @@ import { SidePanel } from '../components/SidePanel/SidePanel';
 export function ProjectsPage() {
   return (
     <BasePage
-        side={<SideProjects />}
-      >
-        <PageTitle title="Projects" />
-        <PageContent />
-      </BasePage>
+      side={<SideProjects />}
+    >
+      <PageTitle title="Projects" />
+      <PageContent />
+    </BasePage>
   );
 }
 
@@ -20,10 +20,10 @@ function PageContent() {
   const status = useSelector(selectProjectLoadingStatus());
   const error = useSelector(selectProjectError());
 
-  return <div className="text-white">
+  return <div className="text-white w-full">
     {status === ReduxLoadingStatus.Success && (
-      <div className="grid grid-cols-2 gap-4">
-        <div className="grid grid-cols-1 gap-4">
+      <div className="flex flex-row gap-4 w-full">
+        <div className="flex flex-col gap-4 w-[45%]">
           {projects.map((project) => (
             <ProjectCard
               key={project.project_uid}
@@ -31,7 +31,9 @@ function PageContent() {
             />
           ))}
         </div>
-        <SidePanel />
+        <div className="flex flex-col gap-4 flex-grow">
+          <SidePanel />
+        </div>
       </div>
     )}
 

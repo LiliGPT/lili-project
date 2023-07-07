@@ -2,7 +2,6 @@
 
 import { MissionExecutionStatus, ReduxCodeProject, ReduxMissionExecution, selectMissionExecution, useAppSelector } from "@lili-project/lili-store";
 import './styles.css';
-import { RunnableCommand, RunnableCommandStatus } from "../RunnableCommand";
 import { CustomButton } from "../../Button";
 import { ProjectDetails } from "./ProjectDetails";
 import { MissionDetails, MissionDetails_OnClickGenerate, MissionDetails_OnClickRetry } from "./MissionDetails";

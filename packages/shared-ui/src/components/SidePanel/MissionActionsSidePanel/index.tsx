@@ -4,8 +4,11 @@ import { MissionActionsSidePanelLayout } from "./MissionActionsSidePanel.layout"
 export function MissionActionsSidePanel() {
   const dispatch = useAppDispatch();
   const actions = useAppSelector(selectSelectedMissionActions());
+  const countActionFiles: number = actions?.rows?.reduce((acc, action) => {
+    return acc + action.actions.length;
+  }, 0) ?? 0;
 
-  if (!actions.rows.length) {
+  if (!countActionFiles) {
     return null;
   }
 
