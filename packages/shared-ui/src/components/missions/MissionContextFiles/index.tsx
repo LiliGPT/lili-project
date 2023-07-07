@@ -1,4 +1,4 @@
-import { MissionExecutionStatus, ReduxMissionExecution, useAppDispatch } from "@lili-project/lili-store";
+import { MissionExecutionStatus, PrompterClient, ReduxMissionExecution, fetchMissionExecutionsThunk, useAppDispatch } from "@lili-project/lili-store";
 
 interface Props {
   execution: ReduxMissionExecution;
@@ -18,11 +18,19 @@ export function MissionContextFiles(props: Props) {
     || executionData?.execution_status === MissionExecutionStatus.Approved;
 
   const onClickAdd = async () => {
-    // await rustAddContextFiles(
-    //   executionData?.mission_data.project_dir,
-    //   executionData?.execution_id,
-    // );
-    // await dispatch(fetchExecutionsThunk());
+    const project_dir = executionData?.mission_data.project_dir;
+    const execution_id = executionData?.execution_id;
+    if (project_dir && execution_id) {
+      try {
+        await PrompterClient.addContextFiles(project_dir, execution_id);
+      } catch(error) {
+        console.error(
+          `[MissionContextFiles/index@onClickAdd] failed to add context files`,
+          error,
+        );
+      }
+    }
+    await dispatch(fetchMissionExecutionsThunk());
   };
 
   return (

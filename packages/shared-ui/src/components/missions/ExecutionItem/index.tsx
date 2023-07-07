@@ -52,8 +52,6 @@ export function ExecutionItem(props: Props) {
 
   const onClickSetPerfect = async () => {
     setLoading(true);
-    // await rustExecutionSetPerfect(execution.execution_id);
-    // await dispatch(fetchExecutionsThunk());
     if (executionData) {
       await dispatch(setExecutionPerfectThunk(executionData.execution_id));
     }
