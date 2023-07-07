@@ -57,7 +57,7 @@ export function ExecutionItem(props: Props) {
     setLoading(false);
     if (canToggleEditMode) {
       setEditionMode(false);
-    } 
+    }
   };
 
   const onClickRetryMission = async () => {
@@ -65,7 +65,7 @@ export function ExecutionItem(props: Props) {
     if (executionData) {
       const message = messageForRetry ?? executionData.mission_data.message;
       await dispatch(retryExecutionThunk({
-        message: messageForRetry,
+        message,
         execution_id: executionData.execution_id,
       }));
     }
@@ -105,7 +105,7 @@ export function ExecutionItem(props: Props) {
       setEditionMode(false);
     }
   };
- 
+
   // --- settings dropdown
   let settingsActions: { [key: string]: () => void } = {
     'commit local files': onClickCommitLocalFiles,
@@ -123,7 +123,7 @@ export function ExecutionItem(props: Props) {
       };
     }
   }
-  
+
   return <ExecutionItemLayout
     execution={props.execution}
     hideProjectName={hideProjectName}

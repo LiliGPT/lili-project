@@ -85,7 +85,7 @@ export function ExecutionItemLayout(props: Props) {
       key={executionData?.execution_id}
     >
       {editModeIconButton}
-      
+
       {!hideProjectName && (
         <div className="mb-2 text-xs">{executionData?.mission_data.project_dir.split('/').pop()}</div>
       )}

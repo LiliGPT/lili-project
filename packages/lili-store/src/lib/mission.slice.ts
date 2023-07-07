@@ -115,7 +115,7 @@ export const missionSlice = createSlice({
     }>) {
       const { execution_id, action_path } = action.payload;
       let selected_actions_paths: string[] = JSON.parse(JSON.stringify(
-        state.entities[execution_id]?.selected_actions_paths
+        state.entities[execution_id]?.selected_actions_paths ?? [],
       ));
       if (!selected_actions_paths) return;
       if (selected_actions_paths.indexOf(action_path) === -1) {

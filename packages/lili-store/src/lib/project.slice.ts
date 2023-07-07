@@ -96,6 +96,11 @@ export const selectOpenedProjects = () => createSelector(
   }),
 );
 
+export const selectOpenedRootProject = () => createSelector(
+  getProjectState,
+  (state) => selectAll(state).find((project) => project.project_uid === state.opened_project_uid),
+);
+
 export const selectCurrentProjectUid = () => createSelector(
   getProjectState,
   (state) => state.opened_project_uid
