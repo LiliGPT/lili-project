@@ -36,7 +36,7 @@ export function LastExecutions() {
 
   if (loadingStatus === ReduxLoadingStatus.Error) {
     contentComponents.push(
-      <div className="text-gray-500 text-center rounded-xl py-5 px-3" key="error">
+      <div className="text-gray-500 text-center rounded-xl py-5" key="error">
         Not possible to list executions for this project
       </div>
     );
@@ -50,7 +50,7 @@ export function LastExecutions() {
 
   if (loadingStatus === ReduxLoadingStatus.Success) {
     contentComponents.push(
-      <div className="bg-primary py-2 px-3 rounded-xl text-left flex flex-col gap-2" key="success">
+      <div className="CardBoxContent bg-primary rounded-xl text-left flex flex-col gap-2" key="success">
         <h2 className="text-left">
           Last Executions
           <CustomButton
