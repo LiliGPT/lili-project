@@ -1,5 +1,6 @@
 pub mod dependencies;
 pub mod frameworks;
+pub mod git;
 pub mod languages;
 pub mod project_files;
 pub mod review_actions;

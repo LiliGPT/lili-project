@@ -35,3 +35,34 @@ pub struct PathInfo {
     pub subprojects: Vec<SubprojectDescriptor>,
     pub test_scripts: serde_json::Map<String, serde_json::Value>,
 }
+
+#[derive(Debug, serde::Serialize, Default)]
+pub struct RepositoryInfo {
+    pub project_dir: String,
+    pub branch: String,
+    pub git_status: Vec<GitStatusEntry>,
+    pub log: Vec<GitLogEntry>,
+}
+
+#[derive(Debug, serde::Serialize)]
+pub struct GitStatusEntry {
+    pub file_path: String,
+    pub is_staged: bool,
+    pub change_type: GitChangeType,
+}
+
+#[derive(Debug, serde::Serialize, strum::Display)]
+pub enum GitChangeType {
+    Added,
+    Modified,
+    Deleted,
+    Untracked,
+}
+
+#[derive(Debug, serde::Serialize)]
+pub struct GitLogEntry {
+    pub hash: String,
+    pub author: String,
+    pub datetime: String,
+    pub message: String,
+}
