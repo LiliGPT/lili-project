@@ -1,5 +1,21 @@
 import { TauriInvokeFn } from './rust-platform.types';
 
+export abstract class SpecificPlatformClient {
+  invokeFn: TauriInvokeFn;
+
+  constructor(invokeFn: TauriInvokeFn) {
+    this.invokeFn = invokeFn;
+  }
+
+  abstract pickProject(): Promise<CodeProject>;
+  abstract signInPassword(username: string, password: string): Promise<PlatformSignInResponse>;
+  abstract refreshToken(refresh_token: string): Promise<PlatformSignInResponse>;
+  abstract runShellCommand(cwd: string, command: string): Promise<string>;
+  abstract spawnShellCommand(args: SpawnShellCommandArgs): Promise<number>;
+  abstract repositoryInfo(project_dir: string): Promise<RepositoryInfo>;
+  abstract readTextFile(path: string): Promise<string>;
+}
+
 export interface CodeProject {
   project_dir: string;
   code_language: string;
@@ -22,21 +38,6 @@ export interface CodeSubproject {
 export enum PlatformPossibleClients {
   Rust,
   Web,
-}
-
-export abstract class SpecificPlatformClient {
-  invokeFn: TauriInvokeFn;
-
-  constructor(invokeFn: TauriInvokeFn) {
-    this.invokeFn = invokeFn;
-  }
-
-  abstract pickProject(): Promise<CodeProject>;
-  abstract signInPassword(username: string, password: string): Promise<PlatformSignInResponse>;
-  abstract refreshToken(refresh_token: string): Promise<PlatformSignInResponse>;
-  abstract runShellCommand(cwd: string, command: string): Promise<string>;
-  abstract spawnShellCommand(args: SpawnShellCommandArgs): Promise<number>;
-  abstract repositoryInfo(project_dir: string): Promise<RepositoryInfo>;
 }
 
 export interface PlatformSignInResponse {

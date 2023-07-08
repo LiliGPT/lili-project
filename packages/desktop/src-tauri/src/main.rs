@@ -48,6 +48,7 @@ fn main() {
             tauri_commands::auth_login::auth_login_command,
             tauri_commands::auth_refresh_token::auth_refresh_token_command,
             tauri_commands::repository_info::repository_info_command,
+            tauri_commands::read_text_file::read_text_file_command,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

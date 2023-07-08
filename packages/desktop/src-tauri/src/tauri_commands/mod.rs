@@ -7,6 +7,7 @@ pub mod get_file_tree;
 pub mod get_test_scripts;
 pub mod install_dependencies;
 pub mod open_project;
+pub mod read_text_file;
 pub mod repository_info;
 pub mod retry_execution;
 pub mod review_actions;

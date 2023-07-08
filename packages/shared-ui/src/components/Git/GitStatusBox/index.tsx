@@ -1,7 +1,7 @@
 import { PlatformClient, ReduxLoadingStatus, RepositoryInfo, selectOpenedRootProject, useAppSelector } from "@lili-project/lili-store";
 import { GitFilesPicker } from "../GitFilesPicker";
-import { GitFileChange } from "../types";
 import { useEffect, useState } from "react";
+import { DiffPreview } from "../DiffPreview";
 
 interface State {
   repo?: RepositoryInfo;
@@ -51,10 +51,11 @@ export function GitStatusBox() {
 
   if (state.loading_status === ReduxLoadingStatus.Success && state.repo) {
     return (
-        <div className="flex flex-col">
+      <div className="flex flex-col relative">
         <GitFilesPicker files={state.repo.git_status} />
         <GitFilesPicker files={[]} />
-        </div>
+        <DiffPreview />
+      </div>
     );
   }
 }

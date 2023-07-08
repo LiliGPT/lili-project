@@ -83,4 +83,9 @@ export class RustPlatformClient implements SpecificPlatformClient {
     const request = { project_dir };
     return await this.invokeFn<RepositoryInfo>('repository_info_command', { request });
   }
+
+  async readTextFile(path: string): Promise<string> {
+    return await this.invokeFn<string>('read_text_file_command', path);
+  }
 }
+
