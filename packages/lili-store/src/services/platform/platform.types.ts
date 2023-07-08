@@ -58,6 +58,7 @@ export interface RepositoryInfo {
   project_dir: string;
   branch: string;
   git_status: GitStatusEntry[];
+  diff_text: string;
   log: GitLogEntry[];
 }
 

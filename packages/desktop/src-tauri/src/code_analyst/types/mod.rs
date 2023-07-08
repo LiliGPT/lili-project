@@ -41,6 +41,7 @@ pub struct RepositoryInfo {
     pub project_dir: String,
     pub branch: String,
     pub git_status: Vec<GitStatusEntry>,
+    pub diff_text: String,
     pub log: Vec<GitLogEntry>,
 }
 

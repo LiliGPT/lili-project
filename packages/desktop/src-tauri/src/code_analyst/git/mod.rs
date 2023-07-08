@@ -8,10 +8,12 @@ use super::{GitChangeType, GitLogEntry, GitStatusEntry, RepositoryInfo};
 pub fn get_repository_info(project_dir: &str) -> Result<RepositoryInfo, ApiError> {
     let branch: String = get_repository_branch(project_dir)?;
     let git_status = get_git_status(project_dir)?;
+    let diff_text = get_diff_text(project_dir);
     Ok(RepositoryInfo {
         project_dir: project_dir.to_owned(),
         branch,
         git_status,
+        diff_text,
         log: Vec::new(),
     })
 }
@@ -86,4 +88,19 @@ fn parse_git_status_line(line: &str) -> Result<GitStatusEntry, ApiError> {
         is_staged,
         change_type,
     })
+}
+
+fn get_diff_text(project_dir: &str) -> String {
+    let command = "git --no-pager diff -U";
+    let res: RunShellCommandResult = run_shell_command(command, project_dir);
+    let stdout = res.stdout.clone();
+    let stderr = res.stderr.clone();
+    if stderr.len() > 0 {
+        print!("[get_diff_text] Failed to get diff text: {}", stderr);
+        return "".to_owned();
+    }
+    if stdout.len() == 0 {
+        return "".to_owned();
+    }
+    stdout
 }
