@@ -254,7 +254,7 @@ export const fetchMissionExecutionsThunk = createAsyncThunk<
     };
     let executions: MissionExecution[] = [];
     try {
-      executions = await PrompterClient.searchExecutions(filters);
+      executions = await PrompterClient.searchExecutions(filters) ?? [];
       for (const exec of executions) {
         dispatch(missionSlice.actions.upsertOne({
           entity_id: exec.execution_id,
@@ -573,9 +573,7 @@ export const retryExecutionThunk = createAsyncThunk<
     }));
     await dispatch(refreshTokenThunk());
     try {
-      console.log('retry execution: ', args);
       await PrompterClient.retryExecution(args.execution_id, args.message);
-      console.log('retry execution worked');
       await dispatch(fetchMissionExecutionsThunk());
     } catch (error) {
       dispatch(missionSlice.actions.setExecutionError({

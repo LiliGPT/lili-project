@@ -36,9 +36,8 @@ export function LastExecutions() {
 
   if (loadingStatus === ReduxLoadingStatus.Error) {
     contentComponents.push(
-      <div className="bg-red-500 text-white rounded-xl py-2 px-3" key="error">
-        <h1>Error</h1>
-        <p>{JSON.stringify(error, null, 2)}</p>
+      <div className="text-gray-500 text-center rounded-xl py-5 px-3" key="error">
+        Not possible to list executions for this project
       </div>
     );
   }
