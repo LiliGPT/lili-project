@@ -11,7 +11,7 @@ export interface TauriShellModule {
   shell: {
     Command: TauriShellCommand;
   };
-};
+}
 
 export type TauriShellCommand = (
   command: string,

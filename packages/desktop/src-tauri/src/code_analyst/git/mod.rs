@@ -37,7 +37,7 @@ fn get_repository_branch(project_dir: &str) -> Result<String, ApiError> {
 }
 
 fn get_git_status(project_dir: &str) -> Result<Vec<GitStatusEntry>, ApiError> {
-    let command = "git status --porcelain";
+    let command = "git status --porcelain -u";
     let res: RunShellCommandResult = run_shell_command(command, project_dir);
     let stdout = res.stdout.clone();
     let stderr = res.stderr.clone();

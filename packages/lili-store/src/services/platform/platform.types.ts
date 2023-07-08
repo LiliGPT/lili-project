@@ -36,6 +36,7 @@ export abstract class SpecificPlatformClient {
   abstract refreshToken(refresh_token: string): Promise<PlatformSignInResponse>;
   abstract runShellCommand(cwd: string, command: string): Promise<string>;
   abstract spawnShellCommand(args: SpawnShellCommandArgs): Promise<number>;
+  abstract repositoryInfo(project_dir: string): Promise<RepositoryInfo>;
 }
 
 export interface PlatformSignInResponse {
@@ -51,4 +52,26 @@ export interface SpawnShellCommandArgs {
   on_error: (data: Error) => void;
   on_exit: (code: number) => void;
 }
+
+export interface RepositoryInfo {
+  project_dir: string;
+  branch: string;
+  git_status: GitStatusEntry[];
+  log: GitLogEntry[];
+}
+
+export interface GitStatusEntry {
+  file_path: string;
+  is_staged: boolean;
+  change_type: GitChangeType;
+}
+
+export enum GitChangeType {
+  Added = 'Added',
+  Modified = 'Modified',
+  Deleted = 'Deleted',
+  Untracked = 'Untracked',
+}
+
+export interface GitLogEntry { }
 

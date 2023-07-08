@@ -1,54 +1,61 @@
+import { PlatformClient, ReduxLoadingStatus, RepositoryInfo, selectOpenedRootProject, useAppSelector } from "@lili-project/lili-store";
 import { GitFilesPicker } from "../GitFilesPicker";
 import { GitFileChange } from "../types";
+import { useEffect, useState } from "react";
 
-interface Props {}
+interface State {
+  repo?: RepositoryInfo;
+  loading_status: ReduxLoadingStatus;
+  error: string;
+}
 
-export function GitStatusBox(props: Props) {
+export function GitStatusBox() {
+  const project_dir = useAppSelector(selectOpenedRootProject())?.data?.project_dir;
+  const [state, setState] = useState<State>({
+    repo: undefined,
+    loading_status: ReduxLoadingStatus.Idle,
+    error: '',
+  });
 
-  const mockFiles: GitFileChange[] = [
-      {
-        path: 'src/components/GitUI/UnstagedChanges.tsx',
-        status: 'modified',
-      },
-      {
-        path: 'src/components/GitUI/index.tsx',
-        status: 'modified',
-      },
-      {
-        path: 'src/components/ExampleDontExist.tsx',
-        status: 'deleted',
-      },
-      {
-        path: 'src/components/ExampleCreatingNewFile.tsx',
-        status: 'created',
-      },
-    ];
+  const fetchRepositoryInfo = () => {
+    if (!project_dir) {
+      console.log('[GitStatusBox] project_dir is empty');
+      return;
+    }
 
-  const gitInfoResponse = {
-    branch: 'main',
-    unstagedFiles: mockFiles,
-    stagedFiles: mockFiles,
-    log: [
-      {
-        hash: '1234567890',
-        author: 'John Doe',
-        datetime: '2021-01-01T00:00:00Z',
-        message: 'secondary commit message to test',
-      },
-      {
-        hash: '1234568883',
-        author: 'Janny Doe',
-        datetime: '2021-01-01T00:00:00Z',
-        message: 'Initial commit',
-      },
-    ],
+    setState(state => ({
+      ...state,
+      loading_status: ReduxLoadingStatus.Loading,
+      error: '',
+    }));
+
+    PlatformClient.client().repositoryInfo(project_dir).then((repo) => {
+      setState(state => ({
+        ...state,
+        repo: repo,
+        loading_status: ReduxLoadingStatus.Success,
+        error: '',
+      }));
+    }).catch((error) => {
+      console.error(`[GitStatusBox] fetchRepositoryInfo failed:`, error);
+      setState(state => ({
+        ...state,
+        repo: undefined,
+        loading_status: ReduxLoadingStatus.Error,
+        error: error.message,
+      }));
+    });
   };
 
-  return (
-    <div className="flex flex-col">
-      <GitFilesPicker files={gitInfoResponse.unstagedFiles} />
-      <GitFilesPicker files={gitInfoResponse.stagedFiles} />
-    </div>
-  );
+  useEffect(() => fetchRepositoryInfo(), []);
+
+  if (state.loading_status === ReduxLoadingStatus.Success && state.repo) {
+    return (
+        <div className="flex flex-col">
+        <GitFilesPicker files={state.repo.git_status} />
+        <GitFilesPicker files={[]} />
+        </div>
+    );
+  }
 }
 
