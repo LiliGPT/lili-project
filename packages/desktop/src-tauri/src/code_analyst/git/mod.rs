@@ -9,12 +9,13 @@ pub fn get_repository_info(project_dir: &str) -> Result<RepositoryInfo, ApiError
     let branch: String = get_repository_branch(project_dir)?;
     let git_status = get_git_status(project_dir)?;
     let diff_text = get_diff_text(project_dir);
+    let log = get_git_log(project_dir)?;
     Ok(RepositoryInfo {
         project_dir: project_dir.to_owned(),
         branch,
         git_status,
         diff_text,
-        log: Vec::new(),
+        log,
     })
 }
 
@@ -36,6 +37,42 @@ fn get_repository_branch(project_dir: &str) -> Result<String, ApiError> {
         });
     }
     Ok(stdout)
+}
+
+fn get_git_log(project_dir: &str) -> Result<Vec<GitLogEntry>, ApiError> {
+    let command = "git --no-pager log --pretty=format:'%h|%an|%ad|%s' --date=iso-strict";
+    let res: RunShellCommandResult = run_shell_command(command, project_dir);
+    let stdout = res.stdout.clone();
+    let stderr = res.stderr.clone();
+    if stderr.len() > 0 {
+        return Err(ApiError {
+            message: format!("Failed to get git log: {}", stderr),
+            status_code: 500,
+        });
+    }
+    if stdout.len() == 0 {
+        return Err(ApiError {
+            message: "Failed to get git log: No entries found".to_owned(),
+            status_code: 500,
+        });
+    }
+    let mut entries: Vec<GitLogEntry> = Vec::new();
+    for line in stdout.lines() {
+        let line_split = line.split('|').collect::<Vec<&str>>();
+        let (hash, author, datetime, message) = (
+            line_split[0].to_owned(),
+            line_split[1].to_owned(),
+            line_split[2].to_owned(),
+            line_split[3].to_owned(),
+        );
+        entries.push(GitLogEntry {
+            hash,
+            author,
+            message,
+            datetime,
+        });
+    }
+    Ok(entries)
 }
 
 fn get_git_status(project_dir: &str) -> Result<Vec<GitStatusEntry>, ApiError> {
