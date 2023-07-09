@@ -75,5 +75,10 @@ export enum GitChangeType {
   Untracked = 'Untracked',
 }
 
-export interface GitLogEntry { }
+export interface GitLogEntry {
+  hash: string;
+  author: string;
+  datetime: string;
+  message: string;
+}
 
