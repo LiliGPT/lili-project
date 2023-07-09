@@ -7,6 +7,7 @@ import * as path from 'path';
 const config: UserConfigExport = {
   base: path.join(__dirname, "../.."),
   resolve: {
+    preserveSymlinks: true,
     alias: {
       '@lili-project/lili-store': path.join(__dirname, "../..", "packages/lili-store/src/index.ts"),
       '@lili-project/shared-ui': path.join(__dirname, "../..", "packages/shared-ui/src/index.ts"),

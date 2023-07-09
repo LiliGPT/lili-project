@@ -14,7 +14,7 @@ export function DiffPreview(props: Props) {
   const files: FileData[] = parseDiff(diffText);
 
   const renderFile = ({oldRevision, newRevision, type, hunks, newPath }: FileData) => (
-    <Diff key={oldRevision + '-' + newRevision} viewType="unified" diffType={type} hunks={hunks}>
+    <Diff key={oldRevision + '-' + newRevision} viewType="unified" diffType={type} hunks={hunks} gutterType='none'>
       {hunks => hunks.map(renderHunk)}
     </Diff>
   );
@@ -30,8 +30,7 @@ export function DiffPreview(props: Props) {
   } catch(e) {}
 
   return (
-    <div className="p-5 bg-slate-100 absolute left-[-475px] w-[475px] top-0 bottom-0 z-20 border border-slate-600 overflow-auto text-sm">
-      {props.path}<br/><br/>
+    <div className="p-5 bg-slate-100 absolute left-[-475px] w-[475px] top-0 bottom-0 z-20 border border-slate-600 overflow-auto text-xs">
       {!!fileToRender && (renderFile(fileToRender))}
       {!fileToRender && (
         <pre className="">{content}</pre>

@@ -16,4 +16,5 @@ export * from './services/platform/rust-platform.client';
 export * from './services/platform/rust-platform.types';
 export * from './services/prompter/prompter.types';
 export * from './services/prompter/prompter.client';
+export * from "./hooks/useRepositoryInfo";
 export * from './store';
