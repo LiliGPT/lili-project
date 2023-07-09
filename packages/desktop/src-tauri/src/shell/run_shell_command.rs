@@ -1,5 +1,6 @@
 use std::process::Command;
 
+#[derive(serde::Serialize, serde::Deserialize, Debug)]
 pub struct RunShellCommandResult {
     pub stdout: String,
     pub stderr: String,
