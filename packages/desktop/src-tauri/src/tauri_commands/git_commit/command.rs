@@ -5,7 +5,7 @@ use super::command_request::CommandRequest;
 #[tauri::command]
 pub async fn git_commit_command(request: CommandRequest) -> Result<(), ApiError> {
     let project_dir = &request.project_dir;
-    let path = &request.path;
-    git_commit(project_dir, path)?;
+    let message = &request.message;
+    git_commit(project_dir, message)?;
     Ok(())
 }

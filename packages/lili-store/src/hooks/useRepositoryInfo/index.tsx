@@ -69,6 +69,51 @@ export function useRepositoryInfo() {
     });
   };
 
+  const gitAdd = (path: string) => {
+    if (!project_dir) {
+      return;
+    }
+    PlatformClient.client().gitAdd(
+      project_dir,
+      path,
+    ).then(() => {
+      fetchRepositoryInfo();
+    }).catch((error) => {
+      console.error(`[GitStatusBox] gitAdd failed:`, error);
+      fetchRepositoryInfo();
+    });
+  };
+
+  const gitReset = (path: string) => {
+    if (!project_dir) {
+      return;
+    }
+    PlatformClient.client().gitReset(
+      project_dir,
+      path,
+    ).then(() => {
+      fetchRepositoryInfo();
+    }).catch((error) => {
+      console.error(`[GitStatusBox] gitReset failed:`, error);
+      fetchRepositoryInfo();
+    });
+  };
+
+  const gitCommit = (message: string) => {
+    if (!project_dir) {
+      return;
+    }
+    PlatformClient.client().gitCommit(
+      project_dir,
+      message,
+    ).then(() => {
+      fetchRepositoryInfo();
+    }).catch((error) => {
+      console.error(`[GitStatusBox] gitCommit failed:`, error);
+      fetchRepositoryInfo();
+    });
+  };
+
   useEffect(() => fetchRepositoryInfo(), [project_dir]);
 
   return {
@@ -77,6 +122,9 @@ export function useRepositoryInfo() {
     setCurrentPath,
     fileContents,
     setFileContents,
+    gitAdd,
+    gitReset,
+    gitCommit,
   };
 }
 

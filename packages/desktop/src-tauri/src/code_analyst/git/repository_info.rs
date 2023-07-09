@@ -62,7 +62,7 @@ fn get_git_log(project_dir: &str) -> Result<Vec<GitLogEntry>, ApiError> {
             line_split[0].to_owned(),
             line_split[1].to_owned(),
             line_split[2].to_owned(),
-            line_split[3].to_owned(),
+            line_split[3].to_owned().trim_end_matches("\'").to_owned(),
         );
         entries.push(GitLogEntry {
             hash,
@@ -86,10 +86,11 @@ fn get_git_status(project_dir: &str) -> Result<Vec<GitStatusEntry>, ApiError> {
         });
     }
     if stdout.len() == 0 {
-        return Err(ApiError {
-            message: "Failed to get unstaged files: No files found".to_owned(),
-            status_code: 500,
-        });
+        // return Err(ApiError {
+        //     message: "Failed to get unstaged files: No files found".to_owned(),
+        //     status_code: 500,
+        // });
+        return Ok(Vec::new());
     }
     let mut entries: Vec<GitStatusEntry> = Vec::new();
     for line in stdout.lines() {

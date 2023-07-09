@@ -17,6 +17,9 @@ export function GitUI() {
     setCurrentPath,
     setFileContents,
     fileContents,
+    gitAdd,
+    gitReset,
+    gitCommit,
   } = useRepositoryInfo();
 
   const onClickChangeTab = (tab: string) => {
@@ -40,6 +43,9 @@ export function GitUI() {
         state={state}
         currentPath={currentPath}
         setCurrentPath={setCurrentPath}
+        gitAdd={gitAdd}
+        gitReset={gitReset}
+        gitCommit={gitCommit}
       />}
       {tab === GitUITab.Log && !!state.repo && <GitLogBox
         repo={state.repo}

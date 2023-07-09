@@ -1,5 +1,5 @@
 import { PlatformError } from './platform.error';
-import { CodeProject, SpecificPlatformClient, PlatformSignInResponse, SpawnShellCommandArgs, RepositoryInfo } from './platform.types';
+import { CodeProject, SpecificPlatformClient, PlatformSignInResponse, SpawnShellCommandArgs, RepositoryInfo, RunShellCommandResponse } from './platform.types';
 import { TauriInvokeFn, TauriShellModule } from './rust-platform.types';
 
 const _delay = (ms = 500) => new Promise(resolve => setTimeout(resolve, ms));
@@ -87,5 +87,24 @@ export class RustPlatformClient implements SpecificPlatformClient {
   async readTextFile(path: string): Promise<string> {
     return await this.invokeFn<string>('read_text_file_command', { path });
   }
-}
 
+  async gitAdd(project_dir: string, path: string): Promise<void> {
+    const request = { project_dir, path };
+    await this.invokeFn<void>('git_add_command', { request });
+  }
+
+  async gitCommit(project_dir: string, message: string): Promise<void> {
+    const request = { project_dir, message };
+    await this.invokeFn<void>('git_commit_command', { request });
+  }
+
+  async gitReset(project_dir: string, path: string): Promise<void> {
+    const request = { project_dir, path };
+    await this.invokeFn<void>('git_reset_command', { request });
+  }
+
+  async gitCustom(project_dir: string, command: string, args: string): Promise<RunShellCommandResponse> {
+    const request = { project_dir, command, args };
+    return await this.invokeFn<RunShellCommandResponse>('git_custom_command', { request });
+  }
+}

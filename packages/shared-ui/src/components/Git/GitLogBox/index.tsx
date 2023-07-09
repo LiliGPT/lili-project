@@ -17,7 +17,7 @@ export function GitLogBox({
         today.getMonth() === dateObj.getMonth() &&
         today.getDate() === dateObj.getDate();
     }
-    datetime = isToday() ? log.datetime.substring(11, 16) : log.datetime.substring(0, 10);
+    datetime = isToday(log.datetime) ? log.datetime.substring(11, 16) : log.datetime.substring(0, 10);
     return (
       <div className="flex flex-row gap-4 leading-8" key={log.hash}>
         <div className="text-slate-400">

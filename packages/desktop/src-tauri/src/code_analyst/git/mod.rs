@@ -34,7 +34,7 @@ pub fn git_reset(project_dir: &str, path: &str) -> Result<(), ApiError> {
 }
 
 pub fn git_commit(project_dir: &str, message: &str) -> Result<(), ApiError> {
-    let command = format!("git commit -m \"{}\"", message);
+    let command = format!("git commit -m '{}'", message);
     let res: RunShellCommandResult = run_shell_command(&command, project_dir);
     let stderr = res.stderr.clone();
     if stderr.len() > 0 {

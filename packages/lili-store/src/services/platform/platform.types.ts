@@ -1,5 +1,10 @@
 import { TauriInvokeFn } from './rust-platform.types';
 
+interface RunShellCommandResponse {
+  stdout: string;
+  stderr: string;
+}
+
 export abstract class SpecificPlatformClient {
   invokeFn: TauriInvokeFn;
 
@@ -14,6 +19,10 @@ export abstract class SpecificPlatformClient {
   abstract spawnShellCommand(args: SpawnShellCommandArgs): Promise<number>;
   abstract repositoryInfo(project_dir: string): Promise<RepositoryInfo>;
   abstract readTextFile(path: string): Promise<string>;
+  abstract gitAdd(project_dir: string, path: string): Promise<void>;
+  abstract gitCommit(project_dir: string, message: string): Promise<void>;
+  abstract gitReset(project_dir: string, path: string): Promise<void>;
+  abstract gitCustom(project_dir: string, command: string, args: string): Promise<RunShellCommandResponse>;
 }
 
 export interface CodeProject {
