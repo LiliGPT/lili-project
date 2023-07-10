@@ -11,6 +11,7 @@ pub mod git_custom;
 pub mod git_reset;
 pub mod install_dependencies;
 pub mod open_project;
+pub mod open_terminal;
 pub mod read_text_file;
 pub mod repository_info;
 pub mod retry_execution;

@@ -53,6 +53,7 @@ fn main() {
             tauri_commands::git_commit::git_commit_command,
             tauri_commands::git_reset::git_reset_command,
             tauri_commands::git_custom::git_custom_command,
+            tauri_commands::open_terminal::open_terminal,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

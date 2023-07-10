@@ -23,6 +23,7 @@ export abstract class SpecificPlatformClient {
   abstract gitCommit(project_dir: string, message: string): Promise<void>;
   abstract gitReset(project_dir: string, path: string): Promise<void>;
   abstract gitCustom(project_dir: string, command: string, args: string): Promise<RunShellCommandResponse>;
+  abstract openTerminal(): Promise<void>;
 }
 
 export interface CodeProject {

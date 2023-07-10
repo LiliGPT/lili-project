@@ -1,6 +1,6 @@
 "use client";
 
-import { CodeMission, ReduxCodeProject, ReduxMissionExecution, createMissionThunk, retryExecutionThunk, selectMissionExecution, useAppDispatch, useAppSelector } from "@lili-project/lili-store";
+import { CodeMission, PlatformClient, ReduxCodeProject, ReduxMissionExecution, createMissionThunk, retryExecutionThunk, selectMissionExecution, useAppDispatch, useAppSelector } from "@lili-project/lili-store";
 import { ProjectCardLayout } from "./layout";
 import { useState } from "react";
 import { MissionDetails_OnClickGenerate, MissionDetails_OnClickRetry } from "./MissionDetails";
@@ -50,7 +50,14 @@ export function ProjectCard(props: Props) {
   };
 
   const onClickOpenTerminal = async () => {
-    // todo: open windows terminal
+    await PlatformClient.client()
+      .openTerminal()
+      .catch((err) => {
+        console.error(
+          '[ProjectCard/index.tsx @ onClickOpenTerminal] error opening terminal.',
+          { err }
+        );
+      });
   };
 
   return (

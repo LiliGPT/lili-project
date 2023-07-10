@@ -107,4 +107,8 @@ export class RustPlatformClient implements SpecificPlatformClient {
     const request = { project_dir, command, args };
     return await this.invokeFn<RunShellCommandResponse>('git_custom_command', { request });
   }
+
+  async openTerminal(): Promise<void> {
+    await this.invokeFn<void>('open_terminal', {});
+  }
 }
