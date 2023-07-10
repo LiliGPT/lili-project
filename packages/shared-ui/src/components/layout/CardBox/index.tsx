@@ -5,7 +5,7 @@ interface Props {
 export function CardBox(props: Props) {
   const { children } = props;
   return (
-    <div className="bg-primary rounded-xl flex-grow elevation-2">
+    <div className="bg-primary rounded-xl flex-grow shadow-xl">
       {children}
     </div>
   );

@@ -15,6 +15,9 @@
   }
 
   .RunnableCommand_label {
-    @apply text-gray-600 mr-2 w-36 overflow-ellipsis overflow-hidden text-xs whitespace-nowrap;
+    @apply text-gray-400 mr-2 w-36
+      overflow-ellipsis overflow-hidden
+      text-xs whitespace-nowrap
+      leading-9;
   }
 }

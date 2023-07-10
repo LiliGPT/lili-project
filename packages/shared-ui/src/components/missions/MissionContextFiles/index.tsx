@@ -41,10 +41,10 @@ export function MissionContextFiles(props: Props) {
           + add
         </span>
       )}
-      <div className="mt-2 mb-1 text-xs">context files</div>
+      <div className="mt-2 mb-1 text-xs text-slate-600">context files</div>
       <div className="p-2 rounded py-1 px-2 bg-primary text-xs">
         {executionData?.context_files.map((file, index) => (
-          <div key={`file-${index}`}>
+          <div key={`file-${index}`} className="leading-5 text-slate-500">
             <div className="">{file.path}</div>
           </div>
         ))}

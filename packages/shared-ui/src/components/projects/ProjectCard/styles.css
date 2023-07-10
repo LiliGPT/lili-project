@@ -12,7 +12,7 @@
   }
 
   .ProjectCard_title {
-    @apply text-white text-base font-bold;
+    @apply text-gray-200 text-base font-bold;
   }
 
   .ProjectCard_subtitle {
@@ -20,11 +20,11 @@
   }
 
   .ProjectCard_data {
-    @apply px-3;
+    @apply px-8 mb-4;
   }
 
   .ProjectCard_data_item {
-    @apply text-gray-400 text-sm;
+    @apply text-gray-400 text-sm leading-8;
   }
 
   .ProjectCard_data_item_label {
@@ -37,5 +37,9 @@
 
   .ProjectCard_actions {
     @apply my-2 px-3;
+  }
+
+  .ProjectCard_actions_title {
+    @apply text-gray-500 text-xs mb-2;
   }
 }

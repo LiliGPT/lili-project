@@ -1,4 +1,4 @@
-import { GitStatusEntry } from "@lili-project/lili-store";
+import { GitChangeType, GitStatusEntry } from "@lili-project/lili-store";
 import { useRef } from "react";
 
 interface Props {
@@ -21,6 +21,22 @@ export function GitFilesPicker(props: Props) {
     props.onChange(file_path);
   };
 
+  const fileColor = (file: GitStatusEntry) => {
+    if (!file.is_staged) {
+      return 'text-red-500';
+    }
+    if (file.is_staged && file.change_type === GitChangeType.Modified) {
+      return 'text-yellow-400';
+    }
+    if (file.is_staged && file.change_type === GitChangeType.Added) {
+      return 'text-green-400';
+    }
+    if (file.is_staged && file.change_type === GitChangeType.Deleted) {
+      return 'text-red-500';
+    }
+    return 'text-slate-400';
+  }
+
   return (
     <div
       onMouseOut={delayedClose}
@@ -30,7 +46,7 @@ export function GitFilesPicker(props: Props) {
         return (
           <div
             key={file.file_path}
-            className="leading-7 hover:bg-secondary hover:text-white text-slate-400 transition-colors duration-400 px-2 cursor-pointer"
+            className={`${fileColor(file)} text-opacity-60 text-sm leading-8 hover:bg-cyan-900 hover:text-white transition-colors duration-400 px-2 cursor-pointer`}
             onMouseOver={onFileMouseOverFn(file.file_path)}
           >
             {file.file_path}

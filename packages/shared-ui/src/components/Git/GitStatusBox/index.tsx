@@ -36,7 +36,7 @@ export function GitStatusBox({
   const untrackedFiles = state.repo?.git_status.filter((file) => !file.is_staged) ?? [];
 
   const commitBlock = stagedFiles.length > 0 && (
-    <div className="pt-4">
+    <div className="">
       <TextInput
         label='Commit message'
         value={commitMessage}
@@ -55,13 +55,13 @@ export function GitStatusBox({
   if (state.loading_status === ReduxLoadingStatus.Success && state.repo) {
     return (
       <div className="flex flex-col relative z-100">
-        <div>
+        <div className="pb-4">
           <CustomButton
             label='Add all'
             onClick={() => {
               gitAdd('.');
             }}
-            size='small'
+            size='medium'
             variant='boldy'
             disabled={untrackedFiles.length === 0}
           />
@@ -71,7 +71,7 @@ export function GitStatusBox({
             onClick={() => {
               gitReset('.');
             }}
-            size='small'
+            size='medium'
             variant='boldy'
             disabled={stagedFiles.length === 0}
           />
@@ -83,10 +83,10 @@ export function GitStatusBox({
             onChange={setCurrentPath}
           />
         )}
-        <GitFilesPicker
+        {stagedFiles.length > 0 && (<GitFilesPicker
           files={stagedFiles}
           onChange={setCurrentPath}
-        />
+        />)}
         {!!currentPath && (
           <DiffPreview
             path={currentPath}

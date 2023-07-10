@@ -51,7 +51,7 @@ export function LastExecutions() {
   if (loadingStatus === ReduxLoadingStatus.Success) {
     contentComponents.push(
       <div className="CardBoxContent bg-primary rounded-xl text-left flex flex-col gap-2" key="success">
-        <h2 className="text-left">
+        <h2 className="text-left text-sm leading-10 mb-4">
           Last Executions
           <CustomButton
             label="Refresh"

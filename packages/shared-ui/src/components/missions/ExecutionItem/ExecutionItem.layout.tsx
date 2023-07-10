@@ -77,23 +77,41 @@ export function ExecutionItemLayout(props: Props) {
     />
   );
 
-  const className = (hideProjectName || hideMessage) ? `pt-2 pb-2` : `pt-1 pb-2`;
+  let className = (hideProjectName || hideMessage)
+    ? `pt-2 pb-2` : `pt-1 pb-2`;
+
+  const estatus = executionData?.execution_status;
+  if (estatus === MissionExecutionStatus.Fail) {
+    className += ` border-l-4 border-red-900 border-opacity-70`;
+  } else if (estatus === MissionExecutionStatus.Created) {
+    className += ` border-l-4 border-cyan-600 border-opacity-60`;
+  } else if (estatus === MissionExecutionStatus.Perfect) {
+    className += ` border-l-4 border-violet-600 border-opacity-60`;
+  }
 
   return (
     <div
-      className={`relative border rounded-md px-2 ${className} bg-tertiary border-tertiary text-xs`}
+      className={`relative rounded-md px-6 ${className} bg-slate-800 text-xs`}
       key={executionData?.execution_id}
     >
       {editModeIconButton}
 
-      {!hideProjectName && (
-        <div className="mb-2 text-xs">{executionData?.mission_data.project_dir.split('/').pop()}</div>
-      )}
+      <div className="flex flex-row justify-between gap-5">
+        {!hideProjectName && (
+          <div className="flex-shrink mb-2 text-xs text-slate-600">{executionData?.mission_data.project_dir.split('/').pop()}</div>
+        )}
+        <div className="flex-1 text-slate-600">
+          #{executionData?.execution_id}
+        </div>
+        <div className="flex-1"></div>
+        <div className="flex-shrink text-slate-600">
+          {executionData?.execution_status}
+        </div>
+      </div>
       {!hideMessage && (
-        <div className="text-sm">{executionData?.mission_data.message}</div>
+        <div className="text-lg text-slate-400">{executionData?.mission_data.message}</div>
       )}
       <div className="text-xs text-slate-500 flex flex-row">
-        {executionData?.execution_status} ({executionData?.execution_id})
         {setFailButton}
         {approveAndRunButton}
         {setPerfectButton}
@@ -101,14 +119,20 @@ export function ExecutionItemLayout(props: Props) {
           {settingsDropdownMenu}
         </div>
       </div>
-      <ExecutionActions
-        execution={execution}
-        canDelete={!loading && editionMode}
-      />
-      <MissionContextFiles
-        execution={execution}
-        editMode={editionMode}
-      />
+      <div className="flex flex-row gap-10">
+        <div className="flex-1">
+          <ExecutionActions
+            execution={execution}
+            canDelete={!loading && editionMode}
+          />
+        </div>
+        <div className="flex-1">
+          <MissionContextFiles
+            execution={execution}
+            editMode={editionMode}
+          />
+        </div>
+      </div>
     </div>
   );
 }
