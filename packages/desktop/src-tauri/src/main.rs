@@ -9,6 +9,7 @@ mod configjson;
 mod database;
 mod git_repo;
 mod io;
+mod keymaps;
 mod prompter;
 mod shell;
 mod tauri_commands;
@@ -23,6 +24,10 @@ fn main() {
     dotenv::dotenv().expect("Failed to load .env file");
     // database::manager::create_database();
     tauri::Builder::default()
+        .setup(|app| {
+            keymaps::setup(app.handle());
+            Ok(())
+        })
         .invoke_handler(tauri::generate_handler![
             tauri_commands::get_file_tree::get_file_tree,
             tauri_commands::get_test_scripts::get_test_scripts,
