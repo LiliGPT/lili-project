@@ -1,4 +1,4 @@
-use std::{error::Error, process::Command, thread, time::Duration};
+use std::{process::Command};
 
 use crate::code_missions_api::ApiError;
 
@@ -11,7 +11,7 @@ pub async fn open_terminal() -> Result<(), ApiError> {
     Ok(())
 }
 
-fn internal_open_terminal(project_dir: &str) {
+fn internal_open_terminal(_project_dir: &str) {
     let mut _child = Command::new("wt.exe")
         .arg("-w")
         .arg("0")

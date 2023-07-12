@@ -1,5 +1,5 @@
-use super::super::code_analyst;
-use super::super::prompter;
+
+
 
 #[tauri::command]
 pub async fn rust_prompt_delete(prompt_id: String) -> Result<impl serde::Serialize, String> {

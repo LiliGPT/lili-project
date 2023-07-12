@@ -33,7 +33,7 @@ fn get_command_arguments(original_command: &str) -> Vec<String> {
         } else if current_arg_is_start && !current_arg_is_end {
             temp_arg.push_str(arg.trim_start_matches("\"").trim_start_matches("'"));
         } else if !current_arg_is_start && current_arg_is_end {
-            if (temp_arg.len() == 0) {
+            if temp_arg.len() == 0 {
                 parsed_args.push(arg);
                 continue;
             }

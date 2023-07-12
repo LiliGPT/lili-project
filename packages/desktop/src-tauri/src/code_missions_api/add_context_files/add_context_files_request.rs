@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use crate::code_missions_api::{MissionAction, MissionExecutionContextFile};
+use crate::code_missions_api::{MissionExecutionContextFile};
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct AddContextFilesRequest {

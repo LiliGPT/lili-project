@@ -1,18 +1,12 @@
 use std::path::Path;
 
-use serde_json::json;
+
 
 use crate::{
-    code_analyst::{
-        frameworks::detect_framework_from_path, languages::detect_code_language_from_path,
-        project_files::get_project_files,
-    },
     code_missions_api::{
-        add_context_files, create_mission, find_one_execution, AddContextFilesRequest, ApiError,
-        CreateMissionRequest, ExecuteMissionRequest, MissionData, MissionExecutionContextFile,
+        add_context_files, find_one_execution, AddContextFilesRequest, ApiError, MissionExecutionContextFile,
         MissionExecutionStatus,
     },
-    io::LocalPath,
 };
 
 use super::command_request::CommandRequest;

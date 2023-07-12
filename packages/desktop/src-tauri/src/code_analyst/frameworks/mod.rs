@@ -38,7 +38,7 @@ pub fn is_dependencies_installed(
 pub fn get_local_server_commands(
     project_dir: &str,
     code_language: &super::types::CodeLanguage,
-    framework: &super::types::Framework,
+    _framework: &super::types::Framework,
 ) -> Result<Vec<String>, String> {
     // read projectJson at project_dir
     match code_language {
@@ -56,7 +56,7 @@ fn node_commands(project_dir: &str) -> Result<Vec<String>, Box<dyn std::error::E
         .expect("invalid Package.json scripts")
         .to_owned();
     let mut commands = vec![];
-    for (key, value) in project_json_scripts {
+    for (key, _value) in project_json_scripts {
         let is_start = key.contains("start");
         let is_dev = key.contains("dev");
         if is_start == true || is_dev == true {

@@ -1,4 +1,4 @@
-use super::super::code_analyst;
+
 use super::super::prompter;
 
 #[tauri::command]

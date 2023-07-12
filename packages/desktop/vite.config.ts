@@ -5,7 +5,7 @@ import dts from 'vite-plugin-dts';
 import * as path from 'path';
 
 const config: UserConfigExport = {
-  base: path.join(__dirname, "../.."),
+  // base: path.join(__dirname, "../.."),
   resolve: {
     preserveSymlinks: true,
     alias: {

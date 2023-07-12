@@ -1,6 +1,5 @@
 use crate::{
     auth::{auth_login, AuthLoginRequest},
-    configjson,
 };
 
 #[tauri::command]

@@ -6,7 +6,7 @@ mod nestts;
 
 pub fn get_project_files(
     project_dir: LocalPath,
-    code_language: &CodeLanguage,
+    _code_language: &CodeLanguage,
     framework: &Framework,
 ) -> Vec<String> {
     match framework {

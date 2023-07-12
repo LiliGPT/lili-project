@@ -1,5 +1,5 @@
 use crate::code_missions_api::{
-    api_client::{api_get, EmptyApiResponse},
+    api_client::{api_get},
     ApiError, MissionExecution,
 };
 

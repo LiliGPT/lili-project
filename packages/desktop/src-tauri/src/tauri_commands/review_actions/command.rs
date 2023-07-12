@@ -1,4 +1,4 @@
-use crate::code_missions_api::{review_actions, ApiError, MissionActionType, ReviewActionsRequest};
+use crate::code_missions_api::{review_actions, ApiError, ReviewActionsRequest};
 
 use super::command_request::CommandRequest;
 
