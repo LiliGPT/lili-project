@@ -8,19 +8,32 @@ export type TauriInvokeFn = <Result>(
 ) => Promise<Result>;
 
 export interface TauriShellModule {
-  shell: {
-    Command: TauriShellCommand;
-  };
+  shell: TauriShell;
 }
 
-export type TauriShellCommand = (
-  command: string,
-  args: string[],
-  options: TauriShellCommandOptions,
-) => TauriShellCommandInstance;
+export interface TauriShell {
+  Command: TauriShellCommand;
+}
+
+// export type TauriShellCommand = (
+//   command: string,
+//   args: string[],
+//   options: TauriShellCommandOptions,
+// ) => TauriShellCommandInstance;
+export interface TauriShellCommand {
+  // construct
+  new (
+    command: string,
+    args: string[],
+    options: TauriShellCommandOptions,
+  ): TauriShellCommandInstance;
+}
 
 export type TauriShellCommandInstance = {
   stdout: {
+    on: TauriShellEventHandler;
+  },
+  stderr: {
     on: TauriShellEventHandler;
   },
   on: TauriShellEventHandler;

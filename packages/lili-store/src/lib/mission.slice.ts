@@ -242,7 +242,7 @@ let _lastFetchMissionExecutionsArgs: FetchMissionExecutionsThunkArgs | null = nu
 
 export const fetchMissionExecutionsThunk = createAsyncThunk<
   MissionExecution[],
-  FetchMissionExecutionsThunkArgs | undefined
+  FetchMissionExecutionsThunkArgs | undefined | null
 >(`${MISSION_FEATURE_KEY}/fetchMissionExecutionsThunk`,
   async (args, { dispatch }) => {
     const _argsFilters: FetchMissionExecutionsThunkArgs = args ?? _lastFetchMissionExecutionsArgs ?? {filters:{}};
@@ -366,7 +366,7 @@ export const setExecutionFailThunk = createAsyncThunk<
         console.log('[setExecutionFailThunk] invalid execution ', execution_id, execution);
         return;
       }
-      await dispatch(fetchMissionExecutionsThunk());
+      await dispatch(fetchMissionExecutionsThunk(undefined));
       // dispatch(missionSlice.actions.upsertOne({
       //   ...execution,
       //   loading_status: ReduxLoadingStatus.Success,
@@ -402,13 +402,13 @@ export const setExecutionPerfectThunk = createAsyncThunk<
     await dispatch(refreshTokenThunk());
     try {
       await PrompterClient.setExecutionPerfect(execution_id);
-      await dispatch(fetchMissionExecutionsThunk());
+      await dispatch(fetchMissionExecutionsThunk(undefined));
       const execution = selectMissionExecution(execution_id)((getState() as RootState));
       if (!execution?.data) {
         console.log('[setExecutionPerfectThunk] invalid execution ', execution_id, execution);
         return;
       }
-      await dispatch(fetchMissionExecutionsThunk());
+      await dispatch(fetchMissionExecutionsThunk(undefined));
       // dispatch(missionSlice.actions.upsertOne({
       //   ...execution,
       //   loading_status: ReduxLoadingStatus.Success,
@@ -574,7 +574,7 @@ export const retryExecutionThunk = createAsyncThunk<
     await dispatch(refreshTokenThunk());
     try {
       await PrompterClient.retryExecution(args.execution_id, args.message);
-      await dispatch(fetchMissionExecutionsThunk());
+      await dispatch(fetchMissionExecutionsThunk(undefined));
     } catch (error) {
       dispatch(missionSlice.actions.setExecutionError({
         execution_id: args.execution_id,
@@ -606,7 +606,7 @@ export const commitExecutionLocalChangesThunk = createAsyncThunk<
     await dispatch(refreshTokenThunk());
     try {
       await PrompterClient.submitReview(args.project_dir, args.execution_id);
-      await dispatch(fetchMissionExecutionsThunk());
+      await dispatch(fetchMissionExecutionsThunk(undefined));
     } catch (error) {
       dispatch(missionSlice.actions.setExecutionError({
         execution_id: args.execution_id,

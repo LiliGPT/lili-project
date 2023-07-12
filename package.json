@@ -50,7 +50,6 @@
     "jest-environment-node": "^29.4.1",
     "jsdom": "~22.1.0",
     "nx": "16.4.0",
-    "nx-cloud": "latest",
     "postcss": "8.4.21",
     "postcss-nesting": "^11.3.0",
     "postcss-preset-env": "^8.5.1",

@@ -95,8 +95,8 @@ export function ProjectDetails(props: Props) {
               label={commandKey}
               project_id={project_id}
               command={commandValue}
-              onPlay={() => { /** */ }}
-              onStop={() => { /** */ }}
+              onPlay={async () => { /** */ }}
+              onStop={async () => { /** */ }}
             />
           ))}
         </div>

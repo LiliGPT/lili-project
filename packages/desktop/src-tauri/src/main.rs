@@ -21,7 +21,7 @@ extern crate dotenv_codegen;
 
 fn main() {
     dotenv::dotenv().expect("Failed to load .env file");
-    database::manager::create_database();
+    // database::manager::create_database();
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
             tauri_commands::get_file_tree::get_file_tree,

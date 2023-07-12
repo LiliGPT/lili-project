@@ -1,16 +1,16 @@
 import { PlatformError } from './platform.error';
 import { CodeProject, SpecificPlatformClient, PlatformSignInResponse, SpawnShellCommandArgs, RepositoryInfo, RunShellCommandResponse } from './platform.types';
-import { TauriInvokeFn, TauriShellModule } from './rust-platform.types';
+import { TauriInvokeFn, TauriShell, TauriShellModule } from './rust-platform.types';
 
 const _delay = (ms = 500) => new Promise(resolve => setTimeout(resolve, ms));
 
 export class RustPlatformClient implements SpecificPlatformClient {
   invokeFn: TauriInvokeFn;
-  shell: TauriShellModule;
+  shell: TauriShell;
 
   constructor(invokeFn: TauriInvokeFn, shell: TauriShellModule) {
     this.invokeFn = invokeFn;
-    this.shell = shell;
+    this.shell = shell.shell;
   }
 
   async pickProject(path?: string): Promise<CodeProject> {

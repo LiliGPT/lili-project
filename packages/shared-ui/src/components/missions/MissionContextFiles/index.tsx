@@ -30,7 +30,7 @@ export function MissionContextFiles(props: Props) {
         );
       }
     }
-    await dispatch(fetchMissionExecutionsThunk());
+    await dispatch(fetchMissionExecutionsThunk(undefined));
   };
 
   return (

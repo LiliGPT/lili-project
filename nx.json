@@ -1,8 +1,9 @@
 {
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "neverConnectToCloud": true,
   "tasksRunnerOptions": {
     "default": {
-      "runner": "nx-cloud",
+      "runner": "",
       "options": {
         "cacheableOperations": ["build", "lint", "test", "e2e"],
         "accessToken": "NTFhODJmZjgtMGRhZC00MjI3LTlmYmEtMGZhZGM0YjkyZWNifHJlYWQtd3JpdGU="

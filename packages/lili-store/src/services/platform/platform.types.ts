@@ -1,6 +1,6 @@
 import { TauriInvokeFn } from './rust-platform.types';
 
-interface RunShellCommandResponse {
+export interface RunShellCommandResponse {
   stdout: string;
   stderr: string;
 }

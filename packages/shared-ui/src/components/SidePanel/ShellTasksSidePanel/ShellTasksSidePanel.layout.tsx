@@ -36,7 +36,7 @@ function ShellTaskLogs(props: { task: ReduxShellTask }) {
       containerRef.current.scrollTo({
         top: containerRef.current.scrollHeight,
         left: 0,
-        behavior: 'instant',
+        behavior: 'auto',
       });
     }
   }, [task.logs]);
