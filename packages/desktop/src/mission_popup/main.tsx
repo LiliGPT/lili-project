@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { PlatformClient, RustPlatformClient, TauriInvokeFn, TauriShellModule } from "@lili-project/lili-store";
 import { invoke, shell } from "@tauri-apps/api";
+import { App } from "./App";
 
 PlatformClient.setClient(new RustPlatformClient(
   invoke as unknown as TauriInvokeFn,
@@ -10,7 +11,7 @@ PlatformClient.setClient(new RustPlatformClient(
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <div>mission_popup</div>
+    <App />
   </React.StrictMode>
 );
 
