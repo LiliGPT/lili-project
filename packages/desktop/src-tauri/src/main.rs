@@ -11,9 +11,12 @@ mod git_repo;
 mod io;
 mod keymaps;
 mod prompter;
+mod server;
 mod shell;
 mod tauri_commands;
 mod utils;
+
+use std::thread;
 
 #[macro_use]
 extern crate dotenv_codegen;
@@ -26,6 +29,7 @@ fn main() {
     tauri::Builder::default()
         .setup(|app| {
             keymaps::setup(app.handle());
+            server::setup(app.handle());
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![

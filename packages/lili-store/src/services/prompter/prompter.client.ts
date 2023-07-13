@@ -2,7 +2,9 @@ import { PlatformClient } from '../platform/platform.client';
 import { MissionAction, MissionExecution } from './prompter.types';
 
 export class PrompterClient {
-  static url = 'http://localhost:3000';
+  // static url() {
+  //   return 'http://localhost:3000';
+  // }
 
   static async createMission(projectDir: string, message: string): Promise<MissionExecution> {
     const request = { projectDir, message };
