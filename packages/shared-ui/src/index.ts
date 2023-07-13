@@ -13,3 +13,4 @@ export * from './components/projects/ProjectCard';
 export * from './pages/ProjectsPage';
 export * from './pages/SignInPage';
 export * from './pages/AppContent';
+export * from './pages/ExternalMissionPopup';

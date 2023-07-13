@@ -13,6 +13,7 @@ export abstract class SpecificPlatformClient {
   }
 
   abstract pickProject(): Promise<CodeProject>;
+  abstract signInPlatform(): Promise<PlatformSignInResponse>;
   abstract signInPassword(username: string, password: string): Promise<PlatformSignInResponse>;
   abstract refreshToken(refresh_token: string): Promise<PlatformSignInResponse>;
   abstract runShellCommand(cwd: string, command: string): Promise<string>;

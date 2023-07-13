@@ -1,9 +1,11 @@
-mod routes;
+pub mod routes;
 
 use std::{sync::Mutex, thread};
 
 use actix_web::{middleware, web, App, HttpServer};
 use tauri::AppHandle;
+
+// ---
 
 struct TauriAppState {
     app: Mutex<AppHandle>,

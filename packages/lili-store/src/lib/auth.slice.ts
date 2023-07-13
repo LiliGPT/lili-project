@@ -105,6 +105,27 @@ export const selectCurrentUser = () => createSelector(
 
 // --- Thunks
 
+export const platformSignInThunk = createAsyncThunk<
+  void,
+  void
+>(
+  `${AUTH_FEATURE_KEY}/platformSignIn`,
+  async (_, { dispatch }) => {
+    dispatch(authSlice.actions.setLoadingStatus(ReduxLoadingStatus.Loading));
+    let result;
+    try {
+      result = await PlatformClient.client().signInPlatform();
+    } catch (error) {
+      dispatch(authSlice.actions.setError({
+        error_code: '--todo--',
+        error_description: makeErrorValue(error),
+      }));
+      return;
+    }
+    dispatch(authSlice.actions.setAuthResult(result));
+  },
+);
+
 export const signInThunk = createAsyncThunk<
   void,
   { email: string; password: string }

@@ -1,28 +1,33 @@
-import { appWindow, WebviewWindow } from '@tauri-apps/api/window';
-import { useEffect } from 'react';
-import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
-import { useQueryString } from '../hooks/useQueryString';
+import { useKeyboardShortcuts, useQueryString } from '@lili-project/lili-store';
+import { ExternalMissionPopup } from '@lili-project/shared-ui';
+import { appWindow } from '@tauri-apps/api/window';
 
 export function App() {
-  const qs = useQueryString<{ project_dir: string }>();
+  const qs = useQueryString<{ project_dir: string; message: string; }>();
+
   useKeyboardShortcuts({
     "Escape": async () => {
-      console.log("Escape pressed");
-      // appWindow.close();
-      const mainWin = WebviewWindow.getByLabel("main");
-      await mainWin.hide();
-      await mainWin.show();
-      await mainWin.setFocus();
+      // console.log("Escape pressed");
+      // const mainWin = WebviewWindow.getByLabel("main");
+      // await mainWin.hide();
+      // await mainWin.show();
+      // await mainWin.setFocus();
+      await appWindow.close();
     }
   }, false);
 
-  useEffect(() => {
-    console.log(qs);
-  }, []);
+  if (!qs.project_dir || !qs.message) {
+    return (
+      <div>
+        Missing project_dir or message
+      </div>
+    );
+  }
 
   return (
-    <div>
-      <h1>Hello, world!</h1>
-    </div>
+    <ExternalMissionPopup
+      project_dir={qs.project_dir}
+      message={qs.message}
+    />
   );
 }

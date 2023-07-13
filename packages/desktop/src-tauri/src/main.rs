@@ -18,6 +18,8 @@ mod utils;
 
 use std::thread;
 
+use server::routes::create_mission::create_mission_popup_window;
+
 #[macro_use]
 extern crate dotenv_codegen;
 
@@ -30,6 +32,11 @@ fn main() {
         .setup(|app| {
             keymaps::setup(app.handle());
             server::setup(app.handle());
+            create_mission_popup_window(
+                app.handle(),
+                "/home/l/sample-projects/nestjs-example-project",
+                "Create a new endpoint for mocked examples, each example has an id and name",
+            );
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
@@ -54,6 +61,7 @@ fn main() {
             tauri_commands::set_perfect::set_perfect_command,
             tauri_commands::add_context_files::add_context_files_command,
             tauri_commands::retry_execution::retry_execution_command,
+            tauri_commands::auth_login::auth_login_platform,
             tauri_commands::auth_login::auth_login_command,
             tauri_commands::auth_refresh_token::auth_refresh_token_command,
             tauri_commands::repository_info::repository_info_command,

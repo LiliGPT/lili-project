@@ -14,6 +14,7 @@ interface Props {
   hideProjectName?: boolean;
   hideMessage?: boolean;
   messageForRetry?: string;
+  vertical?: boolean;
 }
 
 export function ExecutionItem(props: Props) {
@@ -27,6 +28,7 @@ export function ExecutionItem(props: Props) {
     hideProjectName,
     hideMessage,
     messageForRetry,
+    vertical,
   } = props;
   const dispatch = useAppDispatch();
   const [editionMode, setEditionMode] = useState<boolean>(defaultEditMode || false);
@@ -140,5 +142,6 @@ export function ExecutionItem(props: Props) {
     onClickFail={onClickFail}
     onClickSetPerfect={onClickSetPerfect}
     onClickApproveAndRun={onClickApproveAndRun}
+    vertical={vertical}
   />
 }

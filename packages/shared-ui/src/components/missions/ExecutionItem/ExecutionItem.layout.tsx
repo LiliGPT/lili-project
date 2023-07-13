@@ -20,10 +20,11 @@ interface Props {
   canToggleEditMode?: boolean;
   hideProjectName?: boolean;
   hideMessage?: boolean;
+  vertical?: boolean;
 }
 
 export function ExecutionItemLayout(props: Props) {
-  const { execution, loading, editionMode, setEditionMode, canOpenSettings, settingsActions, canSetFail, canSetPerfect, onClickFail, onClickSetPerfect, onClickApproveAndRun, hideProjectName, hideMessage, } = props;
+  const { execution, loading, editionMode, setEditionMode, canOpenSettings, settingsActions, canSetFail, canSetPerfect, onClickFail, onClickSetPerfect, onClickApproveAndRun, hideProjectName, hideMessage, vertical, } = props;
   const canToggleEditMode = props.canToggleEditMode ?? true;
   const executionData = execution.data;
   // --- settings dropdown
@@ -88,28 +89,37 @@ export function ExecutionItemLayout(props: Props) {
   } else if (estatus === MissionExecutionStatus.Perfect) {
     className += ` border-l-4 border-violet-600 border-opacity-60`;
   }
+  if (vertical) {
+    className += ` h-full flex flex-col px-1`;
+  } else {
+    className += ' px-6';
+  }
 
   return (
     <div
-      className={`relative rounded-md px-6 ${className} bg-slate-800 text-xs`}
+      className={`relative rounded-md ${className} bg-slate-800 text-xs`}
       key={executionData?.execution_id}
     >
       {editModeIconButton}
 
-      <div className="flex flex-row justify-between gap-5">
+      <div className={`flex flex-row justify-between gap-5`}>
         {!hideProjectName && (
           <div className="flex-shrink mb-2 text-xs text-slate-600">{executionData?.mission_data.project_dir.split('/').pop()}</div>
         )}
         <div className="flex-1 text-slate-600">
           #{executionData?.execution_id}
         </div>
-        <div className="flex-1"></div>
-        <div className="flex-shrink text-slate-600">
-          {executionData?.execution_status}
-        </div>
+        {!vertical && (
+          <>
+            <div className="flex-1"></div>
+            <div className="flex-shrink text-slate-600">
+              {executionData?.execution_status}
+            </div>
+          </>
+        )}
       </div>
       {!hideMessage && (
-        <div className="text-lg text-slate-400">{executionData?.mission_data.message}</div>
+        <div className={`text-slate-400 ${vertical ? 'text-[18px] leading-6' : 'text-lg'}`}>{executionData?.mission_data.message}</div>
       )}
       <div className="text-xs text-slate-500 flex flex-row">
         {setFailButton}
@@ -119,8 +129,8 @@ export function ExecutionItemLayout(props: Props) {
           {settingsDropdownMenu}
         </div>
       </div>
-      <div className="flex flex-row gap-10">
-        <div className="flex-1">
+      <div className={vertical ? `flex flex-col h-full` : `flex flex-row gap-10`}>
+        <div className="flex-shrink">
           <ExecutionActions
             execution={execution}
             canDelete={!loading && editionMode}

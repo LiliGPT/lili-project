@@ -9,7 +9,7 @@ export function MissionActionsSidePanelLayout(props: Props) {
   const { actions: { rows } } = props;
 
   return (
-    <div className="bg-primary mb-4 px-3 py-2 rounded-xl">
+    <div className="bg-primary px-3 py-2 rounded-xl flex-1">
       {rows.map((row, index) => {
         const rowkey = `r-${index}`;
         return (

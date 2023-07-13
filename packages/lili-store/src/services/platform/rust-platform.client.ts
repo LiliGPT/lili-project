@@ -19,6 +19,12 @@ export class RustPlatformClient implements SpecificPlatformClient {
     return project;
   }
 
+  async signInPlatform(): Promise<PlatformSignInResponse> {
+    const result = await this.invokeFn<PlatformSignInResponse>('auth_login_platform', {});
+    console.log('signInPlatform result: ', result);
+    return result;
+  }
+
   async signInPassword(username: string, password: string): Promise<PlatformSignInResponse> {
     const request = { username, password };
     const result = await this.invokeFn<PlatformSignInResponse>('auth_login_command', { request });

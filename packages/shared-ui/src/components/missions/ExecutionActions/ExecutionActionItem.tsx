@@ -14,12 +14,20 @@ export function ExecutionActionItem(props: Props) {
   const labelClassName = is_selected ? 'bg-secondary' : 'bg-primary';
 
   return (
-    <div className="my-1 w-full flex flex-row items-center">
+    <div className="my-1 w-full flex flex-row items-center relative overflow-hidden">
       <div
         onClick={props.onClick}
-        className={`rounded flex-grow py-1 px-2 text-xs leading-6 cursor-pointer ${labelClassName}`}
+        className={`rounded flex-grow py-1 px-2 text-xs leading-6 cursor-pointer ${labelClassName} flex flex-row relative overflow-hidden text-slate-500`}
       >
-        {props.action_type} - {props.path}
+        <div className="flex-none">
+          {props.action_type[0]}
+        </div>
+        <div className="flex-1 overflow-hidden relative ml-3">
+          &nbsp;
+          <div className="text-right absolute top-1/2 right-0 -translate-y-1/2 pr-2">
+            {props.path}
+          </div>
+        </div>
       </div>
       {!!onClickDelete && (
         <div

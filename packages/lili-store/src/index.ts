@@ -17,4 +17,7 @@ export * from './services/platform/rust-platform.types';
 export * from './services/prompter/prompter.types';
 export * from './services/prompter/prompter.client';
 export * from "./hooks/useRepositoryInfo";
+export * from "./hooks/useComponentDidMount";
+export * from "./hooks/useKeyboardShortcuts";
+export * from "./hooks/useQueryString";
 export * from './store';
