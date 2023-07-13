@@ -32,7 +32,8 @@ fn create_mission_popup_window(app: AppHandle) {
     // let win = app.get_window("main").unwrap();
     // win.hide().unwrap();
     // create a new window
-    let winurl = tauri::WindowUrl::App(PathBuf::from("mission_popup.html").into());
+    let winurl =
+        tauri::WindowUrl::App(PathBuf::from("mission_popup.html?project_dir=asdasas").into());
     let builder = tauri::WindowBuilder::new(&app, "mission_popup", winurl);
     builder.build().unwrap();
 }
