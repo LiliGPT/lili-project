@@ -1,0 +1,10 @@
+curl --request POST \
+  --url http://localhost:18018/create_mission \
+  --header 'Content-Type: application/json' \
+  --data '{
+	"project_dir": "/home/l/sample-projects/nestjs-example-project",
+	"file_path": "/home/l/sample-projects/nestjs-example-project/src/app.module.ts",
+	"line": 0,
+	"column": 0,
+	"message": "create a new endpoint for mocked places, each place has an id and name"
+}'
