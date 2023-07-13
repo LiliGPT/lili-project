@@ -16,6 +16,9 @@
       "globalShortcut": {
         "all": true
       },
+      "window": {
+        "all": true
+      },
       "process": {
         "all": true,
         "exit": true,

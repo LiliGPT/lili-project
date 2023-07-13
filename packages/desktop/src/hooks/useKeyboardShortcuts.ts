@@ -1,23 +1,45 @@
-import { useEffect } from "react";
-import { isRegistered, register, unregister, unregisterAll } from '@tauri-apps/api/globalShortcut';
+import { useCallback, useEffect } from "react";
 
 type Callback = (() => void) | (() => Promise<void>);
 
-export async function useKeyboardShortcuts(shortcuts: Record<string, Callback>) {
-  function registerShortcut(shortcut: string, callback: Callback) {
-    unregister(shortcut).then(() => {
-      setTimeout(() => {
-        register(shortcut, callback).catch((err) => {
-          console.error(err);
-        });
-      }, 3000);
-    });
+export function useKeyboardShortcuts(shortcuts: Record<string, Callback>, debug = false) {
+  const onKeyDown = useCallback(function onKeyDownHandler(event: KeyboardEvent) {
+    let mappedKeyName = '';
+    const isAlt = event.altKey;
+    const isCtrl = event.ctrlKey;
+    const isShift = event.shiftKey;
+    const keyName = event.key;
+
+    if (isAlt) {
+      mappedKeyName += 'A-';
+    } else if (isCtrl) {
+      mappedKeyName += 'C-';
+    } else if (isShift) {
+      mappedKeyName += 'S-';
+    }
+
+    mappedKeyName += keyName;
+
+    if (debug) console.log(`key pressed: ${mappedKeyName}`);
+
+    if (shortcuts[mappedKeyName]) {
+      if (debug) console.log('trigger shortcut: ', mappedKeyName);
+      shortcuts[mappedKeyName]();
+    }
+  }, []);
+
+  function registerShortcuts() {
+    document.addEventListener('keydown', onKeyDown);
+  }
+
+  function unregisterShortcuts() {
+    document.removeEventListener('keydown', onKeyDown);
   }
 
   useEffect(() => {
-    Object.entries(shortcuts).forEach(([shortcut, callback]) => {
-      registerShortcut(shortcut, callback);
-    });
+    registerShortcuts();
+
+    return () => unregisterShortcuts();
   }, []);
 }
 

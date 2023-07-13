@@ -4,9 +4,9 @@ pub fn setup(app_handle: AppHandle) {
     app_handle
         .global_shortcut_manager()
         .register("Alt+M", show_popup_create_mission);
-    // app_handle
-    //     .global_shortcut_manager()
-    //     .register("Escape", move || close_popup_create_mission(&app_handle));
+    app_handle
+        .global_shortcut_manager()
+        .register("Escape", move || close_popup_create_mission(&app_handle));
 }
 
 fn show_popup_create_mission() {
