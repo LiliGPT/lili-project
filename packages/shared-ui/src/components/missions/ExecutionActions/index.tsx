@@ -60,14 +60,6 @@ export function ExecutionActions(props: Props) {
         onClickDelete={onClickDelete(action.path)}
         {...action}
       />)}
-      {/*
-      <ExecutionActionDialog
-        open={action !== null}
-        onClose={() => setAction(null)}
-        action={action}
-        contextFiles={execution.context_files}
-      />
-      */}
     </div>
   );
 }
