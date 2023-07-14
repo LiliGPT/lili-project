@@ -15,6 +15,7 @@ interface Props {
   hideMessage?: boolean;
   messageForRetry?: string;
   vertical?: boolean;
+  selectSingleAction?: boolean;
 }
 
 export function ExecutionItem(props: Props) {
@@ -29,6 +30,7 @@ export function ExecutionItem(props: Props) {
     hideMessage,
     messageForRetry,
     vertical,
+    selectSingleAction,
   } = props;
   const dispatch = useAppDispatch();
   const [editionMode, setEditionMode] = useState<boolean>(defaultEditMode || false);
@@ -143,5 +145,6 @@ export function ExecutionItem(props: Props) {
     onClickSetPerfect={onClickSetPerfect}
     onClickApproveAndRun={onClickApproveAndRun}
     vertical={vertical}
+    selectSingleAction={selectSingleAction}
   />
 }

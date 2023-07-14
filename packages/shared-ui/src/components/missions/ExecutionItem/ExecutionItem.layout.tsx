@@ -21,10 +21,11 @@ interface Props {
   hideProjectName?: boolean;
   hideMessage?: boolean;
   vertical?: boolean;
+  selectSingleAction?: boolean;
 }
 
 export function ExecutionItemLayout(props: Props) {
-  const { execution, loading, editionMode, setEditionMode, canOpenSettings, settingsActions, canSetFail, canSetPerfect, onClickFail, onClickSetPerfect, onClickApproveAndRun, hideProjectName, hideMessage, vertical, } = props;
+  const { execution, loading, editionMode, setEditionMode, canOpenSettings, settingsActions, canSetFail, canSetPerfect, onClickFail, onClickSetPerfect, onClickApproveAndRun, hideProjectName, hideMessage, vertical, selectSingleAction } = props;
   const canToggleEditMode = props.canToggleEditMode ?? true;
   const executionData = execution.data;
   // --- settings dropdown
@@ -81,6 +82,13 @@ export function ExecutionItemLayout(props: Props) {
   let className = (hideProjectName || hideMessage)
     ? `pt-2 pb-2` : `pt-1 pb-2`;
 
+  if (vertical) {
+    className += ` flex flex-col px-1 shadow-lg shadow-[#141414]`;
+    className += ` border border-t-slate-700 border-r-slate-700 border-b-slate-700`;
+  } else {
+    className += ' px-6';
+  }
+  
   const estatus = executionData?.execution_status;
   if (estatus === MissionExecutionStatus.Fail) {
     className += ` border-l-4 border-red-900 border-opacity-70`;
@@ -88,11 +96,6 @@ export function ExecutionItemLayout(props: Props) {
     className += ` border-l-4 border-cyan-600 border-opacity-60`;
   } else if (estatus === MissionExecutionStatus.Perfect) {
     className += ` border-l-4 border-violet-600 border-opacity-60`;
-  }
-  if (vertical) {
-    className += ` h-full flex flex-col px-1`;
-  } else {
-    className += ' px-6';
   }
 
   return (
@@ -134,6 +137,7 @@ export function ExecutionItemLayout(props: Props) {
           <ExecutionActions
             execution={execution}
             canDelete={!loading && editionMode}
+            selectSingleAction={selectSingleAction}
           />
         </div>
         <div className="flex-1">

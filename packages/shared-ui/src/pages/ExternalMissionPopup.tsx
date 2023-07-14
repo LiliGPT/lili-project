@@ -43,23 +43,43 @@ function MissionPopupInnerContent({ project_dir, message }: Props) {
 
   if (!execution || execution.loading_status === ReduxLoadingStatus.Loading) {
     return (
-      <div>loading...</div>
+      <div
+        className="fixed top-0 right-5 w-96"
+      >
+        <CuteNotification>
+          <div className="text-sm mb-2 text-slate-700">loading...</div>
+          <div className="">{message}</div>
+        </CuteNotification>
+      </div>
     );
   }
 
-  return (<div className="flex flex-row">
-    <div className="w-1/3 h-screen">
+  return (<div className="fixed right-5 h-screen flex flex-col items-end gap-5">
+    <div className="w-96 flex flex-col">
+      <CuteNotification>
+        {message}
+      </CuteNotification>
       <ExecutionItem
         execution={execution}
-        canToggleEditMode={true}
+        canToggleEditMode={false}
+        hideMessage={true}
         defaultEditMode={true}
         hideProjectName={true}
         canRetry={true}
         vertical={true}
+        selectSingleAction={true}
       />
     </div>
-    <div className="flex flex-1 items-stretch self-stretch">
+    <div className="w-[600px] flex flex-col flex-1 self-stretch items-stretch pb-28">
       <MissionActionsSidePanel />
     </div>
   </div>);
+}
+
+function CuteNotification({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="my-5 bg-boldy px-8 py-4 rounded-md shadow-md shadow-[#141414] text-slate-100 border border-slate-800">
+      {children}
+    </div>
+  );
 }

@@ -11,7 +11,7 @@ interface Props extends MissionAction {
 export function ExecutionActionItem(props: Props) {
   const { execution_id, is_selected, onClick, onClickDelete } = props;
   const dispatch = useAppDispatch();
-  const labelClassName = is_selected ? 'bg-secondary' : 'bg-primary';
+  const labelClassName = is_selected ? 'bg-secondary text-white' : 'bg-primary';
 
   return (
     <div className="my-1 w-full flex flex-row items-center relative overflow-hidden">

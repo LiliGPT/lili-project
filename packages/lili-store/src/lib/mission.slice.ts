@@ -127,6 +127,16 @@ export const missionSlice = createSlice({
         selected_actions_paths,
       });
     },
+    toggleSelectedExecutionActionSingle(state, action: PayloadAction<{
+      execution_id: string;
+      action_path: string;
+    }>) {
+      const { execution_id, action_path } = action.payload;
+      const selected_actions_paths: string[] = [action_path];
+      return _patchEntity(state, execution_id, {
+        selected_actions_paths,
+      });
+    },
   },
   extraReducers: (builder) => {
     // builder.addCase(createMissionThunk.pending, (state): ReduxMissionState => {
@@ -149,7 +159,10 @@ export const missionSlice = createSlice({
   },
 });
 
-export const { toggleSelectedExecutionAction } = missionSlice.actions;
+export const {
+  toggleSelectedExecutionAction,
+  toggleSelectedExecutionActionSingle,
+} = missionSlice.actions;
 
 // --- Selectors
 

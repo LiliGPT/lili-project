@@ -31,16 +31,30 @@ pub fn create_mission_popup_window(app: AppHandle, project_dir: &str, message: &
     // hide the current window
     // let win = app.get_window("main").unwrap();
     // win.hide().unwrap();
-    let url = format!("mission_popup.html?project_dir={}&message={}", urlencoding::encode(project_dir), urlencoding::encode(message));
+    let url = format!(
+        "mission_popup.html?project_dir={}&message={}",
+        urlencoding::encode(project_dir),
+        urlencoding::encode(message)
+    );
     // create a new window
     let winurl = tauri::WindowUrl::App(PathBuf::from(url).into());
     let builder = tauri::WindowBuilder::new(&app, "mission_popup", winurl);
     builder
-        .inner_size(700.0, 500.0)
-        .maximizable(false)
+        .inner_size(1920.0, 1080.0)
+        .maximized(false)
         .resizable(false)
-        .decorations(false)
         .always_on_top(true)
+        .focused(true)
+        .decorations(false)
+        .transparent(true)
         .build()
         .unwrap();
+    // builder
+    //     .inner_size(700.0, 500.0)
+    //     .maximizable(false)
+    //     .resizable(false)
+    //     .decorations(false)
+    //     .always_on_top(true)
+    //     .build()
+    //     .unwrap();
 }
