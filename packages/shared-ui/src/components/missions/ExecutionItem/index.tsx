@@ -6,6 +6,10 @@ import { CustomButton } from '../../Button';
 import { SettingsDropdownButton } from '../../SettingsDropdownMenu';
 import { ExecutionItemLayout } from './ExecutionItem.layout';
 
+const emptyCallback = async () => {
+  // pass
+};
+
 interface Props {
   execution: ReduxMissionExecution;
   defaultEditMode?: boolean;
@@ -16,6 +20,9 @@ interface Props {
   messageForRetry?: string;
   vertical?: boolean;
   selectSingleAction?: boolean;
+  afterSetFail?: typeof emptyCallback;
+  afterApprove?: typeof emptyCallback;
+  afterRetry?: typeof emptyCallback;
 }
 
 export function ExecutionItem(props: Props) {
@@ -31,6 +38,9 @@ export function ExecutionItem(props: Props) {
     messageForRetry,
     vertical,
     selectSingleAction,
+    afterSetFail = emptyCallback,
+    afterApprove = emptyCallback,
+    afterRetry = emptyCallback,
   } = props;
   const dispatch = useAppDispatch();
   const [editionMode, setEditionMode] = useState<boolean>(defaultEditMode || false);
@@ -52,6 +62,7 @@ export function ExecutionItem(props: Props) {
     if (canToggleEditMode) {
       setEditionMode(false);
     }
+    await afterSetFail();
   };
 
   const onClickSetPerfect = async () => {
@@ -79,6 +90,7 @@ export function ExecutionItem(props: Props) {
     if (canToggleEditMode) {
       setEditionMode(false);
     }
+    await afterRetry();
   };
 
   const onClickApproveAndRun = async () => {
@@ -94,6 +106,7 @@ export function ExecutionItem(props: Props) {
     if (canToggleEditMode) {
       setEditionMode(false);
     }
+    await afterApprove();
   };
 
   const onClickCommitLocalFiles = async () => {

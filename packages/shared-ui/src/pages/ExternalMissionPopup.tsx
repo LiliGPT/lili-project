@@ -1,12 +1,16 @@
-import { ReduxCoreView, ReduxLoadingStatus, createMissionThunk, platformSignInThunk, selectCoreView, selectMissionExecution, store, useAppDispatch, useAppSelector, useComponentDidMount, useKeyboardShortcuts, useQueryString } from '@lili-project/lili-store';
+import { ReduxCoreView, ReduxLoadingStatus, approveAndRunExecutionThunk, createMissionThunk, platformSignInThunk, selectCoreView, selectMissionExecution, selectMissionLoading, setExecutionFailThunk, store, useAppDispatch, useAppSelector, useComponentDidMount, useKeyboardShortcuts, useQueryString } from '@lili-project/lili-store';
 import { useState } from 'react';
 import { Provider } from 'react-redux';
 import { ExecutionItem } from '../components/missions/ExecutionItem';
 import { MissionActionsSidePanel } from '../components/SidePanel/MissionActionsSidePanel';
+import { CustomButton } from '../components/Button';
 
 interface Props {
   project_dir: string;
   message: string;
+  afterSetFail?: () => Promise<void>;
+  afterApprove?: () => Promise<void>;
+  afterRetry?: () => Promise<void>;
 }
 
 export function ExternalMissionPopup(props: Props) {
@@ -17,10 +21,17 @@ export function ExternalMissionPopup(props: Props) {
   );
 }
 
-function MissionPopupInnerContent({ project_dir, message }: Props) {
+function MissionPopupInnerContent({
+  project_dir,
+  message,
+  afterSetFail,
+  afterApprove,
+  afterRetry,
+}: Props) {
   const dispatch = useAppDispatch();
   const [executionId, setExecutionId] = useState('');
   const execution = useAppSelector(selectMissionExecution(executionId));
+  const loading = useAppSelector(selectMissionLoading(executionId));
   
   useComponentDidMount(async () => {
     await dispatch(platformSignInThunk())
@@ -41,7 +52,29 @@ function MissionPopupInnerContent({ project_dir, message }: Props) {
     });
   });
 
-  if (!execution || execution.loading_status === ReduxLoadingStatus.Loading) {
+  const onSetFail = async () => {
+    await dispatch(setExecutionFailThunk(executionId));
+    if (afterSetFail) await afterSetFail();
+  };
+
+  const onApprove = async () => {
+    await dispatch(approveAndRunExecutionThunk({
+      project_dir,
+      execution_id: executionId,
+    }));
+    if (afterApprove) await afterApprove();
+  };
+
+  useKeyboardShortcuts({
+    "Escape": async () => {
+      await onSetFail();
+    },
+    "r": async () => {
+      await onApprove();
+    },
+  }, false);
+
+  if (!execution) {
     return (
       <div
         className="fixed top-0 right-5 w-96"
@@ -54,12 +87,19 @@ function MissionPopupInnerContent({ project_dir, message }: Props) {
     );
   }
 
+  const isLoading = loading === ReduxLoadingStatus.Loading;
+
   return (<div className="fixed right-5 h-screen flex flex-col items-end gap-5">
     <div className="w-96 flex flex-col">
       <CuteNotification>
         {message}
       </CuteNotification>
-      <ExecutionItem
+      {isLoading && (
+        <CuteNotification>
+          loading...
+        </CuteNotification>
+      )}
+      {!isLoading && (<ExecutionItem
         execution={execution}
         canToggleEditMode={false}
         hideMessage={true}
@@ -68,11 +108,33 @@ function MissionPopupInnerContent({ project_dir, message }: Props) {
         canRetry={true}
         vertical={true}
         selectSingleAction={true}
-      />
+        afterSetFail={afterSetFail}
+        afterApprove={afterApprove}
+        afterRetry={afterRetry}
+      />)}
     </div>
+    {!isLoading && (
+      <div className="w-96 flex flex-row gap-2">
+        <CustomButton
+          label="[Esc] Close"
+          size='medium'
+          variant='danger'
+          onClick={onSetFail}
+          fullWidth
+        />
+        <CustomButton
+          label="[r] Approve and Run"
+          size='medium'
+          variant='boldy'
+          onClick={onApprove}
+          fullWidth
+        />
+      </div>
+    )}
     <div className="w-[600px] flex flex-col flex-1 self-stretch items-stretch pb-28">
       <MissionActionsSidePanel />
     </div>
+    
   </div>);
 }
 
