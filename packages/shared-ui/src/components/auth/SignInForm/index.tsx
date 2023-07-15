@@ -2,7 +2,7 @@ import { ChangeEvent, useState } from 'react';
 import { TextInput } from '../../TextInput';
 import './SignInForm.styles.css';
 import { CustomButton } from '../../Button';
-import { selectAuthState, signInThunk, useAppDispatch, useAppSelector } from '@lili-project/lili-store';
+import { ReduxLoadingStatus, selectAuthState, signInThunk, useAppDispatch, useAppSelector } from '@lili-project/lili-store';
 
 interface Props {
   _?: never;
@@ -28,9 +28,12 @@ export function SignInForm(props: Props) {
     await dispatch(signInThunk(data));
   };
 
+  const isLoading = auth.loading_status === ReduxLoadingStatus.Loading;
+
+  const errorMessage = auth.error?.error_description ?? '';
+
   return (
     <div className="SignInForm">
-      <pre>{JSON.stringify(auth, null, 4)}</pre>
       <div>
         <h2>Sign In</h2>
 
@@ -47,12 +50,17 @@ export function SignInForm(props: Props) {
           onChange={onChange('password')}
         />
 
-        <div className="flex flex-row justify-end">
+        <div className="flex flex-row">
+          <div className="flex-1">
+            {!!errorMessage && (
+              <div className="text-red-500 text-sm font-normal">{errorMessage}</div>
+            )}
+          </div>
           <CustomButton
-            label="Sign In"
+            label={isLoading ? 'loading...' : "Sign In"}
             size="medium"
             variant="primary"
-            disabled={false}
+            disabled={isLoading}
             onClick={onSubmit}
           />
         </div>

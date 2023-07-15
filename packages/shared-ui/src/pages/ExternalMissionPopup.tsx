@@ -1,9 +1,10 @@
-import { ReduxCoreView, ReduxLoadingStatus, approveAndRunExecutionThunk, createMissionThunk, platformSignInThunk, selectCoreView, selectMissionExecution, selectMissionLoading, setExecutionFailThunk, store, useAppDispatch, useAppSelector, useComponentDidMount, useKeyboardShortcuts, useQueryString } from '@lili-project/lili-store';
+import { ReduxCoreView, ReduxLoadingStatus, approveAndRunExecutionThunk, createMissionThunk, platformSignInThunk, selectCoreView, selectCurrentUser, selectMissionExecution, selectMissionLoading, setExecutionFailThunk, store, useAppDispatch, useAppSelector, useComponentDidMount, useKeyboardShortcuts, useQueryString } from '@lili-project/lili-store';
 import { useState } from 'react';
 import { Provider } from 'react-redux';
 import { ExecutionItem } from '../components/missions/ExecutionItem';
 import { MissionActionsSidePanel } from '../components/SidePanel/MissionActionsSidePanel';
 import { CustomButton } from '../components/Button';
+import { SignInForm } from '../components/auth/SignInForm';
 
 interface Props {
   project_dir: string;
@@ -16,8 +17,31 @@ interface Props {
 export function ExternalMissionPopup(props: Props) {
   return (
     <Provider store={store}>
-      <MissionPopupInnerContent {...props} />
+      <ExternalMissionPopupContent {...props} />
     </Provider>
+  );
+}
+
+function ExternalMissionPopupContent(props: Props) {
+  const dispatch = useAppDispatch();
+  const user = useAppSelector(selectCurrentUser());
+
+  useComponentDidMount(async () => {
+    await dispatch(platformSignInThunk());
+  });
+
+  if (!user?.sub) {
+    return <SignInPopup />;
+  }
+
+  return <MissionPopupInnerContent {...props} />;
+}
+
+function SignInPopup() {
+  return (
+    <div className="fixed top-5 right-5 bg-primary shadow-md p-4 w-96">
+      <SignInForm />
+    </div>
   );
 }
 
@@ -34,14 +58,13 @@ function MissionPopupInnerContent({
   const loading = useAppSelector(selectMissionLoading(executionId));
   
   useComponentDidMount(async () => {
-    await dispatch(platformSignInThunk())
     await dispatch(createMissionThunk({
       message,
       project_dir,
     })).unwrap().then((execution) => {
       if (!execution.data) {
         console.error(
-          '[ProjectCard/index.tsx @ onClickGenerate] no execution data.',
+          '[ExternalMissionPopup.tsx @ onClickGenerate] no execution data.',
           'This should never happen since this execution was just created.',
           { execution }
         );
