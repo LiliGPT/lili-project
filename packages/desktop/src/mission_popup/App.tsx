@@ -5,16 +5,20 @@ import { appWindow } from '@tauri-apps/api/window';
 export function App() {
   const qs = useQueryString<{ project_dir: string; message: string; }>();
 
-  useKeyboardShortcuts({
-    "Escape": async () => {
-      // console.log("Escape pressed");
-      // const mainWin = WebviewWindow.getByLabel("main");
-      // await mainWin.hide();
-      // await mainWin.show();
-      // await mainWin.setFocus();
-      await appWindow.close();
-    }
-  }, false);
+  // useKeyboardShortcuts({
+  //   "Escape": async () => {
+  //     // console.log("Escape pressed");
+  //     // const mainWin = WebviewWindow.getByLabel("main");
+  //     // await mainWin.hide();
+  //     // await mainWin.show();
+  //     // await mainWin.setFocus();
+  //     await appWindow.close();
+  //   }
+  // }, false);
+
+  const closePopupWindow = async () => {
+    await appWindow.close();
+  };
 
   if (!qs.project_dir || !qs.message) {
     return (
@@ -28,6 +32,8 @@ export function App() {
     <ExternalMissionPopup
       project_dir={qs.project_dir}
       message={qs.message}
+      afterApprove={closePopupWindow}
+      afterSetFail={closePopupWindow}
     />
   );
 }
