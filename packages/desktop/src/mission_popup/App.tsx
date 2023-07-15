@@ -14,7 +14,7 @@ export function App() {
   //     // await mainWin.setFocus();
   //     await appWindow.close();
   //   }
-  // }, false);
+  // }, [], false);
 
   const closePopupWindow = async () => {
     await appWindow.close();

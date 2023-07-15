@@ -1,4 +1,4 @@
-import { ReduxCoreView, ReduxLoadingStatus, approveAndRunExecutionThunk, createMissionThunk, platformSignInThunk, selectCoreView, selectCurrentUser, selectMissionExecution, selectMissionLoading, setExecutionFailThunk, store, useAppDispatch, useAppSelector, useComponentDidMount, useKeyboardShortcuts, useQueryString } from '@lili-project/lili-store';
+import { ReduxCoreView, ReduxLoadingStatus, approveAndRunExecutionThunk, createMissionThunk, platformSignInThunk, selectCoreView, selectCurrentUser, selectMissionExecution, selectMissionLoading, selectNextExecutionActionSingle, selectPreviousExecutionActionSingle, setExecutionFailThunk, store, useAppDispatch, useAppSelector, useComponentDidMount, useKeyboardShortcuts, useQueryString } from '@lili-project/lili-store';
 import { useState } from 'react';
 import { Provider } from 'react-redux';
 import { ExecutionItem } from '../components/missions/ExecutionItem';
@@ -72,6 +72,7 @@ function MissionPopupInnerContent({
         return;
       }
       setExecutionId(execution.data?.execution_id);
+      dispatch(selectNextExecutionActionSingle({ execution_id: execution.data?.execution_id }));
     });
   });
 
@@ -95,7 +96,13 @@ function MissionPopupInnerContent({
     "r": async () => {
       await onApprove();
     },
-  }, false);
+    "ArrowUp": async () => {
+      await dispatch(selectPreviousExecutionActionSingle({ execution_id: executionId }));
+    },
+    "ArrowDown": async () => {
+      await dispatch(selectNextExecutionActionSingle({ execution_id: executionId }));
+    },
+  }, [executionId], true);
 
   if (!execution) {
     return (

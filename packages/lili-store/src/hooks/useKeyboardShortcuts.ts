@@ -2,7 +2,7 @@ import { useCallback, useEffect } from "react";
 
 type Callback = (() => void) | (() => Promise<void>);
 
-export function useKeyboardShortcuts(shortcuts: Record<string, Callback>, debug = false) {
+export function useKeyboardShortcuts(shortcuts: Record<string, Callback>, deps: any[] = [], debug = false) {
   const onKeyDown = useCallback(function onKeyDownHandler(event: KeyboardEvent) {
     let mappedKeyName = '';
     const isAlt = event.altKey;
@@ -26,7 +26,7 @@ export function useKeyboardShortcuts(shortcuts: Record<string, Callback>, debug 
       if (debug) console.log('trigger shortcut: ', mappedKeyName);
       shortcuts[mappedKeyName]();
     }
-  }, []);
+  }, [shortcuts, ...deps]);
 
   function registerShortcuts() {
     document.addEventListener('keydown', onKeyDown);
@@ -40,6 +40,6 @@ export function useKeyboardShortcuts(shortcuts: Record<string, Callback>, debug 
     registerShortcuts();
 
     return () => unregisterShortcuts();
-  }, []);
+  }, deps);
 }
 

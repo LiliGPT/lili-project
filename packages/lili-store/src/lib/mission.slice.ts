@@ -137,6 +137,50 @@ export const missionSlice = createSlice({
         selected_actions_paths,
       });
     },
+    selectNextExecutionActionSingle(state, action: PayloadAction<{
+      execution_id: string;
+    }>) {
+      const { execution_id } = action.payload;
+      const execution = state.entities[execution_id];
+      if (!execution) return;
+      const actions = execution.data?.reviewed_actions ?? execution.data?.original_actions ?? [];
+      const previous_selected = execution.selected_actions_paths[0];
+      const selected_actions_paths: string[] = [];
+      if (previous_selected) {
+        const previous_selected_index = actions.findIndex(a => a.path === previous_selected);
+        const next_selected_index = previous_selected_index + 1;
+        if (next_selected_index >= actions.length) return;
+        const next_selected = actions[next_selected_index].path;
+        selected_actions_paths.push(next_selected);
+      } else {
+        selected_actions_paths.push(actions[0].path);
+      }
+      return _patchEntity(state, execution_id, {
+        selected_actions_paths,
+      });
+    },
+    selectPreviousExecutionActionSingle(state, action: PayloadAction<{
+      execution_id: string;
+    }>) {
+      const { execution_id } = action.payload;
+      const execution = state.entities[execution_id];
+      if (!execution) return;
+      const actions = execution.data?.reviewed_actions ?? execution.data?.original_actions ?? [];
+      const previous_selected = execution.selected_actions_paths[0];
+      const selected_actions_paths: string[] = [];
+      if (previous_selected) {
+        const previous_selected_index = actions.findIndex(a => a.path === previous_selected);
+        const next_selected_index = previous_selected_index - 1;
+        if (next_selected_index < 0) return;
+        const next_selected = actions[next_selected_index].path;
+        selected_actions_paths.push(next_selected);
+      } else {
+        selected_actions_paths.push(actions[0].path);
+      }
+      return _patchEntity(state, execution_id, {
+        selected_actions_paths,
+      });
+    },
   },
   extraReducers: (builder) => {
     // builder.addCase(createMissionThunk.pending, (state): ReduxMissionState => {
@@ -162,6 +206,8 @@ export const missionSlice = createSlice({
 export const {
   toggleSelectedExecutionAction,
   toggleSelectedExecutionActionSingle,
+  selectNextExecutionActionSingle,
+  selectPreviousExecutionActionSingle,
 } = missionSlice.actions;
 
 // --- Selectors
