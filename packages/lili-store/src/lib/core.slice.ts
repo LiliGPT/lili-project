@@ -26,7 +26,7 @@ const makeErrorValue = (error: unknown) => {
 
 export const initialCoreState: ReduxCoreState = {
   // page view
-  view: ReduxCoreView.SignIn,
+  view: ReduxCoreView.CodeProjects,
 };
 
 // --- Slice
