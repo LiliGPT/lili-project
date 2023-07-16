@@ -7,6 +7,7 @@ mod code_analyst;
 mod code_missions_api;
 mod configjson;
 mod database;
+mod error;
 mod git_repo;
 mod io;
 mod keymaps;
@@ -32,11 +33,11 @@ fn main() {
         .setup(|app| {
             keymaps::setup(app.handle());
             server::setup(app.handle());
-            create_mission_popup_window(
-                app.handle(),
-                "/home/l/sample-projects/nestjs-example-project",
-                "Create a new endpoint for mocked examples, each example has an id and name",
-            );
+            // create_mission_popup_window(
+            //     app.handle(),
+            //     "/home/l/sample-projects/nestjs-example-project",
+            //     "Create a new endpoint for mocked examples, each example has an id and name",
+            // );
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![

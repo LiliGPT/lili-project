@@ -11,6 +11,7 @@ interface Props {
 export function SignInForm(props: Props) {
   const dispatch = useAppDispatch();
   const auth = useAppSelector(selectAuthState);
+  const user = auth.user;
 
   const [data, setData] = useState({
     email: 'giovanneafonso@gmail.com',
@@ -31,6 +32,16 @@ export function SignInForm(props: Props) {
   const isLoading = auth.loading_status === ReduxLoadingStatus.Loading;
 
   const errorMessage = auth.error?.error_description ?? '';
+
+  const isSignedIn = !!user?.sub;
+
+  if (isSignedIn) {
+    return (
+      <div className="text-slate-200">
+        User: {user.email}
+      </div>
+    );
+  }
 
   return (
     <div className="SignInForm">

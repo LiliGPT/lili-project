@@ -137,10 +137,7 @@ export const signInThunk = createAsyncThunk<
     try {
       result = await PlatformClient.client().signInPassword(args.email, args.password);
     } catch (error) {
-      dispatch(authSlice.actions.setError({
-        error_code: '--todo--',
-        error_description: makeErrorValue(error),
-      }));
+      dispatch(authSlice.actions.setError(error));
       return;
     }
     dispatch(authSlice.actions.setAuthResult(result));

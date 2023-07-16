@@ -1,4 +1,4 @@
-import { ReduxCoreView, selectCoreView, store, useAppSelector } from '@lili-project/lili-store';
+import { ReduxCoreView, platformSignInThunk, selectCoreView, store, useAppDispatch, useAppSelector, useComponentDidMount } from '@lili-project/lili-store';
 import { ProjectsPage } from './ProjectsPage';
 import { SignInPage } from './SignInPage';
 import { Provider } from 'react-redux';
@@ -12,8 +12,13 @@ export function AppContent() {
 }
 
 function AppInnerContent() {
+  const dispatch = useAppDispatch();
   const view = useAppSelector(selectCoreView());
-  console.log('view', view);
+
+  useComponentDidMount(async () => {
+    await dispatch(platformSignInThunk());
+  });
+
   return (
     <>
       {view === ReduxCoreView.CodeProjects && (<ProjectsPage />)}

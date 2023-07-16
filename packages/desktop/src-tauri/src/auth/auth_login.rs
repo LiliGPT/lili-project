@@ -1,8 +1,8 @@
-use crate::configjson;
+use crate::{configjson, error::PlatformError};
 
 use super::{AuthLoginRequest, AuthLoginResponse};
 
-pub async fn auth_login(request: AuthLoginRequest) -> Result<AuthLoginResponse, String> {
+pub async fn auth_login(request: AuthLoginRequest) -> Result<AuthLoginResponse, PlatformError> {
     // --- login to keycloak
     let client = reqwest::Client::new();
     let login_endpoint = "https://liligpt-auth.giovannefeitosa.com/auth/realms/liligpt/protocol/openid-connect/token";
@@ -19,27 +19,37 @@ pub async fn auth_login(request: AuthLoginRequest) -> Result<AuthLoginResponse, 
         .await;
     let response = match response {
         Ok(response) => response,
-        Err(error) => return Err(format!("Failed to send request to auth server: {}", error)),
+        Err(error) => {
+            return Err(PlatformError::reqwest(
+                error,
+                "Error sending request to authentication server",
+            ))
+        }
     };
-    println!("text response: {:?}", &response);
+    if response.status() == 522 || response.status() == 521 {
+        return Err(PlatformError::new(
+            &format!("http-{}", response.status().as_str()),
+            "Authentication server is down",
+        ));
+    }
     // --- parse text response (manually to prevent next function to panic)
     let response = match response.text().await {
-      Ok(response) => response,
-      Err(error) => {
-        return Err(format!(
-          "Failed to parse text response from auth server: {}",
-          error
-        ))
-      }
+        Ok(response) => response,
+        Err(error) => {
+            return Err(PlatformError::reqwest(
+                error,
+                "Error reading authentication server response",
+            ))
+        }
     };
     println!("Response: {:?}", &response);
     // --- parse json response
     let final_response = match serde_json::from_str::<AuthLoginResponse>(&response) {
         Ok(response) => response,
         Err(error) => {
-            return Err(format!(
-                "Failed to parse json response from auth server: {}",
-                error
+            return Err(PlatformError::new(
+                "json-parse",
+                &format!("Error parsing authentication server response: {}", error),
             ))
         }
     };

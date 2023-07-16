@@ -133,7 +133,7 @@ export function ExecutionItemLayout(props: Props) {
         </div>
       </div>
       <div className={vertical ? `flex flex-col h-full` : `flex flex-row gap-10`}>
-        <div className="flex-shrink">
+        <div className={vertical ? "flex-shrink" : "flex-1"}>
           <ExecutionActions
             execution={execution}
             canDelete={!loading && editionMode}
