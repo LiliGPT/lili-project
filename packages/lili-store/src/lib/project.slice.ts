@@ -130,7 +130,9 @@ export const selectProjectError = () => createSelector(
 
 // --- Thunks
 
-type PickProjectThunkArgs = undefined;
+type PickProjectThunkArgs = {
+  project_dir: string;
+} | undefined;
 
 export const pickProjectThunk = createAsyncThunk<
   ReduxCodeProject,
@@ -145,7 +147,7 @@ export const pickProjectThunk = createAsyncThunk<
     //   return rejectWithValue(makeErrorValue('Platform client not set.'));
     // }
     try {
-      project = await PlatformClient.client().pickProject();
+      project = await PlatformClient.client().pickProject(args?.project_dir);
     } catch (error) {
       return rejectWithValue(makeErrorValue(error));
     }

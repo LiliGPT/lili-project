@@ -1,4 +1,4 @@
-import { ReduxCoreView, platformSignInThunk, selectCoreView, store, useAppDispatch, useAppSelector, useComponentDidMount } from '@lili-project/lili-store';
+import { ReduxCoreView, pickProjectThunk, platformSignInThunk, selectCoreView, store, useAppDispatch, useAppSelector, useComponentDidMount } from '@lili-project/lili-store';
 import { ProjectsPage } from './ProjectsPage';
 import { SignInPage } from './SignInPage';
 import { Provider } from 'react-redux';
@@ -17,6 +17,9 @@ function AppInnerContent() {
 
   useComponentDidMount(async () => {
     await dispatch(platformSignInThunk());
+    await dispatch(pickProjectThunk({
+      project_dir: '/home/l/sample-projects/nestjs-example-project',
+    }));
   });
 
   return (

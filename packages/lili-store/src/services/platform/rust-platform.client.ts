@@ -13,9 +13,9 @@ export class RustPlatformClient implements SpecificPlatformClient {
     this.shell = shell.shell;
   }
 
-  async pickProject(path?: string): Promise<CodeProject> {
+  async pickProject(project_dir?: string): Promise<CodeProject> {
     // throw new PlatformError('not_implemented', 'Rust platform not implemented.');
-    const project = await this.invokeFn<CodeProject>('open_project', { path: path ?? '' });
+    const project = await this.invokeFn<CodeProject>('open_project', { path: project_dir ?? '' });
     return project;
   }
 

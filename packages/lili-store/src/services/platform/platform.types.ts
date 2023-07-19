@@ -12,7 +12,7 @@ export abstract class SpecificPlatformClient {
     this.invokeFn = invokeFn;
   }
 
-  abstract pickProject(): Promise<CodeProject>;
+  abstract pickProject(project_dir?: string): Promise<CodeProject>;
   abstract signInPlatform(): Promise<PlatformSignInResponse>;
   abstract signInPassword(username: string, password: string): Promise<PlatformSignInResponse>;
   abstract refreshToken(refresh_token: string): Promise<PlatformSignInResponse>;
