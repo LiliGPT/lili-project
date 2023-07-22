@@ -56,11 +56,11 @@ pub fn run_shell_command(command: &str, cwd: &str) -> RunShellCommandResult {
     let mut command = command.split_whitespace();
     let command_name = command.next().unwrap();
     let command_args = get_command_arguments(original_command);
-    print!(
-        "command_name: {}\narguments: {}\n",
-        command_name,
-        command_args.join("  ")
-    );
+    // print!(
+    //     "command_name: {}\narguments: {}\n",
+    //     command_name,
+    //     command_args.join("  ")
+    // );
     let output = Command::new(command_name)
         .args(command_args)
         .current_dir(cwd)

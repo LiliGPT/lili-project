@@ -7,7 +7,9 @@ pub enum CodeLanguage {
     Unknown,
 }
 
-#[derive(Debug, strum::Display, serde::Serialize, serde::Deserialize, Default, Clone)]
+#[derive(
+    Debug, strum::Display, serde::Serialize, serde::Deserialize, Default, Clone, PartialEq,
+)]
 pub enum Framework {
     // instead of serializing as NodeTs, I want to serialize as Nest
     NodeNest,

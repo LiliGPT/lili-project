@@ -25,6 +25,7 @@ export abstract class SpecificPlatformClient {
   abstract gitReset(project_dir: string, path: string): Promise<void>;
   abstract gitCustom(project_dir: string, command: string, args: string): Promise<RunShellCommandResponse>;
   abstract openTerminal(): Promise<void>;
+  abstract getEndpoints(project_dir: string): Promise<BackendEndpoint[]>;
 }
 
 export interface CodeProject {
@@ -91,5 +92,18 @@ export interface GitLogEntry {
   author: string;
   datetime: string;
   message: string;
+}
+
+export interface BackendEndpoint {
+  controller_name: string;
+  function_name: string;
+  method: string;
+  path: string;
+  request_body?: BackendEndpointRequestBody;
+}
+
+export interface BackendEndpointRequestBody {
+  name: string;
+  content: string;
 }
 

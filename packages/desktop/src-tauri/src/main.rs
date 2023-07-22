@@ -5,9 +5,11 @@
 mod auth;
 mod code_analyst;
 mod code_missions_api;
+mod code_outline;
 mod configjson;
 mod database;
 mod error;
+mod frameworks;
 mod git_repo;
 mod io;
 mod keymaps;
@@ -72,6 +74,7 @@ fn main() {
             tauri_commands::git_reset::git_reset_command,
             tauri_commands::git_custom::git_custom_command,
             tauri_commands::open_terminal::open_terminal,
+            tauri_commands::get_endpoints::get_endpoints,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

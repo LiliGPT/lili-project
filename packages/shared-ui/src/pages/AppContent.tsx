@@ -18,7 +18,8 @@ function AppInnerContent() {
   useComponentDidMount(async () => {
     await dispatch(platformSignInThunk());
     await dispatch(pickProjectThunk({
-      project_dir: '/home/l/sample-projects/nestjs-example-project',
+      // project_dir: '/home/l/sample-projects/nestjs-example-project',
+      project_dir: '/home/l/dasa/checkin/backend',
     }));
   });
 

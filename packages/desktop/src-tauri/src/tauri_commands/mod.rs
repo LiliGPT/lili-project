@@ -3,6 +3,7 @@ pub mod auth_login;
 pub mod auth_refresh_token;
 pub mod create_mission;
 pub mod fetch_missions;
+pub mod get_endpoints;
 pub mod get_file_tree;
 pub mod get_test_scripts;
 pub mod git_add;

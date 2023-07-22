@@ -1,6 +1,7 @@
 import { ReduxCodeProject, useAppDispatch, addShellTaskThunk, removeShellTaskThunk, stopShellTaskThunk } from "@lili-project/lili-store";
 import { RunnableCommand } from "../RunnableCommand";
 import { CustomButton } from "../../Button";
+import { ProjectEndpoints } from "../ProjectEndpoints";
 
 interface Props {
   project: ReduxCodeProject;
@@ -101,6 +102,8 @@ export function ProjectDetails(props: Props) {
           ))}
         </div>
       </div>
+
+      <ProjectEndpoints project_dir={project.data.project_dir} />
     </>
   );
 }

@@ -1,5 +1,5 @@
 import { PlatformError } from './platform.error';
-import { CodeProject, SpecificPlatformClient, PlatformSignInResponse, SpawnShellCommandArgs, RepositoryInfo, RunShellCommandResponse } from './platform.types';
+import { CodeProject, SpecificPlatformClient, PlatformSignInResponse, SpawnShellCommandArgs, RepositoryInfo, RunShellCommandResponse, BackendEndpoint } from './platform.types';
 import { TauriInvokeFn, TauriShell, TauriShellModule } from './rust-platform.types';
 
 const _delay = (ms = 500) => new Promise(resolve => setTimeout(resolve, ms));
@@ -116,5 +116,9 @@ export class RustPlatformClient implements SpecificPlatformClient {
 
   async openTerminal(): Promise<void> {
     await this.invokeFn<void>('open_terminal', {});
+  }
+
+  async getEndpoints(project_dir: string): Promise<BackendEndpoint[]> {
+      return await this.invokeFn<BackendEndpoint[]>('get_endpoints', { projectDir: project_dir });
   }
 }
