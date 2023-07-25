@@ -1,12 +1,10 @@
+use super::ApiError;
 
-
-use super::{ApiError};
-
-pub async fn api_post<Request: serde::ser::Serialize, Response: serde::de::DeserializeOwned>(
+pub async fn api_post_raw<Request: serde::ser::Serialize>(
     access_token: &str,
     uri: &str,
     json_request: &Request,
-) -> Result<Option<Response>, ApiError> {
+) -> Result<Option<String>, ApiError> {
     let http_client = reqwest::Client::new();
     let response = http_client
         .post(&format!("{}{}", dotenv!("PROMPTER_URL"), uri))
@@ -23,18 +21,15 @@ pub async fn api_post<Request: serde::ser::Serialize, Response: serde::de::Deser
             ))
         }
     };
+
     match response.status() {
         reqwest::StatusCode::OK | reqwest::StatusCode::CREATED => {
-            let response_json = match response.json().await {
-                Ok(resp) => resp,
-                Err(err) => {
-                    return Err(ApiError::from(
-                        err,
-                        "Failed to parse response as a MissionExecution",
-                    ))
-                }
-            };
-            Ok(Some(response_json))
+            let response_text = &response.text().await.unwrap_or("".to_string());
+            if response_text.is_empty() {
+                Ok(None)
+            } else {
+                Ok(Some(response_text.to_string()))
+            }
         }
         reqwest::StatusCode::NO_CONTENT => Ok(None),
         _ => {
@@ -45,5 +40,20 @@ pub async fn api_post<Request: serde::ser::Serialize, Response: serde::de::Deser
                 message: response_text.to_string(),
             })
         }
+    }
+}
+
+pub async fn api_post<Request: serde::ser::Serialize, Response: serde::de::DeserializeOwned>(
+    access_token: &str,
+    uri: &str,
+    json_request: &Request,
+) -> Result<Option<Response>, ApiError> {
+    let response = api_post_raw(access_token, uri, json_request).await?;
+    match response {
+        Some(response) => {
+            let response: Response = serde_json::from_str(&response).unwrap();
+            Ok(Some(response))
+        }
+        None => Ok(None),
     }
 }

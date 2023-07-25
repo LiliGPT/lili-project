@@ -28,6 +28,10 @@ export function BasePage(props: Props) {
     dispatch(setCoreView(ReduxCoreView.SignIn));
   };
 
+  const onClickTailwindGenerator = () => {
+    dispatch(setCoreView(ReduxCoreView.TailwindGenerator));
+  };
+
   return (
     <div className="BasePage">
       <div className="AppSidebar">
@@ -49,10 +53,10 @@ export function BasePage(props: Props) {
             active={view === ReduxCoreView.CodeProjects}
           />
           <SideNavItem
-            label="Missions"
+            label="Tailwind Generator"
             icon={BookIcon}
-            onClick={() => {}}
-            active={false}
+            onClick={onClickTailwindGenerator}
+            active={view === ReduxCoreView.TailwindGenerator}
           />
 
         </SideNav>

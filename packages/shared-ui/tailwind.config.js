@@ -19,9 +19,8 @@ module.exports = {
         tertiary: '#2A3849',
         // accent: 'rgb(217, 119, 6)',
         'accent-hover': '#b06F00',
-      }
+      },
     },
   },
   plugins: [],
 };
-

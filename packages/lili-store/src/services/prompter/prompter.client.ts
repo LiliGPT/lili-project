@@ -59,7 +59,9 @@ export class PrompterClient {
 
   static async askTailwindGenerator(sourceCode: string, message: string): Promise<string> {
     const request = { source_code: sourceCode, message };
+    console.log(`[askTailwindGenerator] ${JSON.stringify(request.message)}`);
     const response = await PlatformClient.client().invokeFn<string>('ask_tailwind_generator', { request });
+    console.log(`[askTailwindGenerator] ${response}`);
     return response;
   }
 }
