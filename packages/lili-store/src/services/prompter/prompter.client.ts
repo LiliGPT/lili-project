@@ -6,6 +6,8 @@ export class PrompterClient {
   //   return 'http://localhost:3000';
   // }
 
+  // --- Missions and Executions
+
   static async createMission(projectDir: string, message: string): Promise<MissionExecution> {
     const request = { projectDir, message };
     const response = await PlatformClient.client().invokeFn<MissionExecution>('create_mission_command', request);
@@ -51,5 +53,13 @@ export class PrompterClient {
   static async retryExecution(executionId: string, message: string): Promise<void> {
     const request = { execution_id: executionId, message };
     await PlatformClient.client().invokeFn<void>('retry_execution_command', { request });
+  }
+
+  // --- Tailwind Generator
+
+  static async askTailwindGenerator(sourceCode: string, message: string): Promise<string> {
+    const request = { source_code: sourceCode, message };
+    const response = await PlatformClient.client().invokeFn<string>('ask_tailwind_generator', { request });
+    return response;
   }
 }

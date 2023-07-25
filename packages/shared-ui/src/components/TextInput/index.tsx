@@ -2,7 +2,7 @@ import { CustomButton } from '../Button';
 import './TextInput.styles.css';
 
 interface Props {
-  label: string;
+  label?: string;
   value: string;
   onChange?: (value: string) => void;
   action?: {

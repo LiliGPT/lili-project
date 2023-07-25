@@ -1,32 +1,29 @@
 import {
-  createAsyncThunk,
-  createEntityAdapter,
   createSelector,
   createSlice,
   PayloadAction,
 } from '@reduxjs/toolkit';
-import { PlatformError } from '../services/platform/platform.error';
 import { ReduxCoreState, ReduxCoreView } from './core.types';
 
 export const CORE_FEATURE_KEY = 'core';
 
-const makeErrorValue = (error: unknown) => {
-  console.log(error, typeof error);
-  // return new PlatformError('lili-store.project-slice', String(error));
-  if (error instanceof PlatformError) {
-    return String(error.error_description);
-  }
-  if (typeof error === 'object' && error !== null && 'message' in error) {
-    return String(error.message);
-  }
-  return String(error);
-};
+// const makeErrorValue = (error: unknown) => {
+//   console.log(error, typeof error);
+//   // return new PlatformError('lili-store.project-slice', String(error));
+//   if (error instanceof PlatformError) {
+//     return String(error.error_description);
+//   }
+//   if (typeof error === 'object' && error !== null && 'message' in error) {
+//     return String(error.message);
+//   }
+//   return String(error);
+// };
 
 // --- Initial State
 
 export const initialCoreState: ReduxCoreState = {
   // page view
-  view: ReduxCoreView.CodeProjects,
+  view: ReduxCoreView.TailwindGenerator,
 };
 
 // --- Slice

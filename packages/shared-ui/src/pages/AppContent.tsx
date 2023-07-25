@@ -2,6 +2,7 @@ import { ReduxCoreView, pickProjectThunk, platformSignInThunk, selectCoreView, s
 import { ProjectsPage } from './ProjectsPage';
 import { SignInPage } from './SignInPage';
 import { Provider } from 'react-redux';
+import { TailwindGeneratorPage } from './TailwindGeneratorPage';
 
 export function AppContent() {
   return (
@@ -27,6 +28,7 @@ function AppInnerContent() {
     <>
       {view === ReduxCoreView.CodeProjects && (<ProjectsPage />)}
       {view === ReduxCoreView.SignIn && (<SignInPage />)}
+      {view === ReduxCoreView.TailwindGenerator && (<TailwindGeneratorPage />)}
     </>
   );
 }

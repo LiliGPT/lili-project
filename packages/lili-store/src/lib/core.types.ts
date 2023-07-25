@@ -4,5 +4,6 @@ export interface ReduxCoreState {
 
 export enum ReduxCoreView {
   CodeProjects = 'CodeProjects',
+  TailwindGenerator = 'TailwindGenerator',
   SignIn = 'SignIn',
 }
