@@ -60,7 +60,7 @@ function AskGeneratorInput(props: AskGeneratorInputProps) {
         props.onChangeSourceCode(response);
       })
       .catch((error) => {
-        setErrorMessage(String(error));
+        setErrorMessage(error.message);
       });
   };
 

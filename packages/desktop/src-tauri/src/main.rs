@@ -75,6 +75,7 @@ fn main() {
             tauri_commands::git_custom::git_custom_command,
             tauri_commands::open_terminal::open_terminal,
             tauri_commands::get_endpoints::get_endpoints,
+            tauri_commands::ask_tailwind_generator::ask_tailwind_generator,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
