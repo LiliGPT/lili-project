@@ -6,6 +6,7 @@ import { missionSlice } from './lib/mission.slice';
 import { coreSlice } from './lib/core.slice';
 import { authSlice } from './lib/auth.slice';
 import { shellTaskSlice } from './lib/shell-task.slice';
+import { tgSlice } from './lib/tg.slice';
 
 export const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ export const store = configureStore({
     mission: missionSlice.reducer,
     core: coreSlice.reducer,
     shelltask: shellTaskSlice.reducer,
+    tg: tgSlice.reducer,
   },
 });
 

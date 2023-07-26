@@ -1,14 +1,19 @@
 import { useState } from "react";
 import { TextInput } from "../components/TextInput";
 import { BasePage } from "../components/layout/BasePage";
-import { PrompterClient, refreshTokenThunk, useAppDispatch } from "@lili-project/lili-store";
-
-const defaultComponent = `<button class="bg-cyan-500 hover:bg-cyan-700 text-white font-bold py-3 px-6 rounded-full">
-  Get started
-</button>`;
+import {
+  PrompterClient, refreshTokenThunk, useAppDispatch, useAppSelector,
+  selectTgCreation, setTgCreationError, setTgCreationMessage, setTgCreationSourceCode,
+} from "@lili-project/lili-store";
 
 export function TailwindGeneratorPage() {
-  const [sourceCode, setSourceCode] = useState(defaultComponent);
+  const creation = useAppSelector(selectTgCreation());
+  const dispatch = useAppDispatch();
+  const source_code = creation.component.source_code;
+
+  const onChangeSourceCode = (value: string) => {
+    dispatch(setTgCreationSourceCode(value));
+  };
 
   return (
     <BasePage
@@ -17,19 +22,19 @@ export function TailwindGeneratorPage() {
       <div className="flex flex-col h-full gap-4">
         <div className="h-28 w-full flex">
           <AskGeneratorInput
-            sourceCode={sourceCode}
-            onChangeSourceCode={(value: string) => setSourceCode(value)}
+            sourceCode={source_code}
+            onChangeSourceCode={onChangeSourceCode}
           />
         </div>
         <div className="h-44 bg-primary">
           <TextInput
             label=""
-            value={sourceCode}
-            onChange={(value: string) => setSourceCode(value)}
+            value={source_code}
+            onChange={onChangeSourceCode}
             multiline
           />
         </div>
-        <PreviewTailwindComponent sourceCode={sourceCode} />
+        <PreviewTailwindComponent sourceCode={source_code} />
       </div>
     </BasePage>
   );
@@ -42,17 +47,20 @@ interface AskGeneratorInputProps {
 
 function AskGeneratorInput(props: AskGeneratorInputProps) {
   const dispatch = useAppDispatch();
-  const [message, setMessage] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-
+  const creation = useAppSelector(selectTgCreation());
+  const {
+    message,
+    error_message,
+    loading_status,
+  } = creation;
+  
   const onChangeMessage = (value: string) => {
-    setMessage(value);
-    setErrorMessage("");
+    dispatch(setTgCreationMessage(value));
   };
 
   const onSubmit = async () => {
     if (!message) {
-      setErrorMessage("Please enter a message");
+      dispatch(setTgCreationError("Please enter a message"));
       return;
     }
 
@@ -62,7 +70,7 @@ function AskGeneratorInput(props: AskGeneratorInputProps) {
         props.onChangeSourceCode(response);
       })
       .catch((error) => {
-        setErrorMessage(error.message);
+        dispatch(setTgCreationError(error.message));
       });
   };
 
@@ -81,9 +89,9 @@ function AskGeneratorInput(props: AskGeneratorInputProps) {
           }}
         />
       </div>
-      {!!errorMessage && (
+      {!!error_message && (
         <div className="text-red-600 text-center text-sm">
-            {errorMessage}
+            {error_message}
         </div>
       )}
     </div>
