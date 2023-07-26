@@ -10,7 +10,8 @@ import { ReduxTgMode, ReduxTgState } from "./tg.types";
 import { refreshTokenThunk } from './auth.slice';
 import { PrompterClient } from '../services/prompter/prompter.client';
 import { RootState } from '../store';
-import { TgCategory, TgComponent } from '../services/prompter/prompter.types';
+import { TgCategories, TgCategory, TgComponent } from '../services/prompter/prompter.types';
+import { getTgCategories } from '../services/prompter/tg_categories';
 
 // Tailwind Generator (tg)
 export const TG_FEATURE_KEY = 'tg';
@@ -39,30 +40,11 @@ export const initialTgState: ReduxTgState = {
   library: {
     loading_status: ReduxLoadingStatus.Idle,
     error_message: '',
-    selected_category: '',
+    selected_category: TgCategories.Cards,
     components: tgComponentAdapter.getInitialState(),
   },
 };
 
-function getTgCategories(): TgCategory[] {
-  return [
-    {
-      _id: 'cat1',
-      name: 'Cards',
-      slug: 'cards',
-    },
-    {
-      _id: 'cat2',
-      name: 'Buttons',
-      slug: 'buttons',
-    },
-    {
-      _id: 'cat3',
-      name: 'General Purpose',
-      slug: 'general',
-    },
-  ];
-};
 
 // --- Slice
 
@@ -109,7 +91,7 @@ export const tgSlice = createSlice({
         },
       };
     },
-    setTgCreationLoading(state, action: PayloadAction<void>) {
+    setTgCreationLoading(state) {
       return {
         ...state,
         creation: {
@@ -119,7 +101,7 @@ export const tgSlice = createSlice({
         },
       };
     },
-    setTgCreationCategories(state, action: PayloadAction<string[]>) {
+    setTgCreationCategories(state, action: PayloadAction<TgCategories[]>) {
       return {
         ...state,
         creation: {
@@ -153,7 +135,7 @@ export const tgSlice = createSlice({
         },
       };
     },
-    setTgLibraryLoading(state, action: PayloadAction<void>) {
+    setTgLibraryLoading(state) {
       return {
         ...state,
         library: {
@@ -163,7 +145,7 @@ export const tgSlice = createSlice({
         },
       };
     },
-    setTgLibrarySelectedCategory(state, action: PayloadAction<string>) {
+    setTgLibrarySelectedCategory(state, action: PayloadAction<TgCategories>) {
       return {
         ...state,
         library: {
@@ -247,6 +229,11 @@ export const selectTgCategories = () => createSelector(
   (state) => state.categories,
 );
 
+export const selectLibraryComponents = () => createSelector(
+  selectTgState,
+  (state) => selectAll(state.library.components),
+);
+
 // --- Thunks
 
 export const tgAskThunk = createAsyncThunk(
@@ -290,4 +277,26 @@ export const tgCreationSaveThunk = createAsyncThunk(
         dispatch(setTgCreationError(errorMessage));
       });
   },
+);
+
+export const tgLibraryListComponentsThunk = createAsyncThunk(
+  `${TG_FEATURE_KEY}/tgLibraryListComponentsThunk`,
+  async (_, { dispatch, getState }) => {
+    dispatch(setTgLibraryLoading());
+    await dispatch(refreshTokenThunk());
+    const state = getState() as RootState;
+    const selected_category = state.tg.library.selected_category;
+    PrompterClient.tgListComponents(selected_category)
+      .then((response) => {
+        console.log(`[tgLibraryListComponentsThunk] response: ${JSON.stringify(response)}`, selected_category);
+        dispatch(setTgLibraryComponents(response));
+      })
+      .catch((error) => {
+        const parsedError: ReduxError = {
+          error_code: '',
+          error_description: error.message || String(error),
+        };
+        dispatch(setTgLibraryError(parsedError));
+      });
+  }
 );

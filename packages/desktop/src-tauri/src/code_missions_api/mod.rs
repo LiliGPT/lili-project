@@ -13,7 +13,7 @@ mod set_perfect;
 mod types;
 
 pub use add_context_files::{add_context_files, AddContextFilesRequest};
-pub use api_client::ApiError;
+pub use api_client::*;
 pub use ask_tailwind_generator::{ask_tailwind_generator, AskTailwindGeneratorRequest};
 pub use create_mission::{create_mission, CreateMissionRequest, CreateMissionResponse};
 pub use execute_mission::{execute_mission, ExecuteMissionRequest};

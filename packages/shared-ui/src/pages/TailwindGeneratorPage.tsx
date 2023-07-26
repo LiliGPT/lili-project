@@ -3,15 +3,53 @@ import { TextInput } from "../components/TextInput";
 import { BasePage } from "../components/layout/BasePage";
 import {
   PrompterClient, refreshTokenThunk, useAppDispatch, useAppSelector,
-  selectTgCreation, setTgCreationError, setTgCreationMessage, setTgCreationSourceCode, ReduxTgMode, selectTgCurrentMode, setTgCurrentMode, tgAskThunk, selectTgCategories, setTgCreationCategories, tgCreationSaveThunk, setTgCreationName,
+  selectTgCreation, setTgCreationError, setTgCreationMessage, setTgCreationSourceCode, ReduxTgMode, selectTgCurrentMode, setTgCurrentMode, tgAskThunk, selectTgCategories, setTgCreationCategories, tgCreationSaveThunk, setTgCreationName, TgCategories, selectTgLibrary, setTgLibrarySelectedCategory, tgLibraryListComponentsThunk, selectLibraryComponents,
 } from "@lili-project/lili-store";
 import { CardBoxTabs } from "../components/layout/CardBox/CardBoxTabs";
 import { InputCheckbox } from "../components/InputCheckbox";
 import { CustomButton } from "../components/Button";
 
 export function TailwindGeneratorPage() {
-  const creation = useAppSelector(selectTgCreation());
+  const mode = useAppSelector(selectTgCurrentMode());
+
+  return (
+    <BasePage
+      side={<TailwindGeneratorSidebar />}
+    >
+      {mode === ReduxTgMode.Creation && <TailwindGeneratorCreationView />}
+      {mode === ReduxTgMode.Library && <TailwindGeneratorLibraryView />}
+    </BasePage>
+  );
+}
+
+function TailwindGeneratorLibraryView() {
   const dispatch = useAppDispatch();
+  const library = useAppSelector(selectTgLibrary());
+  const components = useAppSelector(selectLibraryComponents());
+
+  const componentsContent = components.map(comp => {
+    return (
+      <div className="p-4 rounded-lg bg-primary">
+        <div className="text-sm font-bold text-slate-500">{comp.name}</div>
+        <div className="min-h-[200px] flex flex-col justify-center items-center">
+          <div className="inline-block"
+            dangerouslySetInnerHTML={{ __html: comp.source_code }}
+          ></div>
+        </div>
+      </div>
+    );
+  });
+
+  return (
+    <div className="flex flex-col gap-4">
+      {componentsContent}
+    </div>
+  );
+}
+
+function TailwindGeneratorCreationView() {
+  const dispatch = useAppDispatch();
+  const creation = useAppSelector(selectTgCreation());
   const source_code = creation.component.source_code;
 
   const onChangeSourceCode = (value: string) => {
@@ -19,27 +57,23 @@ export function TailwindGeneratorPage() {
   };
 
   return (
-    <BasePage
-      side={<TailwindGeneratorSidebar />}
-    >
-      <div className="flex flex-col h-full gap-4">
-        <div className="h-28 w-full flex">
-          <AskGeneratorInput
-            sourceCode={source_code}
-            onChangeSourceCode={onChangeSourceCode}
-          />
-        </div>
-        <div className="h-44 bg-primary">
-          <TextInput
-            label=""
-            value={source_code}
-            onChange={onChangeSourceCode}
-            multiline
-          />
-        </div>
-        <PreviewTailwindComponent sourceCode={source_code} />
+    <div className="flex flex-col h-full gap-4">
+      <div className="h-28 w-full flex">
+        <AskGeneratorInput
+          sourceCode={source_code}
+          onChangeSourceCode={onChangeSourceCode}
+        />
       </div>
-    </BasePage>
+      <div className="h-44 bg-primary">
+        <TextInput
+          label=""
+          value={source_code}
+          onChange={onChangeSourceCode}
+          multiline
+        />
+      </div>
+      <PreviewTailwindComponent sourceCode={source_code} />
+    </div>
   );
 }
 
@@ -49,6 +83,9 @@ function TailwindGeneratorSidebar() {
   
   const onChangeTab = (value: string) => {
     dispatch(setTgCurrentMode(value as ReduxTgMode));
+    if (value === ReduxTgMode.Library.toString()) {
+      dispatch(tgLibraryListComponentsThunk());
+    }
   };
 
   return (
@@ -58,7 +95,50 @@ function TailwindGeneratorSidebar() {
         selectedTab={mode.toString()}
         onChangeTab={onChangeTab}
       />
-      <TgCreationTab />
+      {mode === ReduxTgMode.Creation && <TgCreationTab />}
+      {mode === ReduxTgMode.Library && <TgLibraryTab />}
+    </div>
+  );
+}
+
+function TgLibraryTab() {
+  const dispatch = useAppDispatch();
+  const library = useAppSelector(selectTgLibrary());
+  const categories = useAppSelector(selectTgCategories());
+
+  const {
+    components,
+    error_message,
+    loading_status,
+    selected_category,
+  } = library;
+
+  const itemsVariants = {
+    default: 'text-gray-500 hover:text-white',
+    active: 'text-white bg-slate-800',
+  };
+
+  const onClickCategory = (slug: TgCategories) => {
+    dispatch(setTgLibrarySelectedCategory(slug));
+    dispatch(tgLibraryListComponentsThunk());
+  };
+
+  const itemsContent = categories.map(cat => {
+    const variant = cat.slug === selected_category ? itemsVariants.active : itemsVariants.default;
+    return (
+      <div
+        key={cat._id}
+        className={`text-md leading-10 py-2 px-4 cursor-pointer rounded-lg ${variant}`}
+        onClick={() => onClickCategory(cat.slug)}
+      >
+        {cat.name}
+      </div>
+    );
+  });
+
+  return (
+    <div className="flex flex-col mt-4">
+      {itemsContent}
     </div>
   );
 }
@@ -85,7 +165,17 @@ function TgCreationTab() {
   };
 
   const onClickSaveComponent = async () => {
+    if (!categories.length) {
+      dispatch(setTgCreationError("Please select at least one category"));
+      return;
+    }
+    if (!name) {
+      dispatch(setTgCreationError("Please enter a component name"));
+      return;
+    }
     await dispatch(tgCreationSaveThunk());
+    dispatch(setTgLibrarySelectedCategory(categories[0]));
+    await dispatch(tgLibraryListComponentsThunk());
   };
 
   return (
@@ -162,7 +252,7 @@ function TgCreationCategorySelector() {
   const categories = useAppSelector(selectTgCategories());
   const creation = useAppSelector(selectTgCreation());
 
-  const toggleCategory = (slug: string) => {
+  const toggleCategory = (slug: TgCategories) => {
     const categories = [...creation.component.categories];
     const index = categories.indexOf(slug);
     if (index === -1) {

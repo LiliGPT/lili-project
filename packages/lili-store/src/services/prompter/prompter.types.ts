@@ -80,7 +80,7 @@ export interface TgComponent {
   _id: string;
   name: string;
   training_description: string;
-  categories: string[];
+  categories: TgCategories[];
   source_code: string;
   changelog?: TgComponentChangelog[];
   created_at: string;
@@ -98,5 +98,13 @@ export interface TgComponentChangelog {
 export interface TgCategory {
   _id: string;
   name: string;
-  slug: string;
+  slug: TgCategories;
+}
+
+export enum TgCategories {
+  Cards = 'cards',
+  Buttons = 'buttons',
+  Navigation = 'navigation',
+  Sidebar = 'sidebar',
+  Others = 'others',
 }

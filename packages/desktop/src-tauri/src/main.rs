@@ -17,6 +17,7 @@ mod prompter;
 mod server;
 mod shell;
 mod tauri_commands;
+mod tg_api;
 mod utils;
 
 use std::thread;
@@ -75,7 +76,9 @@ fn main() {
             tauri_commands::git_custom::git_custom_command,
             tauri_commands::open_terminal::open_terminal,
             tauri_commands::get_endpoints::get_endpoints,
-            tauri_commands::ask_tailwind_generator::ask_tailwind_generator,
+            tauri_commands::tailwind_generator::ask_tailwind_generator,
+            tauri_commands::tailwind_generator::tg_create_component,
+            tauri_commands::tailwind_generator::tg_list_components,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

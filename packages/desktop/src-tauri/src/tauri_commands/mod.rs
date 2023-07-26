@@ -1,5 +1,4 @@
 pub mod add_context_files;
-pub mod ask_tailwind_generator;
 pub mod auth_login;
 pub mod auth_refresh_token;
 pub mod create_mission;
@@ -30,3 +29,4 @@ pub mod search_executions;
 pub mod set_approved;
 pub mod set_fail;
 pub mod set_perfect;
+pub mod tailwind_generator;

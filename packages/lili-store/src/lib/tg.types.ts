@@ -1,6 +1,6 @@
 import { EntityState } from "@reduxjs/toolkit";
 import { ReduxLoadingStatus } from "./redux.types";
-import { TgCategory, TgComponent, TgComponentChangelog } from "../services/prompter/prompter.types";
+import { TgCategories, TgCategory, TgComponent, TgComponentChangelog } from "../services/prompter/prompter.types";
 
 export enum ReduxTgMode {
   Creation = 'creation',
@@ -22,7 +22,7 @@ export interface ReduxTgState {
   library: {
     loading_status: ReduxLoadingStatus;
     error_message: string;
-    selected_category: string;
+    selected_category: TgCategories;
     components: EntityState<TgComponent>;
   }
 }

@@ -1,5 +1,5 @@
 import { PlatformClient } from '../platform/platform.client';
-import { MissionAction, MissionExecution, TgComponent } from './prompter.types';
+import { MissionAction, MissionExecution, TgCategories, TgComponent } from './prompter.types';
 
 export class PrompterClient {
   // static url() {
@@ -67,5 +67,16 @@ export class PrompterClient {
     const request = { name, training_description, categories, source_code };
     const response = await PlatformClient.client().invokeFn<TgComponent>('tg_create_component', { request });
     return response;
+  }
+
+  static async tgListComponents(category: TgCategories): Promise<TgComponent[]> {
+    const request = { category };
+    const response = await PlatformClient.client().invokeFn<TgComponent[]>('tg_list_components', { request });
+    return response;
+  }
+
+  static async tgDeleteComponent(_id: string): Promise<void> {
+    const request = { _id };
+    await PlatformClient.client().invokeFn<void>('tg_delete_component', { request });
   }
 }
