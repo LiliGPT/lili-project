@@ -74,3 +74,29 @@ export enum MissionActionType {
   UpdateFile = 'UpdateFile',
 }
 
+// --- Tailwind Generator
+
+export interface TgComponent {
+  _id: string;
+  name: string;
+  training_description: string;
+  categories: string[];
+  source_code: string;
+  changelog?: TgComponentChangelog[];
+  created_at: string;
+  updated_at: string;
+}
+
+export interface TgComponentChangelog {
+  _id: string;
+  message: string;
+  original_code: string;
+  source_code: string;
+  created_at: string;
+}
+
+export interface TgCategory {
+  _id: string;
+  name: string;
+  slug: string;
+}

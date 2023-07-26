@@ -3,8 +3,11 @@ import { TextInput } from "../components/TextInput";
 import { BasePage } from "../components/layout/BasePage";
 import {
   PrompterClient, refreshTokenThunk, useAppDispatch, useAppSelector,
-  selectTgCreation, setTgCreationError, setTgCreationMessage, setTgCreationSourceCode,
+  selectTgCreation, setTgCreationError, setTgCreationMessage, setTgCreationSourceCode, ReduxTgMode, selectTgCurrentMode, setTgCurrentMode, tgAskThunk, selectTgCategories, setTgCreationCategories, tgCreationSaveThunk, setTgCreationName,
 } from "@lili-project/lili-store";
+import { CardBoxTabs } from "../components/layout/CardBox/CardBoxTabs";
+import { InputCheckbox } from "../components/InputCheckbox";
+import { CustomButton } from "../components/Button";
 
 export function TailwindGeneratorPage() {
   const creation = useAppSelector(selectTgCreation());
@@ -17,7 +20,7 @@ export function TailwindGeneratorPage() {
 
   return (
     <BasePage
-      side={null}
+      side={<TailwindGeneratorSidebar />}
     >
       <div className="flex flex-col h-full gap-4">
         <div className="h-28 w-full flex">
@@ -40,6 +43,76 @@ export function TailwindGeneratorPage() {
   );
 }
 
+function TailwindGeneratorSidebar() {
+  const dispatch = useAppDispatch();
+  const mode = useAppSelector(selectTgCurrentMode());
+  
+  const onChangeTab = (value: string) => {
+    dispatch(setTgCurrentMode(value as ReduxTgMode));
+  };
+
+  return (
+    <div className="flex flex-col gap-4">
+      <CardBoxTabs
+        tabs={[ReduxTgMode.Creation.toString(), ReduxTgMode.Library.toString()]}
+        selectedTab={mode.toString()}
+        onChangeTab={onChangeTab}
+      />
+      <TgCreationTab />
+    </div>
+  );
+}
+
+function TgCreationTab() {
+  const creation = useAppSelector(selectTgCreation());
+  const dispatch = useAppDispatch();
+
+  const {
+    component,
+    error_message,
+    loading_status,
+  } = creation;
+
+  const {
+    _id,
+    categories,
+    name,
+    training_description,
+  } = component;
+
+  const onChangeComponentName = (value: string) => {
+    dispatch(setTgCreationName(value));
+  };
+
+  const onClickSaveComponent = async () => {
+    await dispatch(tgCreationSaveThunk());
+  };
+
+  return (
+    <div className="flex flex-col">
+      <TextInput
+        label="Component name"
+        value={name}
+        onChange={onChangeComponentName}
+      />
+      <TgCreationCategorySelector />
+      <div className="flex flex-row justify-end mt-8">
+        <CustomButton
+          label="Save Component"
+          size="medium"
+          variant="primary"
+          onClick={onClickSaveComponent}
+        />
+      </div>
+      {!!error_message && (
+        <div className="text-red-800 mt-8 text-center text-sm">
+          {error_message}
+        </div>
+      )}
+    </div>
+  );
+}
+
 interface AskGeneratorInputProps {
   sourceCode: string;
   onChangeSourceCode: (value: string) => void;
@@ -50,8 +123,6 @@ function AskGeneratorInput(props: AskGeneratorInputProps) {
   const creation = useAppSelector(selectTgCreation());
   const {
     message,
-    error_message,
-    loading_status,
   } = creation;
   
   const onChangeMessage = (value: string) => {
@@ -64,14 +135,7 @@ function AskGeneratorInput(props: AskGeneratorInputProps) {
       return;
     }
 
-    await dispatch(refreshTokenThunk());
-    PrompterClient.askTailwindGenerator(props.sourceCode, message)
-      .then((response) => {
-        props.onChangeSourceCode(response);
-      })
-      .catch((error) => {
-        dispatch(setTgCreationError(error.message));
-      });
+    await dispatch(tgAskThunk());
   };
 
   return (
@@ -89,11 +153,43 @@ function AskGeneratorInput(props: AskGeneratorInputProps) {
           }}
         />
       </div>
-      {!!error_message && (
-        <div className="text-red-600 text-center text-sm">
-            {error_message}
-        </div>
-      )}
+    </div>
+  );
+}
+
+function TgCreationCategorySelector() {
+  const dispatch = useAppDispatch();
+  const categories = useAppSelector(selectTgCategories());
+  const creation = useAppSelector(selectTgCreation());
+
+  const toggleCategory = (slug: string) => {
+    const categories = [...creation.component.categories];
+    const index = categories.indexOf(slug);
+    if (index === -1) {
+      categories.push(slug);
+    } else {
+      categories.splice(index, 1);
+    }
+    dispatch(setTgCreationCategories(categories));
+  };
+
+  return (
+    <div className="flex flex-col gap-2">
+      <div
+        className="text-sm text-gray-600 my-2"
+      >
+        categories:
+      </div>
+      {categories.map(cat => {
+        return (
+          <InputCheckbox
+            key={cat._id}
+            label={cat.name}
+            checked={creation.component.categories.includes(cat.slug)}
+            onClick={() => toggleCategory(cat.slug)}
+          />
+        );
+      })}
     </div>
   );
 }

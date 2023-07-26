@@ -1,5 +1,5 @@
 import { PlatformClient } from '../platform/platform.client';
-import { MissionAction, MissionExecution } from './prompter.types';
+import { MissionAction, MissionExecution, TgComponent } from './prompter.types';
 
 export class PrompterClient {
   // static url() {
@@ -59,9 +59,13 @@ export class PrompterClient {
 
   static async askTailwindGenerator(sourceCode: string, message: string): Promise<string> {
     const request = { source_code: sourceCode, message };
-    console.log(`[askTailwindGenerator] ${JSON.stringify(request.message)}`);
     const response = await PlatformClient.client().invokeFn<string>('ask_tailwind_generator', { request });
-    console.log(`[askTailwindGenerator] ${response}`);
+    return response;
+  }
+
+  static async tgCreateComponent(name: string, training_description: string, categories: string[], source_code: string): Promise<TgComponent> {
+    const request = { name, training_description, categories, source_code };
+    const response = await PlatformClient.client().invokeFn<TgComponent>('tg_create_component', { request });
     return response;
   }
 }
