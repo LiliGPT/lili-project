@@ -3,7 +3,7 @@ import { TextInput } from "../components/TextInput";
 import { BasePage } from "../components/layout/BasePage";
 import {
   PrompterClient, refreshTokenThunk, useAppDispatch, useAppSelector,
-  selectTgCreation, setTgCreationError, setTgCreationMessage, setTgCreationSourceCode, ReduxTgMode, selectTgCurrentMode, setTgCurrentMode, tgAskThunk, selectTgCategories, setTgCreationCategories, tgCreationSaveThunk, setTgCreationName, TgCategories, selectTgLibrary, setTgLibrarySelectedCategory, tgLibraryListComponentsThunk, selectLibraryComponents,
+  selectTgCreation, setTgCreationError, setTgCreationMessage, setTgCreationSourceCode, ReduxTgMode, selectTgCurrentMode, setTgCurrentMode, tgAskThunk, selectTgCategories, setTgCreationCategories, tgCreationSaveThunk, setTgCreationName, TgCategories, selectTgLibrary, setTgLibrarySelectedCategory, tgLibraryListComponentsThunk, selectLibraryComponents, TgComponent,
 } from "@lili-project/lili-store";
 import { CardBoxTabs } from "../components/layout/CardBox/CardBoxTabs";
 import { InputCheckbox } from "../components/InputCheckbox";
@@ -27,9 +27,32 @@ function TailwindGeneratorLibraryView() {
   const library = useAppSelector(selectTgLibrary());
   const components = useAppSelector(selectLibraryComponents());
 
+  const onClickUseTemplate = (comp: TgComponent) => {
+    dispatch(setTgCreationSourceCode(comp.source_code));
+  };
+
+  const onClickCopyCode = (comp: TgComponent) => {
+    // copy to clipboard
+    navigator.clipboard.writeText(comp.source_code);
+  };
+
   const componentsContent = components.map(comp => {
     return (
-      <div className="p-4 rounded-lg bg-primary">
+      <div key={comp._id} className="p-4 rounded-lg bg-primary relative group">
+        <div className="absolute top-0 right-0 p-2 flex flex-col gap-2 opacity-0 group-hover:opacity-100 duration-300">
+          <CustomButton
+            label="Use Template"
+            size="medium"
+            variant="primary"
+            onClick={() => onClickUseTemplate(comp)}
+          />
+          <CustomButton
+            label="Copy Code"
+            size="medium"
+            variant="primary"
+            onClick={() => onClickCopyCode(comp)}
+          />
+        </div>
         <div className="text-sm font-bold text-slate-500">{comp.name}</div>
         <div className="min-h-[200px] flex flex-col justify-center items-center">
           <div className="inline-block"

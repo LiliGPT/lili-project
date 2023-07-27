@@ -71,6 +71,7 @@ export const tgSlice = createSlice({
     setTgCreationSourceCode(state, action: PayloadAction<string>) {
       return {
         ...state,
+        currentMode: ReduxTgMode.Creation,
         creation: {
           ...state.creation,
           loading_status: ReduxLoadingStatus.Success,
@@ -282,6 +283,7 @@ export const tgCreationSaveThunk = createAsyncThunk(
 export const tgLibraryListComponentsThunk = createAsyncThunk(
   `${TG_FEATURE_KEY}/tgLibraryListComponentsThunk`,
   async (_, { dispatch, getState }) => {
+    console.log(`[tgLibraryListComponentsThunk]`);
     dispatch(setTgLibraryLoading());
     await dispatch(refreshTokenThunk());
     const state = getState() as RootState;
@@ -292,6 +294,7 @@ export const tgLibraryListComponentsThunk = createAsyncThunk(
         dispatch(setTgLibraryComponents(response));
       })
       .catch((error) => {
+        console.log(`[tgLibraryListComponentsThunk] error: ${JSON.stringify(error)}`);
         const parsedError: ReduxError = {
           error_code: '',
           error_description: error.message || String(error),
