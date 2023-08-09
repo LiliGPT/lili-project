@@ -1,0 +1,17 @@
+###########################################################################
+# libssh2 installation details
+###########################################################################
+
+prefix=/home/l/liligpt/project/packages/core/target/debug/build/libssh2-sys-5635421e3da5c1a1/out
+exec_prefix=
+libdir=/home/l/liligpt/project/packages/core/target/debug/build/libssh2-sys-5635421e3da5c1a1/out/lib
+includedir=/home/l/liligpt/project/packages/core/target/debug/build/libssh2-sys-5635421e3da5c1a1/out/include
+
+Name: libssh2
+URL: https://www.libssh2.org/
+Description: Library for SSH-based communication
+Version: 1.10.1_DEV
+Requires.private: 
+Libs: -L${libdir} -lssh2 
+Libs.private: 
+Cflags: -I${includedir}

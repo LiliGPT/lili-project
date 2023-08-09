@@ -31,6 +31,7 @@ pub async fn rust_prompt_approve_and_run(
 //     Ok(())
 // }
 
+// new version in core::coder::run_actions
 async fn run_prompt(path: &str, prompt_id: &str) -> Result<(), ApiError> {
     let execution = find_one_execution(prompt_id).await?;
     let actions = match &execution.reviewed_actions {

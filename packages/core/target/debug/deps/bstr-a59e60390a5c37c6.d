@@ -1,0 +1,16 @@
+/home/l/liligpt/project/packages/core/target/debug/deps/bstr-a59e60390a5c37c6.rmeta: /home/l/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bstr-1.6.0/src/lib.rs /home/l/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bstr-1.6.0/src/ascii.rs /home/l/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bstr-1.6.0/src/bstr.rs /home/l/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bstr-1.6.0/src/bstring.rs /home/l/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bstr-1.6.0/src/byteset/mod.rs /home/l/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bstr-1.6.0/src/byteset/scalar.rs /home/l/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bstr-1.6.0/src/escape_bytes.rs /home/l/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bstr-1.6.0/src/ext_slice.rs /home/l/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bstr-1.6.0/src/ext_vec.rs /home/l/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bstr-1.6.0/src/impls.rs /home/l/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bstr-1.6.0/src/io.rs /home/l/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bstr-1.6.0/src/utf8.rs
+
+/home/l/liligpt/project/packages/core/target/debug/deps/bstr-a59e60390a5c37c6.d: /home/l/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bstr-1.6.0/src/lib.rs /home/l/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bstr-1.6.0/src/ascii.rs /home/l/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bstr-1.6.0/src/bstr.rs /home/l/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bstr-1.6.0/src/bstring.rs /home/l/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bstr-1.6.0/src/byteset/mod.rs /home/l/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bstr-1.6.0/src/byteset/scalar.rs /home/l/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bstr-1.6.0/src/escape_bytes.rs /home/l/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bstr-1.6.0/src/ext_slice.rs /home/l/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bstr-1.6.0/src/ext_vec.rs /home/l/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bstr-1.6.0/src/impls.rs /home/l/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bstr-1.6.0/src/io.rs /home/l/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bstr-1.6.0/src/utf8.rs
+
+/home/l/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bstr-1.6.0/src/lib.rs:
+/home/l/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bstr-1.6.0/src/ascii.rs:
+/home/l/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bstr-1.6.0/src/bstr.rs:
+/home/l/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bstr-1.6.0/src/bstring.rs:
+/home/l/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bstr-1.6.0/src/byteset/mod.rs:
+/home/l/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bstr-1.6.0/src/byteset/scalar.rs:
+/home/l/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bstr-1.6.0/src/escape_bytes.rs:
+/home/l/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bstr-1.6.0/src/ext_slice.rs:
+/home/l/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bstr-1.6.0/src/ext_vec.rs:
+/home/l/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bstr-1.6.0/src/impls.rs:
+/home/l/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bstr-1.6.0/src/io.rs:
+/home/l/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bstr-1.6.0/src/utf8.rs:
