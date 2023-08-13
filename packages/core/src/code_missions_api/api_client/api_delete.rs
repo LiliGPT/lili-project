@@ -1,11 +1,12 @@
 use super::ApiError;
+use crate::config::CoreConfig;
 
 pub async fn api_delete(access_token: &str, uri: &str) -> Result<(), ApiError> {
     let http_client = reqwest::Client::new();
     let response = http_client
         .delete(&format!(
             "{}{}",
-            std::env::var("PROMPTER_URL").unwrap(),
+            CoreConfig::prompterUrl(),
             uri
         ))
         .bearer_auth(access_token)

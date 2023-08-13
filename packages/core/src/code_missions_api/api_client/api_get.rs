@@ -1,4 +1,5 @@
 use super::ApiError;
+use crate::config::CoreConfig;
 
 pub async fn api_get<Response: serde::de::DeserializeOwned>(
     access_token: &str,
@@ -8,7 +9,7 @@ pub async fn api_get<Response: serde::de::DeserializeOwned>(
     let response = http_client
         .get(&format!(
             "{}{}",
-            std::env::var("PROMPTER_URL").unwrap(),
+            CoreConfig::prompterUrl(),
             uri
         ))
         .bearer_auth(access_token)
